@@ -742,6 +742,7 @@
             <div class="mobile-facets__main has-submenu gradient">
               {%- if enable_filtering -%}
                 {%- for filter in results.filters -%}
+                {% if filter.type != 'price_range' %}
                   {% liquid
                     assign presentation = filter.presentation | default: default_presentation
                     if presentation == 'image'
@@ -1147,6 +1148,7 @@
                         </div>
                       </details>
                   {% endcase %}
+                {% endif %}
                 {%- endfor -%}
               {%- endif -%}
 
