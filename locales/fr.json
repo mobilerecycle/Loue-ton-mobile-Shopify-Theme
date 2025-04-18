@@ -50,7 +50,7 @@
       "reset": "Effacer le terme de recherche"
     },
     "cart": {
-      "view": "Afficher mon panier ({{ count }})",
+      "view": "Afficher mon panier",
       "item_added": "Article ajouté au panier"
     },
     "share": {
