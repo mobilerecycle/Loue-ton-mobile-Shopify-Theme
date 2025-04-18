@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "password_page": {
@@ -54,7 +63,8 @@
       "pinterest": "Épinglez-le",
       "facebook_follow": "Suivez-nous sur Facebook",
       "twitter_follow": "Suivez-nous sur Twitter",
-      "pinterest_follow": "Suivez-nous sur Pinterest"
+      "pinterest_follow": "Suivez-nous sur Pinterest",
+      "facebook": ""
     },
     "back_to_home_label": "Maison",
     "shipping_calculator": {
@@ -71,12 +81,14 @@
       "popup_title": "Ajouter une note pour le vendeur",
       "textbox_placeholder": "Commander des instructions spéciales",
       "save_button": "Sauvegarder",
-      "cancel_title": "Annuler"
+      "cancel_title": "Annuler",
+      "button_title": ""
     },
     "slider": {
       "of": "de",
       "next_slide": "Faites glisser vers la droite",
-      "previous_slide": "Faites glisser vers la gauche"
+      "previous_slide": "Faites glisser vers la gauche",
+      "name": ""
     }
   },
   "date_formats": {
@@ -105,7 +117,9 @@
     "skip_to_product_info": "Passer aux informations produits",
     "total_reviews": "total des critiques",
     "star_reviews_info": "{{ rating_value }} sur {{ rating_max }} étoiles",
-    "skip_to_filter_info": "Passer aux informations de filtrage"
+    "skip_to_filter_info": "Passer aux informations de filtrage",
+    "collapsible_content_title": "",
+    "complementary_products": ""
   },
   "blogs": {
     "article": {
@@ -144,7 +158,14 @@
         "label": "Quantité",
         "input_label": "Quantité pour {{ product }}",
         "increase": "Augmenter la quantité de {{ product }}",
-        "decrease": "Réduire la quantité de {{ product }}"
+        "decrease": "Réduire la quantité de {{ product }}",
+        "minimum_of": "",
+        "maximum_of": "",
+        "multiples_of": "",
+        "min_of": "",
+        "max_of": "",
+        "in_cart_html": "<span class=\"quantity-cart\">{{ quantity }}</span> dans le panier",
+        "note": ""
       },
       "price": {
         "from_price_html": "Du {{ price }}",
@@ -192,7 +213,8 @@
       "countdown_timer": {
         "days": "Jours",
         "hours": "Heures",
-        "seconds": "Seconde"
+        "seconds": "Seconde",
+        "minutes": ""
       },
       "back_in_stock_notify": {
         "button": "Envoyez-moi un e-mail lorsque disponible",
@@ -218,7 +240,15 @@
       "taxes_included": "Taxes incluses.",
       "duties_included": "Fonctions incluses.",
       "duties_and_taxes_included": "Droits et taxes inclus.",
-      "shipping_policy_html": "<a href=\"&lt;span%20class='notranslate'&gt;{{%20link%20}}&lt;/span&gt;\">Frais de port</a> calculés lors du paiement."
+      "shipping_policy_html": "<a href=\"&lt;span%20class='notranslate'&gt;{{%20link%20}}&lt;/span&gt;\">Frais de port</a> calculés lors du paiement.",
+      "choose_product_options": "",
+      "volume_pricing": {
+        "title": "",
+        "note": "",
+        "minimum": "",
+        "price_at_each": "",
+        "price_range": ""
+      }
     },
     "modal": {
       "label": "Galerie de supports multimédias"
@@ -284,7 +314,9 @@
       "results_with_count_and_term": {
         "one": "{{ count }} résultat trouvé pour « {{ terms }} »",
         "other": "{{ count }} résultats trouvés pour « {{ terms }} »"
-      }
+      },
+      "suggestions": "",
+      "pages": ""
     },
     "cart": {
       "cart": "Panier"
@@ -337,7 +369,15 @@
         "title": "Vous possédez un compte ?",
         "paragraph_html": "<a href=\"{{ link }}\" class=\"link underlined-link\">Connectez-vous</a> pour payer plus vite."
       },
-      "remove": "Retirer"
+      "remove": "Retirer",
+      "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "",
+      "duties_and_taxes_included_shipping_at_checkout_without_policy": "",
+      "taxes_included_shipping_at_checkout_with_policy_html": "",
+      "taxes_included_shipping_at_checkout_without_policy": "",
+      "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "",
+      "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "",
+      "taxes_at_checkout_shipping_at_checkout_with_policy_html": "",
+      "taxes_at_checkout_shipping_at_checkout_without_policy": ""
     },
     "footer": {
       "payment": "Moyens de paiement",
@@ -398,13 +438,44 @@
       "play_slideshow": "Lire le diaporama",
       "carousel": "Carrousel",
       "slide": "Glisser"
+    },
+    "before-and-after-slider": {
+      "navigator": ""
+    },
+    "quick_order_list": {
+      "product_total": "",
+      "view_cart": "",
+      "each": "",
+      "product": "",
+      "variant": "",
+      "variant_total": "",
+      "items_added": {
+        "one": "",
+        "other": ""
+      },
+      "items_removed": {
+        "one": "",
+        "other": ""
+      },
+      "product_variants": "",
+      "total_items": "",
+      "remove_all_single_item_confirmation": "",
+      "remove_all_items_confirmation": "",
+      "remove_all": "",
+      "cancel": "",
+      "min_error": "",
+      "max_error": "",
+      "step_error": ""
     }
   },
   "localization": {
     "country_label": "Pays/région",
     "language_label": "Langue",
     "update_language": "Mettre à jour la langue",
-    "update_country": "Mettre à jour le pays/la région"
+    "update_country": "Mettre à jour le pays/la région",
+    "search": "",
+    "popular_countries_regions": "",
+    "country_results_count": ""
   },
   "customer": {
     "account": {
@@ -550,7 +621,13 @@
       "name_label": "Nom du destinataire (facultatif)",
       "name": "Nom",
       "message_label": "Message (optionnel)",
-      "max_characters": "{{ max_chars }} caractères maximum"
+      "max_characters": "{{ max_chars }} caractères maximum",
+      "expanded": "",
+      "collapsed": "",
+      "email_label_optional_for_no_js_behavior": "",
+      "message": "",
+      "send_on": "",
+      "send_on_label": ""
     }
   },
   "pagefly": {
