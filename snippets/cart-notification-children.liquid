@@ -143,43 +143,6 @@
   {%- endif -%}
 
   <div class="cart_notification_links_inner">
-    <div class="totals">
-      <div class="d-flex justify-content-between align-items-center mb-15">
-        <h3 class="totals__subtotal  mb-0">{{ 'sections.cart.subtotal' | t }}</h3>
-        <p id="cart-notification-subtotal">{{ cart.total_price | money_with_currency }}</p>
-      </div>
-      <div id="cart-notification-discount">
-        {%- if cart.cart_level_discount_applications.size > 0 -%}
-          <div class="cart_notification--discount mb-20">
-            <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-              {%- for discount in cart.cart_level_discount_applications -%}
-                <li class="discounts__discount d-flex justify-content-between">
-                  <span class="discount__title">
-                    {%- render 'icon-discount' -%}
-                    {{ discount.title }}
-                  </span>
-                  <span class="discount__amount"> (-{{ discount.total_allocated_amount | money }})</span>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
-        {%- endif -%}
-      </div>
-    </div>
-
-    {% if settings.cart_tax_note %}
-      <div class="tax-note caption-large rte mb-15">
-        {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
-          {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
-        {%- elsif cart.taxes_included -%}
-          {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
-        {%- elsif shop.shipping_policy.body != blank -%}
-          {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
-        {%- else -%}
-          {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
-        {%- endif -%}
-      </div>
-    {% endif %}
 
     <div class="d-flex justify-content-between cart_notification--footer">
       {%- if settings.cart_btn_enable -%}
