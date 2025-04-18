@@ -83,29 +83,6 @@
             "text_style": "subtitle"
           }
         },
-        "variant_picker_GB76G8": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "button",
-            "show_color_swatch": true,
-            "color_option_style": "color",
-            "choose_options_name": "Color",
-            "color_option_design": "round",
-            "swatch_size": "small"
-          }
-        },
-        "buy_buttons_MLaWQd": {
-          "type": "buy_buttons",
-          "settings": {
-            "quantity__button": true,
-            "preorder_button": true,
-            "show_dynamic_checkout": true,
-            "show_gift_card_recipient": false,
-            "pickup_availability": true,
-            "guarantee_safe_checkout": false,
-            "safe_checkout_text": "Guaranteed safe checkout"
-          }
-        },
         "share_ReXBdG": {
           "type": "share",
           "settings": {
@@ -121,8 +98,6 @@
         "text_bQRGa6",
         "title_nfKxdQ",
         "text_WGNGXY",
-        "variant_picker_GB76G8",
-        "buy_buttons_MLaWQd",
         "share_ReXBdG"
       ],
       "settings": {
