@@ -55,9 +55,6 @@
                       <th class="caption-with-letter-spacing product__title--cart-items" colspan="2" scope="col">
                         {{ 'sections.cart.headings.product' | t }}
                       </th>
-                      <th class="medium-hide large-up-hide right caption-with-letter-spacing" colspan="1" scope="col">
-                        {{ 'sections.cart.headings.total' | t }}
-                      </th>
                       <th
                         class="cart-items__heading--wide small-hide caption-with-letter-spacing"
                         colspan="1"
@@ -157,62 +154,6 @@
                               <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
                             </svg>
                           </p>
-                        </td>
-
-                        <td class="cart-item__totals right medium-hide large-up-hide">
-                          <div class="loading-overlay hidden">
-                            <div class="loading-overlay__spinner">
-                              <svg
-                                aria-hidden="true"
-                                focusable="false"
-                                role="presentation"
-                                class="spinner"
-                                viewBox="0 0 66 66"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
-                              </svg>
-                            </div>
-                          </div>
-                          <div class="cart-item__price-wrapper">
-                            {%- if item.original_line_price != item.final_line_price -%}
-                              <dl class="cart-item__discounted-prices">
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </dt>
-                                <dd>
-                                  <s class="cart-item__old-price price price--end">
-                                    {{ item.original_line_price | money }}
-                                  </s>
-                                </dd>
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.sale_price' | t }}
-                                </dt>
-                                <dd class="price price--end">
-                                  {{ item.final_line_price | money }}
-                                </dd>
-                              </dl>
-                            {%- else -%}
-                              <span class="price price--end">
-                                {{ item.original_line_price | money }}
-                              </span>
-                            {%- endif -%}
-
-                            {%- if item.variant.available and item.unit_price_measurement -%}
-                              <div class="unit-price caption">
-                                <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
-                                {{ item.variant.unit_price | money }}
-                                <span aria-hidden="true">/</span>
-                                <span class="visually-hidden"
-                                  >&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span
-                                >
-                                {%- if item.variant.unit_price_measurement.reference_value != 1 -%}
-                                  {{- item.variant.unit_price_measurement.reference_value -}}
-                                {%- endif -%}
-                                {{ item.variant.unit_price_measurement.reference_unit }}
-                              </div>
-                            {%- endif -%}
-                          </div>
                         </td>
 
                         <td class="cart-item__quantity">
