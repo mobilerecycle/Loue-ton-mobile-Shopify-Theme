@@ -221,9 +221,12 @@
               {%- endif -%}
             </button>
           </div>
-          <div class="d-sm-none">
-            {{ form | payment_button }}
-          </div>
+            {%- if current_variant.available == false and product.has_only_default_variant -%}
+            {%- else -%}
+                <div class="d-sm-none">
+                    {% render 'greenleaze-product' %}
+                </div>
+            {%- endif -%}
         </div>
       {%- endform -%}
     </product-form>
