@@ -1,0 +1,267 @@
+.email__popup--mdoal__content {
+  box-sizing: border-box;
+  position: fixed;
+  z-index: -1;
+  display: none;
+}
+
+.email__popup--mdoal__content.email__popup--position-center {
+  margin: 0 auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(var(--color-foreground), 0.5);
+  height: 100%;
+  align-items: center;
+  width: 100%;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 749px) {
+  .email__popup--mdoal__content:not(.email__popup--position-center) {
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .email__popup--position-center .email__popup---wrapper {
+    max-width: calc(100% - 50px);
+  }
+
+  .email__popup--mdoal__content:not(.email__popup--position-center)
+    .email__popup---wrapper {
+    max-width: 100%;
+  }
+}
+@media only screen and (min-width: 750px) {
+  .email__popup--mdoal__content.email__popup--position-right {
+    right: 3rem;
+    bottom: 30px;
+  }
+  .email__popup--mdoal__content.email__popup--position-left {
+    left: 3rem;
+    bottom: 30px;
+  }
+}
+.email__popup---wrapper {
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+  padding: 3rem;
+  position: relative;
+  background-color: rgb(var(--color-background));
+  overflow: auto;
+  max-height: 60rem;
+  width: 100%;
+  z-index: 9;
+  border-radius: 1.5rem;
+}
+.email-popup-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 8;
+  cursor: crosshair;
+}
+.email__popup--mdoal__content.popup-open {
+  opacity: 1;
+  visibility: visible;
+  z-index: 101;
+  display: flex;
+  animation: fade-in var(--duration-long) ease;
+}
+.email__popup--mdoal__content.popup-closing {
+  animation: fade-out var(--duration-long) ease;
+}
+.email__popup--toggle .icon {
+  height: auto;
+  margin: 0;
+  width: 1.6rem;
+}
+button.email__popup--toggle {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: rgba(var(--color-background));
+  border: none;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  z-index: 9;
+  box-shadow: 0 0 1.5rem rgba(var(--color-foreground), 0.15);
+}
+button.email__popup--hide {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.email__popup--form .form__message {
+  justify-content: center;
+}
+.email__popup--meida-active .email__popup--wrapper-inner {
+  display: flex;
+  position: relative;
+}
+.email__popup--image {
+  width: 30rem;
+  position: absolute;
+  height: 100%;
+}
+.email__popup--media.media {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.email__popup---wrapper.email__popup--meida-active {
+  padding: 0;
+}
+@media screen and (min-width: 750px) {
+  .email__popup--medium,
+  .email__popup--large {
+    max-width: 60rem;
+  }
+  .email__popup--small {
+    max-width: 50rem;
+  }
+}
+@media screen and (min-width: 992px) {
+  .email__popup--medium {
+    max-width: 75rem;
+  }
+  .email__popup--large {
+    max-width: 90rem;
+  }
+}
+
+@media screen and (min-width: 1199px) {
+  .email__popup--large {
+    max-width: 100rem;
+  }
+}
+
+.email__popup--meida-active .email__popup--content {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  flex-grow: 1;
+}
+.email__popup--media-position--left.email__popup--meida-active
+  .email__popup--content {
+  padding-inline-start: 33rem;
+  padding-right: 3rem;
+}
+.email__popup--media-position--right.email__popup--meida-active
+  .email__popup--content {
+  padding-inline-end: 33rem;
+  padding-left: 3rem;
+}
+.email__popup--media-position--left .email__popup--image {
+  left: 0;
+}
+.email__popup--media-position--right .email__popup--image {
+  right: 0;
+}
+.text-right:not(.email__popup--media-position--right)
+  button.email__popup--toggle {
+  right: 0.5rem;
+  top: 0.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+.email__popup--media-position--top .email__popup--content {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.email__popup--content {
+  z-index: 8;
+}
+.email__popup--media-position--full-width .email__popup--content {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.email__popup--media-position--full-width .email__popup--image {
+  width: 100%;
+}
+.email__popup--content {
+  color: rgba(var(--color-foreground), 0.75);
+}
+.email__popup__field-wrapper input {
+  background: transparent;
+}
+.email__popup--position-center .email__popup---wrapper {
+  margin: 0 auto;
+}
+@media only screen and (max-width: 749px) {
+  .email__popup--image {
+    display: none;
+  }
+  .email__popup--media-position--left.email__popup--meida-active
+    .email__popup--content {
+    padding-inline-start: 3rem;
+  }
+  .email__popup--media-position--right.email__popup--meida-active
+    .email__popup--content {
+    padding-inline-end: 3rem;
+  }
+  .email__popup---wrapper {
+    margin: 0 auto;
+  }
+}
+
+.email__popup--mdoal__content:not(.email__popup--position-center) {
+  box-shadow: 0 0 4rem rgba(var(--color-foreground), 0.2);
+}
+.email__popup--content > * + *,
+.email__popup--form > * + * {
+  margin-top: 1.5rem;
+}
+.email__popup--content > *:first-child {
+  margin-bottom: 0;
+}
+.email__form--text.rte {
+  color: rgba(var(--color-foreground), 0.7);
+}
+@media only screen and (min-width: 750px) {
+  .email__popup--form
+    .input__field_form:not(.email--button--full)
+    .input__field {
+    border-radius: 3rem;
+    padding-right: 14.5rem;
+  }
+  .email__popup__field-wrapper
+    .input__field_form:not(.email--button--full)
+    .button {
+    position: absolute;
+    right: 3px;
+    border-radius: 3rem;
+    top: 50%;
+    height: calc(100% - 6px);
+    transform: translateY(-50%);
+  }
+}
+@media only screen and (max-width: 749px) {
+  .email__popup--form
+    .input__field_form:not(.email--button--full)
+    .input__field {
+    margin-bottom: 2rem;
+  }
+  .email__popup--form .input__field_form:not(.email--button--full) .button {
+    width: 100%;
+  }
+}
+@keyframes popup-open {
+  0% {
+    transform: translateY(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.popup-open .email__popup---wrapper {
+  animation: popup-open var(--duration-long) ease;
+}
+.email__popup--media-position--left .email__popup--content > *:first-child {
+  padding-right: 3rem;
+}

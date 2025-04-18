@@ -1,0 +1,436 @@
+{{ 'section-contact-form.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% liquid
+  case section.settings.button_type
+    when 'primary'
+      assign button_class = 'button button--medium '
+    when 'secondary'
+      assign button_class = 'button button--secondary'
+    when 'icon'
+      assign button_class = 'link with--icon'
+    else
+      assign button_class = 'link'
+  endcase
+
+  if section.settings.full_width
+    assign content_column_class = 'col-12'
+    assign form_wrapper_class = 'col-12'
+  else
+    assign content_column_class = 'col-md-4 col-lg-6 col-12'
+    assign form_wrapper_class = 'col-md-8  col-lg-6 col-12'
+  endif
+%}
+
+<div class="contact__section section-{{ section.id }}-padding">
+  <div class="container">
+    <div class="row contact__form--container {% if section.settings.full_width %} full--width-section {% else %} half--width-section {% endif %}">
+      <div class="{{ content_column_class }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if section.settings.heading_tag == 'h1' -%}
+          <h1 class="contact__heading {{ section.settings.heading_size }}">{{ section.settings.heading | escape }}</h1>
+        {%- else -%}
+          <h2 class="contact__heading {{ section.settings.heading_size }}">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="contact__list--wrapper">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'contact_list' -%}
+                  <div
+                    class="contact__list--item  {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                    {{ block.shopify_attributes }}
+                    {% if settings.animations_reveal_on_scroll %}
+                      data-cascade
+                      style="--animation-order: {{ forloop.index }};"
+                    {% endif %}
+                  >
+                    <span class="h4 contact__list--item-heading">{{ block.settings.heading }}</span>
+                    <div class="contact__list--item-content">{{ block.settings.text }}</div>
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="{{ form_wrapper_class }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="contact__form--wrapper color-{{ section.settings.color_scheme }} gradient">
+          <div class="contact__form--header">
+            {%- if section.settings.form_heading_tag == 'h2' -%}
+              <h2 class="contact__form--heading {{ section.settings.form_heading_size }}">
+                {{ section.settings.form_heading }}
+              </h2>
+            {%- else -%}
+              <h3 class="contact__form--heading {{ section.settings.form_heading_size }}">
+                {{ section.settings.form_heading }}
+              </h3>
+            {%- endif -%}
+            <p class="contact__form--text">{{ section.settings.subheading }}</p>
+          </div>
+          {%- form 'contact', id: 'ContactForm' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="form-status form-status-list form__message" tabindex="-1" autofocus>
+                {% render 'icon-success' %}
+                {{ 'templates.contact.form.post_success' | t }}
+              </div>
+            {%- elsif form.errors -%}
+              <div class="form__message">
+                <h2 class="form-status caption-large" role="alert" tabindex="-1" autofocus>
+                  {% render 'icon-error' %}
+                  {{ 'templates.contact.form.error_heading' | t }}
+                </h2>
+              </div>
+              <ul class="form-status-list caption-large" role="list">
+                <li>
+                  <a href="#ContactForm-email" class="link">
+                    {{ form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email }}
+                  </a>
+                </li>
+              </ul>
+            {%- endif -%}
+
+            <div class="input__field_form">
+              <input
+                class="input__field h6"
+                autocomplete="name"
+                type="text"
+                id="ContactForm-name"
+                name="contact[{{ 'templates.contact.form.name' | t }}]"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.name' | t }}"
+              >
+              <label class="visually-hidden" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+            </div>
+
+            <div class="input__field_form field--with-error">
+              <input
+                autocomplete="email"
+                type="email"
+                id="ContactForm-email"
+                class="input__field h6"
+                name="contact[email]"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ContactForm-email-error"
+                {% endif %}
+                placeholder="{{ 'templates.contact.form.email' | t }}"
+              >
+              <label class="visually-hidden" for="ContactForm-email">
+                {{- 'templates.contact.form.email' | t }}
+                <span aria-hidden="true">*</span></label
+              >
+              {%- if form.errors contains 'email' -%}
+                <small class="contact__field-error" id="ContactForm-email-error">
+                  <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                  <span class="form__message">
+                    {%- render 'icon-error' -%}
+                    {{- form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email -}}
+                  </span>
+                </small>
+              {%- endif -%}
+            </div>
+
+            <div class="input__field_form">
+              <input
+                type="tel"
+                id="ContactForm-phone"
+                class="input__field h6"
+                autocomplete="tel"
+                name="contact[{{ 'templates.contact.form.phone' | t }}]"
+                pattern="[0-9\-]*"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.phone' | t }}"
+              >
+              <label class="visually-hidden" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
+            </div>
+            <div class="input__field_form textarea__field">
+              <textarea
+                rows="10"
+                id="ContactForm-body"
+                class="text__area input__field h6"
+                name="contact[{{ 'templates.contact.form.comment' | t }}]"
+                placeholder="{{ 'templates.contact.form.comment' | t }}"
+              >
+                  {{- form.body -}}
+                </textarea>
+              <label class="visually-hidden field__label" for="ContactForm-body">
+                {{- 'templates.contact.form.comment' | t -}}
+              </label>
+            </div>
+            <div class="contact__button">
+              <button type="submit" class="{{ button_class }}">
+                {{ 'templates.contact.form.send' | t }}
+                {%- if section.settings.button_type == 'icon' -%}
+                  {% render 'icon-arrow' %}
+                {%- endif -%}
+              </button>
+            </div>
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.contact-form.name",
+  "tag": "section",
+  "disabled_on": {
+      "groups": ["header"]
+    },
+  "class": "spaced-section",
+  "settings": [
+	{
+      "type": "text",
+      "id": "heading",
+      "default": "Contact form",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "options": [
+        {
+          "value": "h2",
+          "label": "h2"
+        },
+        {
+          "value": "h1",
+          "label": "h1"
+        }
+      ],
+      "default": "h2",
+      "label": "Heading tag",
+      "info": "Used for accessibility and SEO"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "header",
+      "content": "Contact form wrapper"
+    },
+	{
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "default": "You can contact us anytime.",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "form_heading_tag",
+      "options": [
+        {
+          "value": "h2",
+          "label": "h2"
+        },
+        {
+          "value": "h3",
+          "label": "h3"
+        }
+      ],
+      "default": "h3",
+      "label": "Heading tag",
+      "info": "Used for accessibility and SEO"
+    },
+    {
+      "type": "select",
+      "id": "form_heading_size",
+      "options": [
+        {
+          "value": "h4",
+          "label": "Small"
+        },
+        {
+          "value": "h3",
+          "label": "Medium"
+        },
+        {
+          "value": "h2",
+          "label": "Large"
+        }
+      ],
+      "default": "h4",
+      "label": "Heading size"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna accumsan odio odio.",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "label": "Button type",
+      "default": "primary",
+      "options": [
+		{
+          "value": "primary",
+          "label": "Primary button"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary button"
+        },
+		{
+          "value": "icon",
+          "label": "Icon button"
+        },
+		{
+          "value": "underline",
+          "label": "Underline button"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "background-3",
+      "label": "t:sections.header.settings.color_scheme.label"
+     },
+     {
+      "type": "header",
+      "content": "Section padding"
+    },
+	  {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 0
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 0
+        }
+  ],
+  "blocks": [
+        {
+          "type": "contact_list",
+          "name": "contact item",
+          "settings": [
+			      {
+              "type": "text",
+              "id": "heading",
+              "default": "Heading:",
+              "label": "Heading"
+            },
+            {
+              "type": "richtext",
+              "id": "text",
+              "default": "<p>Share information such as the store's physical address, contact details, opening hours, etc.<p>",
+              "label": "t:sections.rich-text.blocks.text.settings.text.label"
+            }
+          ]
+        }
+    ],
+  "presets": [
+    {
+      "name": "t:sections.contact-form.presets.name",
+      "blocks":[
+        {
+        	"type": "contact_list",
+			 "settings": {
+				"heading": "Phone:",
+			    "text": "<p> <strong> (372) 587-2335 </strong> </br> (372) 555-4665</p>"
+			  }
+        },
+        {
+        	"type": "contact_list",
+              "settings": {
+              "heading": "Email:",
+              "text": "<p><a href=\"mailto:info@demomeil.com\" target=\"_blank\" title=\"mailto:info@demomeil.com\"><strong>info@demomeil.com<\/strong><\/a><\/p><p><a href=\"mailto:company@demo.com\" target=\"_blank\" title=\"mailto:company@demo.com\"><strong>company@demo.com<\/strong><\/a><\/p>"
+            }
+        },
+		{
+        	"type": "contact_list",
+              "settings": {
+              "heading": "Address:",
+            "text": "<p><strong>Iris Watson<br\/>P.O. Box 283 8562 Fusce Rd.<br\/>Frederick Nebraska 20620<\/strong><\/p>"
+            }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

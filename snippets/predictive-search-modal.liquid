@@ -1,0 +1,90 @@
+<div id="predictive__search_overlay" tabindex="-1">
+  <div class="search__content_inner">
+    {%- if settings.predictive_search_enabled -%}
+      <predictive-search class="search-modal__form" data-loading-text="{{ 'accessibility.loading' | t }}">
+    {% else %}
+      <search-form class="search-modal__form">
+    {%- endif -%}
+    <form
+      action="{{ routes.search_url }}"
+      method="get"
+      role="search"
+      class="search search-modal__form"
+      style="--search-modal-input-radius: {{ settings.search_modal_input_border_radius }}px"
+    >
+      <div class="search__input_field input__field_form">
+        <label class="visually-hidden" for="Search-In-Modal">{{ 'general.search.search' | t }}</label>
+        <input
+          class="search__input input__field"
+          id="Search-In-Modal"
+          type="search"
+          name="q"
+          value=""
+          placeholder="{{ 'general.search.search' | t }}"
+          {%- if settings.predictive_search_enabled -%}
+            role="combobox"
+            aria-expanded="false"
+            aria-owns="predictive-search-results-list"
+            aria-controls="predictive-search-results-list"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
+            autocorrect="off"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          {%- endif -%}
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+        <button
+          type="reset"
+          class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
+          aria-label="{{ 'general.search.reset' | t }}"
+        >
+          <svg class="icon icon-close" aria-hidden="true" focusable="false">
+            <use xlink:href="#icon-reset">
+          </svg>
+        </button>
+        <button class="search__button input__field_form_button" aria-label="{{ 'general.search.search' | t }}">
+          <svg class="icon icon-search" aria-hidden="true" focusable="false" role="presentation">
+            <use href="#icon-search">
+          </svg>
+        </button>
+      </div>
+
+      {%- if settings.predictive_search_enabled -%}
+        <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+          <div class="predictive-search__loading-state">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="presentation"
+              class="spinner"
+              viewBox="0 0 66 66"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+            </svg>
+          </div>
+        </div>
+
+        <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+      {%- endif -%}
+    </form>
+    {%- if settings.predictive_search_enabled -%}
+      </predictive-search>
+    {%- else -%}
+      </search-form>
+    {%- endif -%}
+    <button
+      type="button"
+      class="modal__close-button link link--text focus-inset"
+      id="search__close_btn"
+      aria-label="{{ 'accessibility.close' | t }}"
+    >
+      <svg class="icon icon-close" aria-hidden="true" focusable="false">
+        <use href="#icon-close">
+      </svg>
+    </button>
+  </div>
+</div>
+<div class="offcanvas-overlay"></div>

@@ -1,0 +1,83 @@
+.product--card__countdown {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0.8rem 0;
+}
+
+.product--card__countdown>div {
+  flex-grow: 1;
+  text-align: center;
+  position: relative;
+}
+.product--card__countdown .countdown__inner>span {
+  display: block;
+  line-height: 1;
+}
+
+.product--card__countdown .countdown__digit {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: rgba(var(--color-foreground));
+}
+
+.product--card__countdown span.countdown__labels {
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+}
+.product--card__countdown .countdown-item + .countdown-item::before {
+  width: 1px;
+  position: absolute;
+  content: "";
+  height: 80%;
+  left: 0;
+  background: rgba(var(--color-foreground));
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: -0.5px;
+}
+@media only screen and (max-width: 767px){
+  .product--card__countdown .countdown__digit,.product--card__countdown span.countdown__labels {
+    font-size: 1.3rem;
+  }
+  .product--card__countdown .countdown-item + .countdown-item::before {
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+  }
+  .product--card__countdown .countdown-item:last-child {
+    display: none;
+  }
+}
+.product-grid-item__content .product--card__countdown {
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+}
+@media only screen and (min-width: 750px){
+  .product__grid_timer.timer_placed--on-image {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    transition: var(--transition);
+      }
+  .timer_placed--on-image .product--card__countdown {
+    border-radius: 5px;
+  }
+  .grid-col-4 .timer_placed--on-image .product--card__countdown .countdown-item:last-child {
+    display: none;
+  }
+  .product-grid-item:hover .product__grid_timer.timer_placed--on-image {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .timer_placed--on-image-mobile{
+  	display: none;
+  }
+}
+
+@media only screen and (max-width: 749px){
+  .product__grid_timer.timer_placed--on-image {
+    display: none;
+  }
+}

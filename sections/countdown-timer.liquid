@@ -1,0 +1,738 @@
+{%- liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+-%}
+
+{{ 'component-grid.css' | asset_url | stylesheet_tag }}
+{{ 'section-countdown-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign container = ''
+  if section.settings.container == 'container'
+    assign container = 'container'
+  elsif section.settings.container == 'container-fluid'
+    assign container = 'container-fluid'
+  else
+    assign container = 'container-fluid px-0'
+  endif
+
+  assign desktop_content_position_class = section.settings.desktop_content_position
+
+  case desktop_content_position_class
+    when 'top'
+      assign desktop_content_position_class_assign = 'align-items-start'
+    when 'bottom'
+      assign desktop_content_position_class_assign = 'align-items-end'
+    else
+      assign desktop_content_position_class_assign = 'align-items-center'
+  endcase
+
+  assign desktop_content_alignment_class = section.settings.desktop_content_alignment
+
+  case desktop_content_alignment_class
+    when 'right'
+      assign desktop_content_alignment_class_assign = 'justify-content-end'
+    when 'center'
+      assign desktop_content_alignment_class_assign = 'justify-content-center'
+    else
+      assign desktop_content_alignment_class_assign = 'justify-content-start'
+  endcase
+-%}
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  {% if section.settings.custom_colors %}
+  .custom--colors-{{ section.id }}{
+    --color-foreground: {{ section.settings.foreground.red }}, {{ section.settings.foreground.green }}, {{ section.settings.foreground.blue }};
+    --color-background: {{ section.settings.background.red }}, {{ section.settings.background.green }}, {{ section.settings.background.blue }};
+    --color-button: {{ section.settings.accent_1_bg.red }}, {{ section.settings.accent_1_bg.green }}, {{ section.settings.accent_1_bg.blue }};
+    --color-button-text: {{ section.settings.accent_1_text.red }}, {{ section.settings.accent_1_text.green }}, {{ section.settings.accent_1_text.blue }};
+  }
+  {% endif %}
+</style>
+
+<div
+  class="deals__banner--section {% if section.settings.full_width %} section-{{ section.id }}-padding  {% endif %}"
+  data-section-id="{{ section.id }}"
+  data-section-type="popup-video"
+>
+  <div class="container countdown--banner__content">
+    <div class="countdown--banner__content--box color-{{ section.settings.color_scheme }} {% unless section.settings.custom_colors %} gradient{% endunless %} {% if section.settings.round_corner %} countdown--media-radius-true {% endif %} {% if section.settings.custom_colors %} custom--colors-{{ section.id }}{% endif %}">
+      <div
+        {% if section.settings.full_width %}
+          style="--grid-desktop-vertical-spacing: 0;"
+        {% endif %}
+        class="timer__video--content-wrapper countdown--timer-content-padding grid {% if section.settings.full_width %}grid--1-col  {% else %}grid--2-col-desktop{% endif %} grid--1-col-tablet-down {% if section.settings.layout == "text_first" %}countdown--timer-content-reverse{% endif %} {% if section.settings.full_width %}full--width-column{% endif %}"
+      >
+        <div class="countdown--timer-media grid__item {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <div
+            class="countdown--timer-media countdown--timer-media--{{ section.settings.height }} {% if section.settings.image != blank %}media{% else %} placeholder{% endif %} {% if section.settings.round_corner %} countdown--media-radius-true {% endif %}"
+            {% if section.settings.height == 'adapt' and section.settings.image != blank %}
+              style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+            {% endif %}
+          >
+            {%- if section.settings.image != blank -%}
+              {%- capture sizes -%}(min-width: {{ settings.container_lg_width }}px) {% if section.settings.full_width %}{{ settings.container_lg_width | minus: 30 }}px{% else %}{{ settings.container_lg_width | minus: 60 | divided_by: 2 }}px{% endif %},(min-width: 750px) {% if section.settings.full_width %} calc(100vw - 30px){% else %} calc((100vw - 130px) / 2) {% endif %}{%- endcapture -%}
+              {{
+                section.settings.image
+                | image_url: width: 1500
+                | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 360, 535, 750, 1070, 1500'
+              }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="timer__video--content grid__item {% unless section.settings.full_width %}d-flex {{ desktop_content_position_class_assign }} {{ desktop_content_alignment_class_assign }} {% else %}timer--horizontal-content{% endunless %} text-{{ section.settings.desktop_content_alignment }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <div class="timer__video--content-inner {% if section.settings.full_width and section.settings.content_direction == 'horizontal' %}timer--content-horizontal-gird-item {% endif %}">
+            {% if section.settings.content_direction == 'horizontal' %}
+              <div class="timer--content-horizontal-column">
+            {% endif %}
+            <div class="deals__banner--content__subtitle text__secondary">{{ section.settings.subheading }}</div>
+            <h2 class="deals__banner--content__maintitle  gradient--title">{{ section.settings.heading }}</h2>
+            <div class="deals__banner--content__desc">{{ section.settings.text }}</div>
+            {% if section.settings.content_direction == 'horizontal' %}</div>{% endif %}
+            {%- if section.settings.countdown_timer -%}
+              {%- liquid
+                assign countdown_timer = section.settings.year | append: '-' | append: section.settings.countdown_month | append: '-' | append: section.settings.countdown_days
+                assign countdown_timer_convert = countdown_timer | date: '%s'
+                assign today_date = 'now' | date: '%s'
+
+                assign timer = false
+                if countdown_timer_convert > today_date
+                  assign timer = true
+                endif
+              -%}
+              <countdown-timer>
+                {% if timer %}
+                  <div
+                    class="countdown--timer-banner d-flex {{ desktop_content_alignment_class_assign }} {% if section.settings.box_border_style == "sqaure" %}box--square-true{% endif %}"
+                    data-countdown="{{ section.settings.year }}-{{ section.settings.countdown_month }}-{{ section.settings.countdown_days }}"
+                  >
+                    <div class="countdown-item Days">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">- -</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.days' | t }}</span>
+                      </div>
+                    </div>
+                    <div class="countdown-item Hrs">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">- -</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.hours' | t }}</span>
+                      </div>
+                    </div>
+                    <div class="countdown-item Min">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">- -</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.minutes' | t }}</span>
+                      </div>
+                    </div>
+                    <div class="countdown-item Sec">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">- -</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.seconds' | t }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="countdown--timer-banner d-flex  {{ desktop_content_alignment_class_assign }} {% if section.settings.box_border_style == "sqaure" %}box--square-true{% endif %}">
+                    <div class="countdown-item Days">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">00</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.days' | t }}</span>
+                      </div>
+                    </div>
+                    <div class="countdown-item Hrs">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">00</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.hours' | t }}</span>
+                      </div>
+                    </div>
+                    <div class="countdown-item Min">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">00</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.minutes' | t }}</span>
+                      </div>
+                    </div>
+                    <div class="countdown-item Sec">
+                      <div class="countdown__inner">
+                        <span class="countdown__digit">00</span>
+                        <span class="countdown__labels">{{ 'products.product.countdown_timer.seconds' | t }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </countdown-timer>
+            {%- endif -%}
+
+            {% liquid
+              if section.settings.button_type == 'primary'
+                assign button_class = 'button--primary'
+              else
+                assign button_class = 'button--secondary'
+              endif
+            %}
+            {%- if section.settings.button_label != blank -%}
+              <a
+                {% if section.settings.button_link != blank %}
+                  href="{{ section.settings.button_link }}"
+                {% endif %}
+                class="button button--{{ section.settings.button_size }} {{ button_class }} {% if section.settings.button_icon %} button--with-icon{% endif %}"
+                {% if section.settings.button_link == blank %}
+                  aria-disabled="true"
+                {% endif %}
+              >
+                {{ section.settings.button_label | escape }}
+
+                {% if section.settings.button_icon %}
+                  <span class="button--icon button--icon-right"></span>
+                {% endif %}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Countdown timer",
+  "settings": [
+    {
+        "type": "header",
+        "content": "General"
+    },
+    {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.image-with-text.settings.height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.image-with-text.settings.height.options__2.label"
+        },
+		{
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image-with-text.settings.height.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.image-with-text.settings.height.label"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "t:sections.image-with-text.settings.layout.options__1.label"
+        },
+        {
+          "value": "text_first",
+          "label": "t:sections.image-with-text.settings.layout.options__2.label"
+        }
+      ],
+      "default": "image_first",
+      "label": "t:sections.image-with-text.settings.layout.label",
+      "info": "t:sections.image-with-text.settings.layout.info"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "middle",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "top",
+      "label": "t:sections.image-with-text.settings.desktop_content_position.label",
+      "info": "It works unless you enable the \"Make section full width\""
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__3.label"
+        }
+      ],
+      "default": "left",
+      "label": "t:sections.image-with-text.settings.desktop_content_alignment.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "round_corner",
+      "label": "Round corner",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": false
+    },
+     {
+      "type": "select",
+      "id": "content_direction",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "vertical",
+      "label": "Content direction",
+      "info": "It will work, when \"Make section full width\" is enabled"
+     },
+    {
+        "type": "header",
+        "content": "Countdown timer"
+      },
+       {
+         "type": "checkbox",
+         "id": "countdown_timer",
+         "label": "Enable",
+         "default": true
+       },
+       {
+       "type": "number",
+       "id": "year",
+        "label": "Year",
+       "info": "Write the year in the following format: 2023",
+       "placeholder": "2023"
+     },
+     {
+         "type": "select",
+         "id": "countdown_month",
+         "label": "Month",
+         "options": [
+           {
+             "value": "01",
+             "label": "Jan"
+           },
+           {
+             "value": "02",
+             "label": "Feb"
+           },
+           {
+             "value": "03",
+             "label": "Mar"
+           },
+           {
+             "value": "04",
+             "label": "Apr"
+           },
+           {
+             "value": "05",
+             "label": "May"
+           },
+           {
+             "value": "06",
+             "label": "Jun"
+           },
+           {
+             "value": "07",
+             "label": "Jul"
+           },
+           {
+             "value": "08",
+             "label": "Aug"
+           },
+           {
+             "value": "09",
+             "label": "Sept"
+           },
+           {
+             "value": "10",
+             "label": "Oct"
+           },
+           {
+             "value": "11",
+             "label": "Nov"
+           },
+           {
+             "value": "12",
+             "label": "Dec"
+           }
+         ],
+         "default": "01"
+       },
+       {
+         "type": "select",
+         "id": "countdown_days",
+         "label": "Day",
+         "options": [
+           {
+             "value": "01",
+             "label": "1"
+           },
+           {
+             "value": "02",
+             "label": "2"
+           },
+           {
+             "value": "03",
+             "label": "3"
+           },
+           {
+             "value": "04",
+             "label": "4"
+           },
+           {
+             "value": "05",
+             "label": "5"
+           },
+           {
+             "value": "06",
+             "label": "6"
+           },
+           {
+             "value": "07",
+             "label": "7"
+           },
+           {
+             "value": "08",
+             "label": "8"
+           },
+           {
+             "value": "09",
+             "label": "9"
+           },
+           {
+             "value": "10",
+             "label": "10"
+           },
+           {
+             "value": "11",
+             "label": "11"
+           },
+           {
+             "value": "12",
+             "label": "12"
+           },
+           {
+             "value": "13",
+             "label": "13"
+           },
+           {
+             "value": "14",
+             "label": "14"
+           },
+           {
+             "value": "15",
+             "label": "15"
+           },
+           {
+             "value": "16",
+             "label": "16"
+           },
+           {
+             "value": "17",
+             "label": "17"
+           },
+           {
+             "value": "18",
+             "label": "18"
+           },
+           {
+             "value": "19",
+             "label": "19"
+           },
+           {
+             "value": "20",
+             "label": "20"
+           },
+           {
+             "value": "21",
+             "label": "21"
+           },
+           {
+             "value": "22",
+             "label": "22"
+           },
+           {
+             "value": "23",
+             "label": "23"
+           },
+           {
+             "value": "24",
+             "label": "24"
+           },
+           {
+             "value": "25",
+             "label": "25"
+           },
+           {
+             "value": "26",
+             "label": "26"
+           },
+           {
+             "value": "27",
+             "label": "27"
+           },
+           {
+             "value": "28",
+             "label": "28"
+           },
+           {
+             "value": "29",
+             "label": "29"
+           },
+           {
+             "value": "30",
+             "label": "30"
+           },
+           {
+             "value": "31",
+             "label": "31"
+           }
+         ],
+         "default": "01"
+       },
+      {
+      "type": "select",
+      "id": "box_border_style",
+      "options": [
+        {
+          "value": "sqaure",
+          "label": "Square"
+        },
+        {
+          "value": "round",
+          "label": "Round"
+        }
+      ],
+      "default": "round",
+      "label": "Box border style"
+     },
+      {
+        "type": "header",
+        "content": "Content settings"
+      },
+     {
+       "type": "inline_richtext",
+       "id": "heading",
+       "default": "Countdown timer",
+       "label": "t:sections.featured-collection.settings.title.label",
+       "info": "Use bold style to highlight text."
+       },
+      {
+        "type": "text",
+        "id": "subheading",
+        "default": "Add a tagline",
+        "label": "Subheading"
+      },
+     {
+       "type": "richtext",
+       "id": "text",
+       "label": "Text",
+       "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>"
+     },
+	{
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+     "default": "Shop now"
+    },
+  	{
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          },
+    {
+            "type": "select",
+            "id": "button_type",
+            "label": "Button type",
+            "default": "primary",
+            "options": [
+              {
+                "value": "secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "primary",
+                "label": "Primary"
+              }
+            ]
+          },
+	{
+            "type": "select",
+            "id": "button_size",
+            "label": "Button size",
+            "default": "large",
+            "options": [
+              {
+                "value": "large",
+                "label": "Large"
+              },
+              {
+                "value": "medium",
+                "label": "Medium"
+              },
+		        {
+                "value": "small",
+                "label": "Small"
+              }
+            ]
+          },
+
+        {
+           "type": "header",
+           "content": "Colors"
+         },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "background-1",
+          "label": "t:sections.header.settings.color_scheme.label"
+       },
+       {
+         "type": "checkbox",
+         "id": "custom_colors",
+         "label": "Replace with your custom colors",
+         "default": false
+       },
+       {
+         "type": "color",
+         "id": "foreground",
+         "default": "#121212",
+         "label": "Foreground color"
+       },
+       {
+         "type": "color",
+         "id": "background",
+         "default": "#F7F8FC",
+         "label": "Background color"
+       },
+      {
+         "type": "color",
+         "id": "accent_1_bg",
+         "default": "#121212",
+         "label": "Accent 1 background"
+       },
+       {
+         "type": "color",
+         "id": "accent_1_text",
+         "default": "#fff",
+         "label": "Accent 1 foreground"
+       },
+      {
+            "type": "header",
+            "content": "Section padding"
+          },
+          {
+                "type": "paragraph",
+                "content": "Desktop"
+              },
+              {
+                "type": "range",
+                "id": "padding_top",
+                "min": 0,
+                "max": 150,
+                "step": 5,
+                "unit": "px",
+                "label": "Padding top",
+                "default": 30
+              },
+              {
+                "type": "range",
+                "id": "padding_bottom",
+                "min": 0,
+                "max": 150,
+                "step": 5,
+                "unit": "px",
+                "label": "Padding bottom",
+                "default": 30
+              },
+              {
+                "type": "paragraph",
+                "content": "Mobile"
+              },
+              {
+                "type": "range",
+                "id": "mobile_padding_top",
+                "min": 0,
+                "max": 150,
+                "step": 5,
+                "unit": "px",
+                "label": "Padding top",
+                "default": 30
+              },
+              {
+                "type": "range",
+                "id": "mobile_padding_bottom",
+                "min": 0,
+                "max": 150,
+                "step": 5,
+                "unit": "px",
+                "label": "Padding bottom",
+                "default": 30
+              }
+ ],
+ "presets": [
+      {
+        "name": "Countdown timer"
+      }
+  ],
+  "disabled_on": {
+   "groups": ["header","footer"]
+ }
+}
+{% endschema %}

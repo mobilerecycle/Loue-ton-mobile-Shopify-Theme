@@ -1,0 +1,44 @@
+.offcanvas-header.open {
+  transform: translateX(0);
+  visibility: visible;
+}
+.offcanvas-header.open ~ .offcanvas-overlay {
+  visibility: visible;
+  opacity: 0.5;
+}
+
+.offcanvas__sub_menu_li {
+  position: relative;
+  border-top: 1px solid #ededed;
+}
+
+.offcanvas__sub_menu_item {
+  line-height: 1;
+  display: block;
+  padding: 15px 0 15px 30px;
+}
+.offcanvas__sub_menu_item ~ .offcanvas__sub_menu .offcanvas__sub_menu_item {
+  padding-left: 40px;
+}
+.offcanvas__menu_item.header__actions_btn {
+  display: flex;
+  align-items: center;
+}
+span.offcanvas__menu_text__icon {
+  margin-left: 10px;
+}
+.offcanvas__menu_item.header__actions_btn {
+  position: relative;
+}
+.offcanvas__menu_item .header__actions_btn_cart_num {
+  right: auto;
+  left: 12px;
+  top: 7px;
+}
+.user--menu__icon > svg {
+  width: 1.8rem;
+}
+.offcanvas__menu_item.user--menu__icon {
+  display: flex;
+  align-items: center;
+}

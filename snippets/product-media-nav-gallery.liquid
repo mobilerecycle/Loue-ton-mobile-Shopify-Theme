@@ -1,0 +1,108 @@
+{% assign count = -1 %}
+
+{%- if product.selected_or_first_available_variant.featured_media != null -%}
+{%- assign count = count | plus: 1 -%}
+{%- assign media = product.selected_or_first_available_variant.featured_media -%}
+{% assign aspect_ratio = media.aspect_ratio |  default: 1 %}
+<div data-index="{{ count }}" data-media-id="{{ media.id }}" class="swiper-slide media__gallery_nav_list" style="--vertical-slide-height: {{ 150 | divided_by: aspect_ratio }}px;">
+  <noscript>
+    {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+    <a href="{% if media.media_type == 'video' %}{{ media.sources[1].url }}{% else %}{{ media | external_video_url }}{% endif %}" aria-label="{{ 'products.product.video_exit_message' | t: title: product.title | escape }}">
+      <span class="product__media-icon motion-reduce">{% render 'icon-play' %}</span>
+      <div class="product__media "
+           tabindex="-1"
+           >
+       <img id="Thumbnail-{{ section.id }}-{{ forloop.index }}" 
+             srcset="{% if media.preview_image.width >= 54 %}{{ media.preview_image | image_url: width: 54 }} 54w,{% endif %}
+                     {% if media.preview_image.width >= 74 %}{{ media.preview_image | image_url: width: 74 }} 74w,{% endif %}
+                     {% if media.preview_image.width >= 104 %}{{ media.preview_image | image_url: width: 104 }} 104w,{% endif %}
+                     {% if media.preview_image.width >= 162 %}{{ media.preview_image | image_url: width: 162 }} 162w,{% endif %}
+                     {% if media.preview_image.width >= 208 %}{{ media.preview_image | image_url: width: 208 }} 208w,{% endif %}
+                     {% if media.preview_image.width >= 324 %}{{ media.preview_image | image_url: width: 324 }} 324w,{% endif %}
+                     {% if media.preview_image.width >= 416 %}{{ media.preview_image | image_url: width: 416 }} 416w,{% endif %},
+                     {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+             src="{{ media | image_url: width: 416 }}"
+             sizes="(min-width: {{ page_width }}px) calc(({{ page_width | minus: 100 | times: media_width | round }} - 4rem) / 4), (min-width: 990px) calc(({{ media_width | times: 100 }}vw - 4rem) / 4), (min-width: 750px) calc((100vw - 15rem) / 8), calc((100vw - 14rem) / 3)"
+             alt="{{ media.alt | escape }}"
+             height="208"
+             width="208"
+             loading="lazy"
+         >
+        
+        
+      </div>
+    </a>
+    {%- else -%}
+    <div class="product__media"
+         tabindex="-1"
+         >
+      <img id="Thumbnail-{{ section.id }}-{{ forloop.index }}" 
+             srcset="{% if media.preview_image.width >= 54 %}{{ media.preview_image | image_url: width: 54 }} 54w,{% endif %}
+                     {% if media.preview_image.width >= 74 %}{{ media.preview_image | image_url: width: 74 }} 74w,{% endif %}
+                     {% if media.preview_image.width >= 104 %}{{ media.preview_image | image_url: width: 104 }} 104w,{% endif %}
+                     {% if media.preview_image.width >= 162 %}{{ media.preview_image | image_url: width: 162 }} 162w,{% endif %}
+                     {% if media.preview_image.width >= 208 %}{{ media.preview_image | image_url: width: 208 }} 208w,{% endif %}
+                     {% if media.preview_image.width >= 324 %}{{ media.preview_image | image_url: width: 324 }} 324w,{% endif %}
+                     {% if media.preview_image.width >= 416 %}{{ media.preview_image | image_url: width: 416 }} 416w,{% endif %},
+                     {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+             src="{{ media | image_url: width: 416 }}"
+             sizes="(min-width: {{ page_width }}px) calc(({{ page_width | minus: 100 | times: media_width | round }} - 4rem) / 4), (min-width: 990px) calc(({{ media_width | times: 100 }}vw - 4rem) / 4), (min-width: 750px) calc((100vw - 15rem) / 8), calc((100vw - 14rem) / 3)"
+             alt="{{ media.alt | escape }}"
+             height="208"
+             width="208"
+             loading="lazy"
+         >
+        
+    </div>
+    {%- endif -%}
+  </noscript>
+
+  <span id="ProductThumbnail-featured" class="media__nav_thumb" aria-label="{{ media.alt }}" type="button" data-media-id="{{ media.id }}">
+    <img id="Thumbnail-{{ section.id }}-{{ forloop.index }}" 
+             srcset="{% if media.preview_image.width >= 54 %}{{ media.preview_image | image_url: width: 54 }} 54w,{% endif %}
+                     {% if media.preview_image.width >= 74 %}{{ media.preview_image | image_url: width: 74 }} 74w,{% endif %}
+                     {% if media.preview_image.width >= 104 %}{{ media.preview_image | image_url: width: 104 }} 104w,{% endif %}
+                     {% if media.preview_image.width >= 162 %}{{ media.preview_image | image_url: width: 162 }} 162w,{% endif %}
+                     {% if media.preview_image.width >= 208 %}{{ media.preview_image | image_url: width: 208 }} 208w,{% endif %}
+                     {% if media.preview_image.width >= 324 %}{{ media.preview_image | image_url: width: 324 }} 324w,{% endif %}
+                     {% if media.preview_image.width >= 416 %}{{ media.preview_image | image_url: width: 416 }} 416w,{% endif %},
+                     {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+             src="{{ media | image_url: width: 416 }}"
+             sizes="(min-width: {{ page_width }}px) calc(({{ page_width | minus: 100 | times: media_width | round }} - 4rem) / 4), (min-width: 990px) calc(({{ media_width | times: 100 }}vw - 4rem) / 4), (min-width: 750px) calc((100vw - 15rem) / 8), calc((100vw - 14rem) / 3)"
+             alt="{{ media.alt | escape }}"
+             height="208"
+             width="208"
+             loading="lazy"
+         >
+  </span>
+
+</div>
+{%- endif -%}
+
+
+{%- for media in product.media -%}
+{% assign aspect_ratio = media.aspect_ratio |  default: 1 %}
+{%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
+{%- assign count = count | plus: 1 -%}
+<div data-index="{{ count }}" data-media-id="{{ media.id }}" class="swiper-slide media__gallery_nav_list" style="--vertical-slide-height: {{ 150 | divided_by: aspect_ratio }}px;">
+  <span class="media__nav_thumb" id="ProductThumbnail-{{ forloop.index }}"  aria-label="{{ media.alt }}" type="button" data-media-id="{{ media.id }}">
+    <img id="Thumbnail-{{ section.id }}-{{ forloop.index }}" 
+             srcset="{% if media.preview_image.width >= 54 %}{{ media.preview_image | image_url: width: 54 }} 54w,{% endif %}
+                     {% if media.preview_image.width >= 74 %}{{ media.preview_image | image_url: width: 74 }} 74w,{% endif %}
+                     {% if media.preview_image.width >= 104 %}{{ media.preview_image | image_url: width: 104 }} 104w,{% endif %}
+                     {% if media.preview_image.width >= 162 %}{{ media.preview_image | image_url: width: 162 }} 162w,{% endif %}
+                     {% if media.preview_image.width >= 208 %}{{ media.preview_image | image_url: width: 208 }} 208w,{% endif %}
+                     {% if media.preview_image.width >= 324 %}{{ media.preview_image | image_url: width: 324 }} 324w,{% endif %}
+                     {% if media.preview_image.width >= 416 %}{{ media.preview_image | image_url: width: 416 }} 416w,{% endif %},
+                     {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+             src="{{ media | image_url: width: 416 }}"
+             sizes="(min-width: {{ page_width }}px) calc(({{ page_width | minus: 100 | times: media_width | round }} - 4rem) / 4), (min-width: 990px) calc(({{ media_width | times: 100 }}vw - 4rem) / 4), (min-width: 750px) calc((100vw - 15rem) / 8), calc((100vw - 14rem) / 3)"
+             alt="{{ media.alt | escape }}"
+             height="208"
+             width="208"
+             loading="lazy"
+         >
+  </span>
+</div>
+{%- endunless -%}
+{%- endfor -%}

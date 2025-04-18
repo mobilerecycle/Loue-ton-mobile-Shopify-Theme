@@ -1,0 +1,31 @@
+.newsletter--signup__form .newsletter-form__field-wrapper input[type="email"] {
+  padding: 0px 1.5rem 0 10rem;
+}
+@media only screen and (min-width: 750px) {
+  .newsletter--signup__form
+    .newsletter-form__field-wrapper
+    input[type="email"] {
+    padding: 0px 3rem 0 11.5rem;
+  }
+}
+.newsletter-form__field-wrapper .input__field_form_button {
+  right: auto;
+  left: 1.5rem;
+}
+@media only screen and (min-width: 991px) {
+  .form__right .newsletter--signup__form.form__width {
+    padding-left: 0;
+    padding-right: 3rem;
+  }
+  .form__left .newsletter--signup__form.form__width {
+    padding-right: 0;
+    padding-left: 10rem;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .form__right .newsletter--signup__form.form__width {
+    padding-left: 0;
+    padding-right: 10rem;
+  }
+}

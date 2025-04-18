@@ -1,0 +1,24 @@
+.search__input.field__input {
+  padding-right: 5rem;
+}
+.search__button .icon {
+  height: 25px;
+  width: 25px;
+}
+/* Remove extra spacing for search inputs in Safari */
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.reset__button {
+  right: 4.4rem;
+  top: 0.2rem;
+}
+.reset__button .icon.icon-close {
+  height: 1.8rem;
+  width: 1.8rem;
+  stroke-width: 0.1rem;
+}

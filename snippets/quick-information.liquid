@@ -1,0 +1,206 @@
+<style>
+    #quick__information_overlay {
+      position: fixed;
+      width: 380px;
+      background: #fff;
+      height: 100%;
+      right: 0;
+      z-index: 99;
+      top: 0;
+      right: 0;
+      opacity: 0;
+      visibility: hidden;
+      background-color: rgb(var(--color-background));
+      border-color: rgba(var(--color-foreground), 0.2);
+      transform: translateX(100%);
+      transition: all 0.3s ease 0s;
+  }
+  #quick__information_overlay.active {
+      transform: translate(0);
+      opacity: 1;
+      visibility: visible;
+  }
+</style>
+{{ 'header-drawer.css' | asset_url | stylesheet_tag }}
+<div class="quick__information d-md-none" id="quick__information_overlay" tabindex="-1">
+  <div class="quick__information--container">
+    <div class="menu__drawer--header">
+      <button
+        type="button"
+        class="menu__drawer--close link link--text focus-inset"
+        id="quick__information--close_btn"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        <span> {{ 'accessibility.close' | t }}</span>
+        <svg class="icon icon-close" aria-hidden="true" focusable="false">
+          <use href="#icon-close">
+        </svg>
+      </button>
+    </div>
+
+    <div class="quick__information--body">
+      <div class="quick__links flex-grow-1 y_scroll">
+        <nav class="offcanvas__menu">
+          <ul class="offcanvas__menu_ul">
+            {%- for link in section.settings.menu.links -%}
+              <li class="offcanvas__menu_li">
+                {%- if link.links != blank -%}
+                  <a class="offcanvas__menu_item" href="{{ link.url }}"> {{ link.title | escape }} </a>
+
+                  <ul class="offcanvas__sub_menu">
+                    {%- for childlink in link.links -%}
+                      {%- if childlink.links != blank -%}
+                        <li class="offcanvas__sub_menu_li">
+                          <a href="{{ childlink.url }}" class="offcanvas__sub_menu_item">
+                            {{- childlink.title | escape -}}
+                          </a>
+                          <ul class="offcanvas__sub_menu">
+                            {%- for grandchildlink in childlink.links -%}
+                              <li class="offcanvas__sub_menu_li">
+                                <a class="offcanvas__sub_menu_item" href="{{ grandchildlink.url }}">
+                                  {{- grandchildlink.title | escape -}}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </li>
+                      {%- else -%}
+                        <li class="offcanvas__sub_menu_li">
+                          <a href="{{ childlink.url }}" class="offcanvas__sub_menu_item">
+                            {{- childlink.title | escape -}}
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    {% endfor %}
+                  </ul>
+
+                {%- else -%}
+                  <a class="offcanvas__menu_item" href="{{ link.url }}"> {{ link.title | escape }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+
+            {%- if shop.customer_accounts_enabled -%}
+              <li class="offcanvas__menu_li">
+                {%- if shop.customer_accounts_enabled -%}
+                  <a
+                    href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                    class="user--menu__icon"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                      <path fill="currentColor" d="M313.6 288c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4zM416 464c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16v-41.6C32 365.9 77.9 320 134.4 320c19.6 0 39.1 16 89.6 16 50.4 0 70-16 89.6-16 56.5 0 102.4 45.9 102.4 102.4V464zM224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm0-224c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z" />
+                    </svg>
+                    <span class="accounts__text--label">
+                      {%- liquid
+                        if customer
+                          echo 'customer.account_fallback' | t
+                        else
+                          echo 'customer.log_in' | t
+                        endif
+                      -%}
+                    </span>
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      </div>
+
+      {%- if section.settings.social_media or section.settings.enable_currency or section.settings.enable_language -%}
+        <div class="menu__drawer--footer">
+          {%- if section.settings.social_media -%}
+            {%- render 'social-media', className: 'text-center' -%}
+          {%- endif -%}
+
+          <div class="localization__store d-flex justify-content-center">
+            {%- if localization.available_countries.size > 1 and section.settings.enable_currency -%}
+              <localization-form>
+                {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+                  <div class="no-js-hidden">
+                    <div class="disclosure">
+                      <button
+                        type="button"
+                        class="dropdown__open_label"
+                        aria-expanded="false"
+                        aria-controls="FooterCountryList"
+                        aria-describedby="FooterCountryLabel"
+                      >
+                        {{ localization.country.name }}
+                        {{ localization.country.currency.iso_code }}
+                        {{ localization.country.currency.symbol }}
+                        {% render 'icon-caret' %}
+                      </button>
+                      <ul id="FooterCountryList" role="list" class="dropdown__open_list list-unstyled" hidden>
+                        {%- for country in localization.available_countries -%}
+                          <li class="disclosure__item" tabindex="-1">
+                            <a
+                              class="dropdown__list__item {% if country.iso_code == localization.country.iso_code %}active{% endif %} "
+                              href="#"
+                              {% if country.iso_code == localization.country.iso_code %}
+                                aria-current="true"
+                              {% endif %}
+                              data-value="{{ country.iso_code }}"
+                            >
+                              {{ country.name }}
+                              <span class="localization-form__currency">
+                                {{- country.currency.iso_code }}
+                                {{ country.currency.symbol -}}
+                              </span>
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                    <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+                  </div>
+                {%- endform -%}
+              </localization-form>
+            {%- endif -%}
+
+            {%- if localization.available_languages.size > 1 and section.settings.enable_language -%}
+              <localization-form>
+                {%- form 'localization', id: 'FooterLanguageForm' -%}
+                  <div class="no-js-hidden">
+                    <div class="disclosure">
+                      <button
+                        type="button"
+                        class="dropdown__open_label"
+                        aria-expanded="false"
+                        aria-controls="FooterLanguageList"
+                        aria-describedby="FooterLanguageLabel"
+                      >
+                        {{ localization.language.endonym_name | capitalize }}
+                        {% render 'icon-caret' %}
+                      </button>
+                      <ul id="FooterLanguageList" role="list" class="dropdown__open_list list-unstyled" hidden>
+                        {%- for language in localization.available_languages -%}
+                          <li class="disclosure__item" tabindex="-1">
+                            <a
+                              class="dropdown__list__item {% if language.iso_code == localization.language.iso_code %} active{% endif %} f"
+                              href="#"
+                              hreflang="{{ language.iso_code }}"
+                              lang="{{ language.iso_code }}"
+                              {% if language.iso_code == localization.language.iso_code %}
+                                aria-current="true"
+                              {% endif %}
+                              data-value="{{ language.iso_code }}"
+                            >
+                              {{ language.endonym_name | capitalize }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                    <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+                  </div>
+                {%- endform -%}
+              </localization-form>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+<div class="offcanvas-overlay"></div>

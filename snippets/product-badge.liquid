@@ -1,0 +1,47 @@
+{%- liquid
+
+	assign nweBadgeDate = product.metafields.meta.product_new_badge.value | date: '%s'
+    assign today_date = 'now' | date: '%s'
+	
+    if settings.badge_style == "style1"
+    	assign badge = "badge--text h5 mb-0" 
+    else
+       assign badge = "badge"
+    endif
+
+   assign sale_text = 'products.product.on_sale' | t
+    
+-%}
+
+
+<span class="product-grid-item__badges badge--{{ section.settings.badge_position }}">
+  {%- if product.metafields.meta.product_new_badge.value -%}
+  {%- if today_date < nweBadgeDate -%}
+  <span class="{{ badge }}  {% if settings.badge_style == "style2" %} color-{{ settings.sale_badge_color_scheme }} {% else %} color-foreground-{{ settings.sale_badge_color_scheme }} {% endif %}">{{ 'products.product.new_badge' | t }}</span>
+  {%- endif -%}
+  {%- endif -%}
+
+  
+  {%- if product.available == false -%}
+  <span class="{{ badge }}  {% if settings.badge_style == "style2" %} color-{{ settings.sold_out_badge_color_scheme }} {% else %} color-foreground-{{ settings.sold_out_badge_color_scheme }}  {% endif %}" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
+  {%- elsif product.compare_at_price > product.price and product.available -%}
+
+
+   {%- if settings.sale_percentage_show or sale_text != blank -%}
+    <span class="{{ badge }} badge--bottom-left {% if settings.badge_style == "style2" %} color-{{ settings.sale_badge_color_scheme }} {% else %} color-foreground-{{ settings.sale_badge_color_scheme }} {% endif %}" aria-hidden="true">
+      
+      {%- if settings.sale_percentage_show -%}
+      <span class="sale__save--percent">-{{- product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | money_without_currency | replace: ',', '.' | times: 100 | remove: '.0' -}} %</span>
+      {%- endif -%}
+  
+      {% if sale_text != blank %}
+      <span class="sale__text">{{ sale_text }}</span>
+      {% endif %}
+    </span>
+   {% endif %}
+  
+  {%- endif -%}
+
+</span>
+  
+  

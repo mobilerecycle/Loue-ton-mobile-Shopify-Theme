@@ -1,0 +1,60 @@
+{%- layout none -%}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+-%}
+
+<div class="product-grid-item">
+  <a href="{{ product.url | default: '#' }}?variant={{ variant.id }}" class="product__card--link">
+    <div class="media product-grid-item__thumbnail">
+      {%- if variant.featured_media -%}
+        <img
+          srcset="
+            {%- if variant.featured_media.width >= 165 -%}{{ variant.featured_media | img_url: '165x' }} 165w,{%- endif -%}
+            {%- if variant.featured_media.width >= 360 -%}{{ variant.featured_media| img_url: '360x' }} 360w,{%- endif -%}
+            {%- if variant.featured_media.width >= 533 -%}{{ variant.featured_media | img_url: '533x' }} 533w,{%- endif -%}
+            {%- if variant.featured_media.width >= 720 -%}{{ variant.featured_media | img_url: '720x' }} 720w,{%- endif -%}
+            {%- if variant.featured_media.width >= 940 -%}{{ variant.featured_media | img_url: '940x' }} 940w,{%- endif -%}
+            {%- if variant.featured_media.width >= 1066 -%}{{ variant.featured_media | img_url: '1066x' }} 1066w{%- endif -%}
+          "
+          src="{{ variant.featured_media | img_url: '533x' }}"
+          sizes="(min-width: {{ settings.container_lg_width }}px) {{ settings.container_lg_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+          alt="{{ variant.featured_media.alt | escape }}"
+          loading="lazy"
+          class="motion-reduce"
+          width="{{ variant.featured_media.width }}"
+          height="{{ variant.featured_media.height }}"
+        >
+      {%- else -%}
+        <img
+          srcset="
+            {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | img_url: '165x' }} 165w,{%- endif -%}
+            {%- if product.featured_media.width >= 360 -%}{{ product.featured_media| img_url: '360x' }} 360w,{%- endif -%}
+            {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | img_url: '533x' }} 533w,{%- endif -%}
+            {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | img_url: '720x' }} 720w,{%- endif -%}
+            {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | img_url: '940x' }} 940w,{%- endif -%}
+            {%- if product.featured_media.width >= 1066 -%}{{ product.featured_media | img_url: '1066x' }} 1066w{%- endif -%}
+          "
+          src="{{ product.featured_media | img_url: '533x' }}"
+          sizes="(min-width: {{ settings.container_lg_width }}px) {{ settings.container_lg_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+          alt="{{ product.featured_media.alt | escape }}"
+          loading="lazy"
+          class="motion-reduce"
+          width="{{ product.featured_media.width }}"
+          height="{{ product.featured_media.height }}"
+        >
+      {% endif %}
+    </div>
+  </a>
+
+  <div class="product-grid-item__content text-{{ settings.product_content_alignment }}">
+    <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+    <div class="product__vendor">{{ product.vendor }}</div>
+
+    <h3 class="product-grid-item__title {{ settings.product_title_size }}">
+      <a href="{{ product.url | default: '#' }}?variant={{ variant.id }}">{{ product.title }}</a>
+    </h3>
+
+    {% render 'price', product: product, price_class: price_class %}
+  </div>
+</div>

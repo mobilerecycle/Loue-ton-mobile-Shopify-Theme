@@ -1,0 +1,306 @@
+{% comment %}
+  Renders product buy-buttons.
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} product form id.
+  - section_id: {String} id of section to which this snippet belongs.
+  - show_pickup_availability: {Boolean} for the pickup availability. If true the pickup availability is rendered, false - not rendered (optional).
+
+  Usage:
+  {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
+{% endcomment %}
+
+<div {{ block.shopify_attributes }}>
+  <div
+    id="Quantity-Form-{{ section.id }}"
+    class="product-form__input product-form__quantity"
+  >
+    {%- if product != blank -%}
+      {%- liquid
+        assign gift_card_recipient_feature_active = false
+        if block.settings.show_gift_card_recipient and product.gift_card?
+          assign gift_card_recipient_feature_active = true
+        endif
+
+        assign show_dynamic_checkout = false
+        if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
+          assign show_dynamic_checkout = true
+        endif
+      -%}
+
+      <product-form
+        class="product-form mb-20 product_buy_button_form"
+        data-hide-errors="{{ gift_card_recipient_feature_active }}"
+        data-section-id="{{ section.id }}"
+      >
+        <div class="product-form__error-message-wrapper no-js-inline" role="alert" hidden>
+          <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-error" viewBox="0 0 13 13">
+            <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"/>
+            <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"/>
+            <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"/>
+            <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+          </svg>
+          <span class="product-form__error-message"></span>
+        </div>
+
+        {%- form 'product',
+          product,
+          id: product_form_id,
+          class: 'form',
+          novalidate: 'novalidate',
+          data-type: 'add-to-cart-form'
+        -%}
+          <input
+            type="hidden"
+            name="id"
+            value="{{ product.selected_or_first_available_variant.id }}"
+            {% if product.selected_or_first_available_variant.available == false
+              or quantity_rule_soldout
+              or product.selected_or_first_available_variant == null
+            %}
+              disabled
+            {% endif %}
+            class="product-variant-id"
+          >
+          {%- if gift_card_recipient_feature_active -%}
+            {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+          {%- endif -%}
+          <div class="product-form__buttons">
+            {% comment %} Quantity input and Add Cart Button Start {% endcomment %}
+            <div class="product-form__cart--box d-flex align-items-end">
+              {%- if block.settings.quantity__button -%}
+                <div class="product-form__input product-form__quantity">
+                  {% # theme-check-disable %}
+                  {%- assign cart_qty = cart
+                    | item_count_for_variant: product.selected_or_first_available_variant.id
+                  -%}
+                  {% # theme-check-enable %}
+                  <label class="quantity__label form__label" for="Quantity-{{ section.id }}">
+                    <strong> {{ 'products.product.quantity.label' | t }}</strong>
+                    <span class="quantity__rules-cart{% if cart_qty == 0 %} hidden{% endif %}">
+                      {%- render 'loading-spinner' -%}
+                      <span
+                        >(
+                        {{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}}
+                        )</span
+                      >
+                    </span>
+                  </label>
+                  <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
+                    <button class="quantity__button" name="minus" type="button">
+                      <span class="visually-hidden">
+                        {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+                      </span>
+                      {% render 'icon-minus' %}
+                    </button>
+                    <input
+                      class="quantity__input"
+                      type="number"
+                      name="quantity"
+                      id="Quantity-{{ section.id }}"
+                      data-cart-quantity="{{ cart_qty }}"
+                      data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                      min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                      {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
+                        data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                        max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                      {% endif %}
+                      step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+                      value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                      form="{{ product_form_id }}"
+                    >
+                    <button class="quantity__button" name="plus" type="button">
+                      <span class="visually-hidden">
+                        {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
+                      </span>
+                      {% render 'icon-plus' %}
+                    </button>
+                  </quantity-input>
+                </div>
+              {%- endif -%}
+
+              <div class="product__add__cart__button">
+                {%- liquid
+                  assign check_against_inventory = true
+                  if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                    assign check_against_inventory = false
+                  endif
+                  if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                    assign quantity_rule_soldout = true
+                  endif
+                -%}
+                <button
+                  id="ProductSubmitButton-{{ section_id }}"
+                  type="submit"
+                  name="add"
+                  class="product-form__submit button {% if block.settings.show_dynamic_checkout and product.selling_plan_groups == empty %}button--secondary{% else %}button--primary{% endif %}"
+                  {% if product.selected_or_first_available_variant.available == false
+                    or quantity_rule_soldout
+                    or product.selected_or_first_available_variant == null
+                  %}
+                    disabled
+                  {% endif %}
+                >
+                  {%- if current_variant.available -%}
+                    {%- if current_variant.inventory_quantity <= 0
+                      and current_variant.inventory_policy == 'continue'
+                      and block.settings.preorder_button
+                    -%}
+                      <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.3679 6.22188C21.2916 6.13269 21.1969 6.06109 21.0903 6.012C20.9837 5.96291 20.8678 5.93749 20.7504 5.9375H15.8754V2.6875C15.8754 2.04103 15.6186 1.42105 15.1615 0.963927C14.7044 0.506807 14.0844 0.25 13.4379 0.25H8.56291C7.91645 0.25 7.29646 0.506807 6.83934 0.963927C6.38222 1.42105 6.12541 2.04103 6.12541 2.6875V5.9375H1.25041C1.13264 5.93617 1.01598 5.96045 0.908523 6.00868C0.801067 6.05691 0.705381 6.12792 0.628094 6.2168C0.550808 6.30568 0.493769 6.4103 0.46093 6.52342C0.428091 6.63653 0.420237 6.75543 0.437912 6.87188L1.96541 16.7438C2.02417 17.1312 2.221 17.4844 2.51961 17.7383C2.81823 17.9921 3.19852 18.1294 3.59041 18.125H18.4267C18.8186 18.1294 19.1988 17.9921 19.4975 17.7383C19.7961 17.4844 19.9929 17.1312 20.0517 16.7438L21.5629 6.87188C21.5792 6.75588 21.5702 6.63773 21.5365 6.52554C21.5029 6.41335 21.4454 6.30976 21.3679 6.22188V6.22188ZM7.75041 2.6875C7.75041 2.47201 7.83602 2.26535 7.98839 2.11298C8.14076 1.9606 8.34742 1.875 8.56291 1.875H13.4379C13.6534 1.875 13.8601 1.9606 14.0124 2.11298C14.1648 2.26535 14.2504 2.47201 14.2504 2.6875V5.9375H7.75041V2.6875ZM18.4267 16.5H3.57416L2.20104 7.5625H19.7998L18.4267 16.5Z" fill="currentColor"/>
+                      </svg>
+                      <span>{{ 'products.product.preorder' | t }}</span>
+                    {%- else -%}
+                      <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.3679 6.22188C21.2916 6.13269 21.1969 6.06109 21.0903 6.012C20.9837 5.96291 20.8678 5.93749 20.7504 5.9375H15.8754V2.6875C15.8754 2.04103 15.6186 1.42105 15.1615 0.963927C14.7044 0.506807 14.0844 0.25 13.4379 0.25H8.56291C7.91645 0.25 7.29646 0.506807 6.83934 0.963927C6.38222 1.42105 6.12541 2.04103 6.12541 2.6875V5.9375H1.25041C1.13264 5.93617 1.01598 5.96045 0.908523 6.00868C0.801067 6.05691 0.705381 6.12792 0.628094 6.2168C0.550808 6.30568 0.493769 6.4103 0.46093 6.52342C0.428091 6.63653 0.420237 6.75543 0.437912 6.87188L1.96541 16.7438C2.02417 17.1312 2.221 17.4844 2.51961 17.7383C2.81823 17.9921 3.19852 18.1294 3.59041 18.125H18.4267C18.8186 18.1294 19.1988 17.9921 19.4975 17.7383C19.7961 17.4844 19.9929 17.1312 20.0517 16.7438L21.5629 6.87188C21.5792 6.75588 21.5702 6.63773 21.5365 6.52554C21.5029 6.41335 21.4454 6.30976 21.3679 6.22188V6.22188ZM7.75041 2.6875C7.75041 2.47201 7.83602 2.26535 7.98839 2.11298C8.14076 1.9606 8.34742 1.875 8.56291 1.875H13.4379C13.6534 1.875 13.8601 1.9606 14.0124 2.11298C14.1648 2.26535 14.2504 2.47201 14.2504 2.6875V5.9375H7.75041V2.6875ZM18.4267 16.5H3.57416L2.20104 7.5625H19.7998L18.4267 16.5Z" fill="currentColor"/>
+                      </svg>
+                      <span>{{ 'products.product.add_to_cart' | t }}</span>
+                    {%- endif -%}
+                  {%- else -%}
+                    <span> {{ 'products.product.sold_out' | t }}</span>
+                  {%- endif -%}
+                </button>
+
+                {% if current_variant.available %}
+                  {% render 'greenleaze-product' %}
+                {% endif %}
+              </div>
+            </div>
+            {% comment %} Quantity input and Add Cart Button End {% endcomment %}
+
+            {% comment %} Quantity Rules, quantity_price_breaks_configured start {% endcomment %}
+            {% render 'quantity-selector', product: product %}
+            {% comment %} Quantity Rules, quantity_price_breaks_configured start {% endcomment %}
+
+            {%- if show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
+          </div>
+        {%- endform -%}
+        {%- liquid
+          assign preorder_button_show = false
+          if block.settings.preorder_button
+            assign preorder_button_show = true
+          endif
+        -%}
+        <script>
+          window.preorder_button = {{ preorder_button_show }};
+        </script>
+      </product-form>
+    {%- else -%}
+      <div class="product-form">
+        <div class="product-form__cart--box d-flex align-items-end">
+          {%- if block.settings.quantity__button -%}
+            <div class="product-form__input product-form__quantity">
+              {% # theme-check-enable %}
+              <label class="quantity__label form__label" for="Quantity-{{ section.id }}">
+                <strong> {{ 'products.product.quantity.label' | t }}</strong>
+              </label>
+              <quantity-input class="quantity" data-url="" data-section="{{ section.id }}">
+                <button class="quantity__button" name="minus" type="button">
+                  <span class="visually-hidden">
+                    {{- 'products.product.quantity.decrease' | t -}}
+                  </span>
+                  {% render 'icon-minus' %}
+                </button>
+                <input
+                  class="quantity__input"
+                  type="number"
+                  name="quantity"
+                  id="Quantity-{{ section.id }}"
+                  data-cart-quantity="0"
+                  min="1"
+                  step="1"
+                  value=""
+                  form="{{ product_form_id }}"
+                >
+
+                <button class="quantity__button" name="plus" type="button">
+                  <span class="visually-hidden">
+                    {{- 'products.product.quantity.increase' | t -}}
+                  </span>
+                  {% render 'icon-plus' %}
+                </button>
+              </quantity-input>
+            </div>
+          {%- endif -%}
+
+          <div class="product-form__buttons form product__add__cart__button">
+            <button
+              type="submit"
+              name="add"
+              class="product-form__submit button button--full-width button--primary"
+              disabled
+            >
+              {{ 'products.product.sold_out' | t }}
+            </button>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {% unless placeholder %}
+    <modal-opener
+      class="product-popup-modal__opener notify_me--available {% if current_variant.available %}hidden{% endif %}"
+      data-modal="#back-in-stock-popup"
+      {{ block.shopify_attributes }}
+    >
+      <button id="ProductPopup-notify" class="product-popup-modal__button link" type="button" aria-haspopup="dialog">
+        {% render 'icon-email' %}
+        {{ 'products.product.back_in_stock_notify.button' | t }}
+      </button>
+    </modal-opener>
+  {% endunless %}
+
+  {%- if block.settings.guarantee_safe_checkout -%}
+    <div class="guarantee__safe__checkout">
+      <p>{{ block.settings.safe_checkout_text }}</p>
+      <ul class="list d-flex product__payment mb-20" role="list">
+        {%- for type in shop.enabled_payment_types -%}
+          <li class="product__payment__item">
+            {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- if show_pickup_availability -%}
+    {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
+    {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
+      | where: 'pick_up_enabled', true
+    -%}
+
+    <pickup-availability
+      class="product__pickup-availabilities no-js-hidden"
+      {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}
+        available
+      {% endif %}
+      data-root-url="{{ routes.root_url }}"
+      data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+      data-has-only-default-variant="{{ product.has_only_default_variant }}"
+    >
+      <template>
+        <pickup-availability-preview class="pickup-availability-preview">
+          {% render 'icon-unavailable' %}
+          <div class="pickup-availability-info">
+            <p class="caption-large">{{ 'products.product.pickup_availability.unavailable' | t }}</p>
+            <button class="pickup-availability-button link link--text underlined-link">
+              {{ 'products.product.pickup_availability.refresh' | t }}
+            </button>
+          </div>
+        </pickup-availability-preview>
+      </template>
+    </pickup-availability>
+    <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+</div>
+{%- assign is_preorder = false -%}
+{%- if block.settings.preorder_button and product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
+  {%- assign is_preorder = true -%}
+{%- endif -%}
+<script type="application/json" data-selected-variant-is-preorder>
+  {{ is_preorder | json }}
+</script>

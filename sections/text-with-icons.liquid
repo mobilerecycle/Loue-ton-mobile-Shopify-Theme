@@ -1,0 +1,445 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+{{ 'text-with-icons.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+{%- if theme_rtl -%}
+  {{ 'text-with-icons-rtl.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+    --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+
+  .text__with--icons--list{
+    --text-with-icon-border-color: {{ section.settings.border_color }}
+  }
+  #MainContent > :first-child .section--top-space-{{ section.id }} {
+    padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+  }
+{%- endstyle -%}
+
+<div class="text__with--icons section--top-space-{{ section.id }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient">
+  <div class="container">
+    <div class="text__with--icons--list text__with--icons-grid-{{ section.settings.column }} text__icons--grid-{{ section.settings.desktop_position }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'feature' -%}
+            {% liquid
+              assign vertical_content_alignment = ''
+              if section.settings.desktop_position == 'vertical'
+                if section.settings.content_alignment == 'center'
+                  assign vertical_content_alignment = 'align-items-center'
+                elsif section.settings.content_alignment == 'left'
+                  assign vertical_content_alignment = 'align-items-start'
+                else
+                  assign vertical_content_alignment = 'align-items-end'
+                endif
+              endif
+            %}
+            <div
+              class="text__with--icons-single--item {% if section.settings.border_show %} border__show {% endif %} text__with--icons__position--{{ section.settings.desktop_position }} {{ vertical_content_alignment }} {% unless section.settings.desktop_position == 'vertical' %} text__with--icons-align--{{ section.settings.content_alignment }}{% endunless %}"
+              {{ block.shopify_attributes }}
+              {% if settings.animations_reveal_on_scroll %}
+                data-cascade
+                style="--animation-order: {{ forloop.index }};"
+              {% endif %}
+            >
+              {%- if block.settings.image != blank -%}
+                <div class="text__with--icons--box">
+                  <img
+                    src="{{ block.settings.image | img_url: '70x' }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    width="70"
+                    height="{{ 70 | divided_by: block.settings.image.aspect_ratio | ceil }}"
+                    loading="lazy"
+                  >
+                </div>
+              {% else %}
+                <div class="text__with--icons--box">
+                  {% render 'icon-features', icon: block.settings.icon %}
+                </div>
+              {%- endif -%}
+              <div class="text__with--icons-content {% if block.settings.image != blank %} text__with--icons-image {% endif %} text-{{ section.settings.content_alignment }}">
+                <h2 class="text__with--icons--heading h4 rte">
+                  {{- block.settings.heading | replace: 'p>', 'span>' -}}
+                </h2>
+                <span class="text__with--icons--text">{{ block.settings.text }}</span>
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Text with icons",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+        "type": "header",
+        "content": "Layout"
+      },
+    {
+      "type": "select",
+      "id": "column",
+      "label": "Number of columns on desktop",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    },
+    {
+        "type": "select",
+        "id": "desktop_position",
+        "label": "Desktop content position",
+        "default": "horizontal",
+        "options": [
+          {
+            "value": "horizontal",
+            "label": "Horizontal"
+          },
+          {
+            "value": "vertical",
+            "label": "Vertical"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "label": "Desktop content alignment",
+        "default": "left",
+        "options": [
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+     {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "background-2",
+        "label": "t:sections.header.settings.color_scheme.label"
+       },
+       {
+        "type": "header",
+        "content": "Border"
+      },
+      {
+          "type": "checkbox",
+          "id": "border_show",
+          "default": true,
+          "label": "Show"
+       },
+      {
+          "type": "color",
+          "id": "border_color",
+          "default": "#DCAD2B",
+          "label": "Color"
+        },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+{
+        "type": "paragraph",
+        "content": "Desktop"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 70
+      },
+{
+        "type": "paragraph",
+        "content": "Mobile"
+      },
+{
+        "type": "range",
+        "id": "mobile_padding_top",
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 60
+      },
+      {
+        "type": "range",
+        "id": "mobile_padding_bottom",
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 60
+      }
+  ],
+  "blocks": [
+    {
+        "type": "feature",
+        "name": "Feature",
+        "limit": 8,
+        "settings": [
+	{
+            "type": "select",
+            "id": "icon",
+            "options": [
+              {
+                "value": "none",
+                "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__1.label"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+		{
+                "value": "award",
+                "label": "Award"
+              },
+		{
+                "value": "alarm",
+                "label": "Alarm"
+              },
+		{
+                "value": "camera",
+                "label": "Camera"
+              },
+		{
+                "value": "check",
+                "label": "Check"
+              },
+		{
+                "value": "clock",
+                "label": "Clock"
+              },
+		{
+                "value": "compass",
+                "label": "Compass"
+              },
+		{
+                "value": "card",
+                "label": "Credit card"
+              },
+		{
+                "value": "dollar",
+                "label": "Dollar icon"
+              },
+		{
+                "value": "gift",
+                "label": "Gift"
+              },
+		{
+                "value": "lock",
+                "label": "Lock"
+              },
+		{
+                "value": "map",
+                "label": "Map"
+              },
+		{
+                "value": "mic",
+                "label": "Mic"
+              },
+		{
+                "value": "monitor",
+                "label": "Monitor"
+              },
+		{
+                "value": "moon",
+                "label": "Moon"
+              },
+		{
+                "value": "music",
+                "label": "Music"
+              },
+		{
+                "value": "phone",
+                "label": "Phone"
+              },
+		{
+                "value": "printer",
+                "label": "Printer"
+              },
+		{
+                "value": "compare",
+                "label": "Compare"
+              },
+		{
+                "value": "search",
+                "label": "Search"
+              },
+		{
+                "value": "cart",
+                "label": "Cart"
+              },
+		{
+                "value": "bag",
+                "label": "Bag"
+              },
+		{
+                "value": "smart_phone",
+                "label": "Smart phone"
+              },
+		{
+                "value": "smile",
+                "label": "Smile"
+              },
+		{
+                "value": "sun",
+                "label": "Sun"
+              },
+		{
+                "value": "thumbs_up",
+                "label": "Thumbs up"
+              },
+		{
+                "value": "thumbs_down",
+                "label": "Thumbs down"
+              },
+		{
+                "value": "trash",
+                "label": "Trash"
+              },
+		{
+                "value": "umbrella",
+                "label": "Umbrella"
+              },
+		{
+                "value": "user",
+                "label": "User"
+              },
+		{
+                "value": "users",
+                "label": "Users"
+              },
+		{
+                "value": "watch",
+                "label": "Watch"
+              }
+            ],
+            "default": "check",
+            "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.label"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "You can upload a custom 70 x 70px image if none of the above icons are suitable for you."
+          },
+	{
+            "type": "header",
+            "content": "Content settings"
+          },
+          {
+              "type": "richtext",
+              "id": "heading",
+              "default": "<p>Feature</p>",
+              "label": "t:sections.featured-collection.settings.title.label"
+          },
+	{
+            "type": "textarea",
+            "id": "text",
+            "label": "Text",
+	  "default": "Pair text with an icon to focus on your store's features."
+          }
+        ]
+      }
+  ],
+  "presets": [
+      {
+        "name": "Text with icons",
+	"blocks": [
+             {
+               "type": "feature",
+		 "settings": {
+                  "icon": "award",
+                  "heading": "<p>Feature</p>",
+                  "text": "Pair text with an icon to focus on your store's features."
+                }
+             },
+		{
+               "type": "feature",
+		  "settings": {
+                  "icon": "gift",
+                  "heading": "<p>Feature</p>",
+                  "text": "Pair text with an icon to focus on your store's features."
+                }
+             },
+		{
+               "type": "feature",
+		  "settings": {
+                  "icon": "map",
+                  "heading": "<p>Feature</p>",
+          		"text": "Pair text with an icon to focus on your store's features."
+                }
+             }
+     		]
+      }
+   ]
+}
+{% endschema %}

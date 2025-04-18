@@ -1,0 +1,342 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+
+{{ 'faq.css' | asset_url | stylesheet_tag }}
+{{ 'component-rte.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  if section.settings.image_position == 'left'
+    assign image_direction = 'flex-row-reverse-min-desktop'
+  else
+    assign image_direction = ''
+  endif
+
+  if section.settings.mobile_image_position == 'top'
+    assign image_mobile_direction = 'flex-column-reverse-max-tablet'
+  else
+    assign image_mobile_direction = ''
+  endif
+
+  if section.settings.full_width and section.settings.enable_image == false
+    assign content_class = ''
+  else
+    assign content_class = 'col-lg-6'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+     --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+
+  #MainContent > :first-child .section--top-space-{{ section.id }} {
+    padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+  }
+{%- endstyle -%}
+{% if theme_rtl %}
+  {{ 'faq-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}
+<div
+  class="faq__wrapper color-{{ section.settings.color_scheme }} gradient section--top-space-{{ section.id }} section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="accordion"
+>
+  <div class="container">
+    <div class="row {{ image_direction }} {{ image_mobile_direction }}  faq__div--parent">
+      <div class="{{ content_class }} col-12 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="faq__list--wrapper">
+          <h2 class="section-heading__title faq__list--wrapper--heading {{ section.settings.heading_size }} rte  gradient--title">
+            {{- section.settings.heading | replace: 'p>', 'span>' -}}
+          </h2>
+          <div class="faq__list--item--wrapper">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'accordion' -%}
+                  <div
+                    class="faq__list--item {% if forloop.first == true %}active{% endif %}"
+                    {{ block.shopify_attributes }}
+                  >
+                    <button class="faq__list--item--heading faq__list--item__button h4 mb-0">
+                      {{ block.settings.heading }}
+                      <span class="faq__button--icon">
+                        {%- render 'icon-plus', className: 'plus__icon' -%}
+                        {%- render 'icon-minus', className: 'minus__icon' -%}
+                      </span>
+                    </button>
+                    <div class="faq__body {% if forloop.first == true %} d-block{% endif %}">
+                      <div class="faq__list--item--content">{{ block.settings.content }}</div>
+                    </div>
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+      {%- if section.settings.enable_image -%}
+        <div class="col-lg-6 col-12 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <div
+            class="faq__media faq__media--{{ section.settings.height }} {% if section.settings.round_corner %} rounded--image {% endif %} {% if section.settings.image == blank %}placeholder{% endif %} media"
+            {% if section.settings.height == 'adapt' and section.settings.image != blank %}
+              style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+            {% endif %}
+          >
+            {%- if section.settings.image != blank -%}
+              {% assign height = section.settings.image.height %}
+              {%- capture sizes -%}(min-width: {{ settings.container_lg_width }}px) {% if section.settings.full_width %}{{ settings.container_lg_width | minus: 30 }}px{% else %}{{ settings.container_lg_width | minus: 60 | divided_by: 2 }}px{% endif %}, (min-width: 750px) {% if section.settings.full_width %} calc(100vw - 30px){% else %} calc((100vw - 130px) / 2) {% endif %},{% if section.settings.full_width %} calc(100vw - 30px) {% else %} calc((100vw - 50px) / 2) {% endif %}{%- endcapture -%}
+              {{
+                section.settings.image
+                | image_url: width: 1920
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: sizes,
+                  widths: '165, 360, 535, 750, 1070, 1500, 1780, 2000, 3000, 3840',
+                  height: height
+              }}
+            {%- else -%}
+              {{ 'collection-2' | placeholder_svg_tag: 'placeholder' }}
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+ {
+   "name": "Collapsible content",
+   "disabled_on": {
+      "groups": ["header"]
+    },
+   "settings": [
+     {
+       "type": "richtext",
+       "id": "heading",
+       "default": "<p>Collapsible heading</p>",
+       "label": "t:sections.featured-collection.settings.title.label",
+        "info": "Use bold style to highlight text."
+    },
+     {
+       "type": "select",
+       "id": "heading_size",
+       "options": [
+         {
+           "value": "h2",
+           "label": "Small"
+         },
+         {
+           "value": "h1",
+           "label": "Medium"
+         },
+         {
+           "value": "h0",
+           "label": "Large"
+         }
+       ],
+       "default": "h1",
+       "label": "Heading size"
+     },
+  {
+       "type": "checkbox",
+       "id": "enable_image",
+       "label": "Show image",
+       "default": true
+     },
+     {
+       "type": "image_picker",
+       "id": "image",
+       "label": "Image"
+     },
+     {
+       "type": "select",
+       "id": "height",
+       "options": [
+         {
+           "value": "adapt",
+           "label": "t:sections.image-with-text.settings.height.options__1.label"
+         },
+         {
+           "value": "small",
+           "label": "t:sections.image-with-text.settings.height.options__2.label"
+         },
+         {
+          "value": "medium",
+          "label": "Medium"
+         },
+         {
+           "value": "large",
+           "label": "t:sections.image-with-text.settings.height.options__3.label"
+         }
+       ],
+       "default": "adapt",
+       "label": "t:sections.image-with-text.settings.height.label"
+     },
+     {
+       "type": "checkbox",
+       "id": "round_corner",
+       "label": "Round corner",
+       "default": true
+     },
+  {
+         "type": "select",
+         "id": "image_position",
+         "label": "Desktop image placement",
+         "default": "right",
+         "options": [
+           {
+             "value": "left",
+             "label": "Image first"
+           },
+           {
+             "value": "right",
+             "label": "Image second"
+           }
+         ]
+       },
+	{
+         "type": "header",
+         "content": "Content settings"
+       },
+	{
+         "type": "checkbox",
+         "id": "full_width",
+         "label": "Make section full width",
+	  "info": "It works when the image is disabled",
+         "default": false
+       },
+       {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "background-1",
+        "label": "t:sections.header.settings.color_scheme.label"
+       },
+	{
+         "type": "header",
+         "content": "Mobile settings"
+       },
+	{
+         "type": "select",
+         "id": "mobile_image_position",
+         "label": "Mobile image placement",
+         "default": "top",
+         "options": [
+           {
+             "value": "top",
+             "label": "Image top"
+           },
+           {
+             "value": "bottom",
+             "label": "Image bottom"
+           }
+         ]
+       },
+	{
+         "type": "header",
+         "content": "Section padding"
+       },
+	{
+         "type": "paragraph",
+         "content": "Desktop"
+       },
+       {
+         "type": "range",
+         "id": "padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       },
+	{
+         "type": "paragraph",
+         "content": "Mobile"
+       },
+	{
+         "type": "range",
+         "id": "mobile_padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "mobile_padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       }
+   ],
+"blocks": [
+       {
+         "type": "accordion",
+         "name": "Collapsible row",
+         "settings": [
+		 {
+             "type": "text",
+             "id": "heading",
+             "default": "Collapsible row",
+             "label": "Heading"
+           },
+		{
+             "type": "richtext",
+             "id": "content",
+		  "default": "<p>Inform your customers about your brand. Make announcements, describe a product, or welcome customers to your store.</p>",
+             "label": "Description"
+           }
+         ]
+       }
+   ],
+"presets": [
+     {
+       "name": "Collapsible content",
+       "blocks":[
+         {
+         	"type": "accordion"
+         },
+         {
+         	"type": "accordion"
+         }
+       ]
+     }
+   ]
+ }
+{% endschema %}

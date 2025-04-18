@@ -1,0 +1,21 @@
+.product_slider_wrapper {
+    position: relative;
+}
+.product__slider--pagination.swiper-pagination-fraction {
+    width: unset;
+    font-size: 1.6rem;
+}
+.product__slider--pagination .swiper-pagination-bullet {
+    background: rgba(var(--color-foreground));
+    width: 1rem;
+    height: 1rem;
+}
+.swiper-pagination.product__slider--pagination {
+    position: unset;
+}
+.swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
+    pointer-events: painted;
+}
+.product_slider_wrapper:hover .product__slider--button.swiper-button-disabled {
+	opacity: 0.5;
+}

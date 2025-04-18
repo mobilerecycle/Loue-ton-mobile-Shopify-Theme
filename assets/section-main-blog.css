@@ -1,0 +1,34 @@
+@media only screen and (min-width: 767px){
+  .blog-articles__article.first--article .article-content {
+    display: flex;
+  }
+  .blog-articles__article.first--article .card__meida--inner {
+    width: 42.5%;
+  }
+  .blog-articles__article.first--article .article-card__info {
+    width: 57.5%;
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.blog-articles__article.mb-100 {
+    margin-bottom: 50px;
+  }
+@media only screen and (min-width: 991px){
+  .blog-articles__article.mb-100 {
+    margin-bottom: 100px;
+  }
+}
+span.article__button--title {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	letter-spacing: 1px;
+     color: rgba(var(--color-foreground));
+}
+
+span.article__button--title>svg {
+	margin-left: 1rem;
+}

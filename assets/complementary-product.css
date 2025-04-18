@@ -1,0 +1,83 @@
+.complementary--product-card {
+  display: grid;
+  grid-template-columns: 8rem auto;
+  gap: 1.5rem;
+}
+.complementary--product-card-content {
+  text-align: left;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1.5rem;
+}
+.product__vendor {
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.complementary--product-card-content .product-grid-item__titleh {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.complementary--product-card-content .price {
+  font-size: 1.4rem;
+}
+.complementary--product-card + .complementary--product-card {
+  margin-top: 1.5rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  padding-top: 1.5rem;
+}
+.complementary__product--cart-btn {
+  background: transparent;
+  padding: 0;
+  font-size: 1.3rem;
+  border: 0.1rem solid rgba(var(--color-button), var(--alpha-button-border));
+  padding: 0.6rem 1.2rem;
+  color: rgba(var(--color-base-outline-button-labels));
+  line-height: revert;
+  border-radius: var(--button-border-radius);
+  position: relative;
+}
+.complementary__product--cart-btn-inner > svg {
+  width: 1rem;
+  display: inline-block;
+}
+.complementary__product--cart-btn-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.complementary__product--cart-btn.loading::after {
+  width: 1rem;
+  height: 1rem;
+  top: 0.8rem;
+  left: 50%;
+  margin-left: -0.5rem;
+}
+.complementary-products--slider:not(.complementary--prouduct-accordion) {
+  margin-top: 2.5rem;
+}
+.complementary__product--cart-btn:hover {
+  box-shadow: 0 0 0 0.1rem rgba(var(--color-button), var(--alpha-button-border));
+}
+.complementary--prouduct-accordion {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+.complementary--product-content-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.complementary--product__cart--btn {
+  text-align: right;
+  align-self: center;
+}
+@media only screen and (min-width: 750px) and (max-width: 1199px),
+  (max-width: 599px) {
+  .complementary--product-card-content {
+    grid-template-columns: auto;
+  }
+  .complementary--product__cart--btn {
+    text-align: left;
+  }
+}

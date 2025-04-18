@@ -1,0 +1,485 @@
+{% liquid
+  assign dummy_video_URL = 'https://cdn.shopify.com/videos/c/o/v/007895aa7ffb4ffd96112c0fa4d0cf7d.mp4'
+  assign video_url = section.settings.shopify_video.sources[1].url
+
+  if video_url == blank
+    assign video_url = dummy_video_URL
+  endif
+
+  assign data_type = 'mp4'
+  if section.settings.shopify_video == null and section.settings.video_url != null
+    assign video_url = section.settings.video_url
+    if section.settings.video_url.type == 'youtube'
+      assign data_type = 'youtube'
+    else
+      assign data_type = 'vimeo'
+    endif
+  endif
+
+  assign desktop_content_alignment_class = section.settings.desktop_content_alignment
+
+  case desktop_content_alignment_class
+    when 'left'
+      assign desktop_content_alignment_class_assign = 'justify-content-start text-left'
+    when 'center'
+      assign desktop_content_alignment_class_assign = 'justify-content-center text-center'
+    else
+      assign desktop_content_alignment_class_assign = 'justify-content-end text-right'
+  endcase
+
+  assign desktop_content_position_class = section.settings.desktop_content_position
+
+  case desktop_content_position_class
+    when 'bottom'
+      assign desktop_content_position_class_assign = 'align-items-end'
+    when 'middle'
+      assign desktop_content_position_class_assign = 'align-items-center'
+    else
+      assign desktop_content_position_class_assign = 'align-items-start'
+  endcase
+%}
+{{ 'video-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+     --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+{%- endstyle -%}
+
+<script src="{{ 'video-hero.js' | asset_url }}" defer></script>
+
+<div class="video--hero section-{{ section.id }}-padding">
+  <div class="{% if section.settings.full_width %}container-fluid p-0{% else %}container{% endif %} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div
+      class="video--hero-inner {% if section.settings.round_corner %}video--hero-radius{% endif %}"
+      style="--video-overlay-opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};"
+    >
+      <div
+        class="video--hero-container media video-hero-height--{{ section.settings.height }} video-hero-mobile-height--{{ section.settings.mobile_height }}"
+      >
+        <video-hero
+          class="video--hero-inner"
+          data-init="false"
+          data-type="{{ data_type }}"
+          data-video-id="{{ section.settings.video_url.id }}"
+        >
+          {% if data_type == 'mp4' and video_url != blank %}
+            <video class="video-playsinline" src="{{ video_url }}" playsinline autoplay muted loop></video>
+          {% endif %}
+        </video-hero>
+      </div>
+      <div class="video--hero-text-content  {% unless section.settings.full_width %}d-flex {{ desktop_content_alignment_class_assign }} {{ desktop_content_position_class_assign }}{% endunless %}">
+        {% if section.settings.full_width %}
+          <div
+            class="video--hero-text-content-width d-flex {{ desktop_content_alignment_class_assign }} {{ desktop_content_position_class_assign }}"
+          >
+        {% endif %}
+        <div class="video--hero-text-inner media--transparent color-{{ section.settings.color_scheme }}">
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {%- when 'heading' -%}
+                <h2
+                  class="video--hero-heading {{ block.settings.heading_size }} mb-0  gradient--title {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{- block.settings.heading | replace: 'p>', 'span>' -}}
+                </h2>
+              {%- when 'caption' -%}
+                <p
+                  class="video--hero--caption {{ block.settings.text_style }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.caption | escape }}
+                </p>
+              {%- when 'text' -%}
+                <div
+                  class="video--hero-text rte {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.text }}
+                </div>
+              {%- when 'button' -%}
+                {% liquid
+                  if block.settings.button_style == 'primary'
+                    assign button_class = ''
+                  else
+                    assign button_class = 'button--secondary'
+                  endif
+                %}
+
+                {%- if block.settings.button_label != blank -%}
+                  <a
+                    {% if block.settings.button_link == blank %}
+                      role="link" aria-disabled="true"
+                    {% else %}
+                      href="{{ block.settings.button_link }}"
+                    {% endif %}
+                    class="button button--{{ block.settings.button_size }} {{ button_class }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                {%- endif -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+        {% if section.settings.full_width %}</div>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video hero",
+  "settings": [
+    {
+      "type": "video",
+      "id": "shopify_video",
+      "label": "Shopify hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "label": "External video URL"
+    },
+    {
+        "type": "select",
+        "id": "height",
+        "options": [
+          {
+            "value": "extra-small",
+            "label": "Extra small"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.image-with-text.settings.height.options__2.label"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "t:sections.image-with-text.settings.height.options__3.label"
+          },
+          {
+            "value": "extra-large",
+            "label": "Extra large"
+          }
+        ],
+        "default": "large",
+        "label": "Video height on desktop"
+      },
+      {
+         "type": "range",
+         "id": "image_overlay_opacity",
+         "min": 0,
+         "max": 100,
+         "step": 10,
+         "unit": "%",
+         "label": "Overlay opacity",
+         "default": 50
+       },
+        {
+          "type": "select",
+          "id": "desktop_content_position",
+          "options": [
+            {
+              "value": "top",
+              "label": "t:sections.image-with-text.settings.desktop_content_position.options__1.label"
+            },
+            {
+              "value": "middle",
+              "label": "t:sections.image-with-text.settings.desktop_content_position.options__2.label"
+            },
+            {
+              "value": "bottom",
+              "label": "t:sections.image-with-text.settings.desktop_content_position.options__3.label"
+            }
+          ],
+          "default": "middle",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.label"
+        },
+        {
+          "type": "select",
+          "id": "desktop_content_alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__2.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__3.label"
+            }
+          ],
+          "default": "center",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.label"
+        },
+        {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Make section full width",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "round_corner",
+        "label": "Round corner",
+        "default": true
+      },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "background-1",
+      "label": "t:sections.header.settings.color_scheme.label"
+     },
+     {
+        "type": "header",
+        "content": "Mobile layout"
+      },
+      {
+        "type": "select",
+        "id": "mobile_height",
+        "options": [
+          {
+            "value": "extra-small",
+            "label": "Extra small"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.image-with-text.settings.height.options__2.label"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "t:sections.image-with-text.settings.height.options__3.label"
+          },
+          {
+            "value": "extra-large",
+            "label": "Extra large"
+          }
+        ],
+        "default": "medium",
+        "label": "Video height"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        }
+  ],
+    "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.image-with-text.blocks.heading.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "heading",
+          "default": "<p>Video hero</p>",
+          "label": "t:sections.image-with-text.blocks.heading.settings.heading.label",
+           "info": "Use bold style to highlight text."
+      },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "Small"
+            },
+            {
+              "value": "h1",
+              "label": "Medium"
+            },
+            {
+              "value": "h0",
+              "label": "Large"
+            }
+          ],
+          "default": "h0",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "caption",
+      "name": "t:sections.image-with-text.blocks.caption.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "caption",
+          "default": "Add a tagline",
+          "label": "t:sections.image-with-text.blocks.caption.settings.text.label"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "options": [
+            {
+              "value": "subtitle",
+              "label": "t:sections.image-with-text.blocks.caption.settings.text_style.options__1.label"
+            },
+            {
+              "value": "caption-with-letter-spacing",
+              "label": "t:sections.image-with-text.blocks.caption.settings.text_style.options__2.label"
+            }
+          ],
+          "default": "caption-with-letter-spacing",
+          "label": "t:sections.image-with-text.blocks.caption.settings.text_style.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.image-with-text.blocks.text.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "t:sections.image-with-text.blocks.text.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "t:sections.image-with-text.blocks.button.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+          "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_link.label"
+        },
+		{
+              "type": "select",
+              "id": "button_style",
+              "label": "Button style",
+              "default": "primary",
+              "options": [
+                {
+                  "value": "secondary",
+                  "label": "Secondary"
+                },
+                {
+                  "value": "primary",
+                  "label": "Primary"
+                }
+              ]
+            },
+			{
+              "type": "select",
+              "id": "button_size",
+              "label": "Button size",
+              "default": "small",
+              "options": [
+                {
+                  "value": "large",
+                  "label": "Large"
+                },
+                {
+                  "value": "medium",
+                  "label": "Medium"
+                },
+				        {
+                  "value": "small",
+                  "label": "Small"
+                }
+              ]
+            }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video hero",
+      "blocks": [
+        {
+          "type": "caption"
+        },
+        {
+          "type": "heading"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

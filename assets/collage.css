@@ -1,0 +1,280 @@
+.collage-wrapper-title {
+  margin-top: 0;
+  margin-bottom: 3rem;
+}
+.heading--text {
+  margin-bottom: 1rem;
+  display: block;
+}
+.collage--wrapper {
+  display: grid;
+}
+.collage__item > * {
+  width: 100%;
+}
+.collage__item .card__content {
+  flex-grow: initial;
+}
+@media screen and (max-width: 749px) {
+  .collage--wrapper {
+    grid-column-gap: var(--grid-mobile-horizontal-spacing);
+    grid-row-gap: var(--grid-mobile-vertical-spacing);
+  }
+  .collage--mobile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .collage--mobile .collage__item--left:nth-child(3n - 2) {
+    grid-column: span 2;
+  }
+
+  .collage--mobile .collage__item--left:nth-child(3n - 2):nth-last-child(2) {
+    grid-column: span 1;
+  }
+
+  .collage--mobile .collage__item--left:nth-child(3n) {
+    grid-column-start: 2;
+  }
+
+  .collage--mobile .collage__item--right:nth-child(3n - 2) {
+    grid-column-start: 1;
+  }
+
+  .collage--mobile .collage__item--right:nth-child(3n - 2):last-child {
+    grid-column: span 2;
+  }
+
+  .collage--mobile .collage__item--right:nth-child(3n - 1) {
+    grid-column-start: 2;
+  }
+
+  .collage--mobile .collage__item--right:nth-child(3n) {
+    grid-column: 1 / span 2;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .collage--wrapper {
+    grid-auto-flow: column;
+    grid-column-gap: var(--grid-desktop-horizontal-spacing);
+    grid-row-gap: var(--grid-desktop-vertical-spacing);
+  }
+  .collage--wrapper.collage--columns-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .collage--wrapper.collage--columns-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .collage__item--left:nth-child(1) {
+    grid-column: 1 / span 2;
+    grid-row: span 2;
+  }
+
+  .collage--columns-3 .collage__item--right:nth-child(3n) {
+    grid-column: 2 / span 2;
+    grid-row: span 2;
+  }
+  .collage--columns-4 .collage__item--left:nth-child(3n - 1) {
+    grid-column-start: 3;
+    grid-row: span 2;
+  }
+
+  .collage--columns-3 .collage__item--left:nth-child(3n - 1),
+  .collage--columns-3 .collage__item--left:nth-child(3n) {
+    grid-column-start: 3;
+  }
+
+  .collage--columns-4 .collage__item--right:nth-child(4n) {
+    grid-column: 3 / span 2;
+    grid-row: span 2;
+  }
+  .collage--columns-4 .collage__item--right:nth-child(3n) {
+    grid-column-start: 2;
+    grid-row: span 2;
+  }
+}
+.collage-card {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Needed for gradient continuity with or without animation, background-attachment: local scopes the gradient to its container which happens automatically when a transform is applied (animation on scroll) */
+.collage-card.gradient {
+  transform: perspective(0);
+}
+.collage-card .media {
+  height: 100%;
+  overflow: hidden;
+}
+.collage-card .deferred-media {
+  height: 100%;
+  overflow: visible;
+}
+.collage-card__link {
+  display: block;
+  height: 100%;
+}
+.collage-card .deferred-media__poster {
+  background-color: transparent;
+  border: 0;
+}
+.collage-card .deferred-media__poster:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  outline-offset: 0.3rem;
+  bottom: calc(var(--border-width) * -1);
+  left: calc(var(--border-width) * -1);
+  right: calc(var(--border-width) * -1);
+  top: calc(var(--border-width) * -1);
+}
+
+.collage-card .deferred-media__poster:focus:after {
+  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
+    0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+}
+
+.collage-card .deferred-media__poster:focus-visible:after {
+  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
+    0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+}
+
+.collage-card .deferred-media__poster:focus:not(:focus-visible),
+.collage-card .deferred-media__poster:focus:not(:focus-visible):after {
+  outline: none;
+  box-shadow: none;
+}
+
+.collage-card .deferred-media__poster:focus {
+  outline: none;
+  box-shadow: none;
+}
+/* New added css  */
+@media only screen and (min-width: 750px) {
+  .banner--content-padding--medium {
+    padding: 4rem;
+  }
+
+  .banner--content-padding--small {
+    padding: 2rem;
+  }
+
+  .banner--content-padding--large {
+    padding: 5rem;
+  }
+}
+
+.collage__banner--subheading.background__pading {
+  padding: 0.5rem 1.5rem;
+}
+@media only screen and (min-width: 992px) {
+  .collage__banner--subheading-spacing-large {
+    margin-bottom: 6rem;
+  }
+  .collage__banner--subheading-spacing-medium {
+    margin-bottom: 4rem;
+  }
+  .banner__list--item-content-inner.collage--banner-content {
+    gap: 1.5rem;
+  }
+}
+@media only screen and (max-width: 749px) {
+  .collage__banner--subheading {
+    margin-bottom: 0;
+  }
+}
+.text--with-btn-icon > svg {
+  max-width: 2rem;
+  min-width: 2rem;
+}
+.text--with-btn-icon {
+  display: inline-flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+.collage--collection-card-text {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  top: 1.5rem;
+  display: flex;
+}
+.collage__collection--card-inner {
+  display: flex;
+  flex-direction: column;
+}
+.collection--title-wrapper {
+  margin-top: auto;
+}
+@media only screen and (min-width: 1440px) {
+  .collage--collection-card-text {
+    bottom: 3rem;
+    left: 3rem;
+    right: 3rem;
+    top: 3rem;
+  }
+}
+@media only screen and (min-width: 750px) {
+  .collage__collection--padding-small {
+    padding: 1rem;
+  }
+  .collage__collection--padding-medium {
+    padding: 2rem;
+  }
+  .collage__collection--padding-large {
+    padding: 3rem;
+  }
+}
+.collage__product--price-rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+@media only screen and (max-width: 749px) {
+  .collage__product--price-rating .product-grid-item__price {
+    font-size: 1.6rem;
+  }
+}
+.collection--list-slider,
+.collection--card-wrapper {
+  position: relative;
+  height: 100%;
+}
+.collage-card .collection__card {
+  height: 100%;
+}
+.collage--product-card-timer .product--card__countdown {
+  margin-bottom: 0;
+  margin-top: 2rem;
+}
+.collage--product-card-timer .product--card__countdown.timer--box-no-radius {
+  border-radius: 0;
+}
+.collage--product-card-timer .product--card__countdown {
+  margin-bottom: 0;
+}
+@media only screen and (min-width: 750px) {
+  .collage--product-card-timer .product--card__countdown {
+    padding: 1.5rem 0;
+  }
+}
+.collage--banner-card .media::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #000;
+  opacity: var(--collage-banner-media-overlay-opacity);
+}
+.collage__product--price-rating .price.product-grid-item__price:only-child {
+  flex-grow: 1;
+}

@@ -1,0 +1,504 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+{{ 'newsletter-signup.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+   {%- if section.settings.image != blank -%}
+    .section-{{ section.id }}-padding {
+      margin-top: {{ section.settings.mobile_padding_top }}px;
+      margin-bottom: {{ section.settings.mobile_padding_bottom }}px;
+       --padding-top: {{ section.settings.mobile_padding_top }}px;
+    }
+
+    @media screen and (min-width: 991px) {
+      .section-{{ section.id }}-padding {
+        margin-top: {{ section.settings.padding_top }}px;
+        margin-bottom: {{ section.settings.padding_bottom }}px;
+         --padding-top: {{ section.settings.padding_top }}px;
+      }
+    }
+   {%- else -%}
+   .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.mobile_padding_top }}px;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+      --padding-top: {{ section.settings.mobile_padding_top }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+        --padding-top: {{ section.settings.padding_top }}px;
+      }
+    }
+  {%- endif -%}
+
+  #MainContent > :first-child .section--top-space-{{ section.id }} {
+    padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+  }
+
+
+    .media.newsletter__media--wrapper::before {
+      position: absolute;
+      content: "";
+      background: rgba(0,0,0,{{ section.settings.image_overlay_opacity | divided_by: 100.0 }});
+      width: 100%;
+      height: 100%;
+      z-index: 8;
+      left: 0;
+      top: 0;
+    }
+{%- endstyle -%}
+
+{% if theme_rtl %}
+  {{ 'newsletter-signup-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+<div class="newsletter__signup section--top-space-{{ section.id }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient">
+  <div class="newsletter__signup--inner">
+    <div class="container {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="newsletter__image--container color-{{ section.settings.box_color_scheme }} gradient {% if section.settings.image_round_corner %}rounded--3rem{% endif %}">
+        {%- if section.settings.image != blank -%}
+          <div class="media newsletter__media--wrapper {% if section.settings.image_round_corner %}rounded--3rem{% endif %}">
+            <img
+              srcset="
+                {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | img_url: '375x' }} 375w,{%- endif -%}
+                {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | img_url: '750x' }} 750w,{%- endif -%}
+                {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | img_url: '1100x' }} 1100w,{%- endif -%}
+                {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | img_url: '1500x' }} 1500w,{%- endif -%}
+                {%- if section.settings.image.width >= 1780 -%}{{ section.settings.image | img_url: '1780x' }} 1780w,{%- endif -%}
+                {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | img_url: '2000x' }} 2000w,{%- endif -%}
+                {%- if section.settings.image.width >= 3000 -%}{{ section.settings.image | img_url: '3000x' }} 3000w,{%- endif -%}
+                {%- if section.settings.image.width >= 3840 -%}{{ section.settings.image | img_url: '3840x' }} 3840w,{%- endif -%}
+              "
+              src="{{ section.settings.image | img_url: '1920x' }}"
+              sizes="100vw"
+              alt="{{  section.settings.image.alt | escape }}"
+              loading="lazy"
+              width="{{ section.settings.image.width }}"
+              height="{{ section.settings.image.height }}"
+            >
+          </div>
+        {%- endif -%}
+
+        <div class="newsletter__signup--wrapper {% if section.settings.form_position == "top" or section.settings.form_position == "bottom" %} {{ section.settings.content_wrapper_width }} {% endif %} d-flex flex-wrap form__{{ section.settings.form_position }} {% if section.settings.image != blank %} newsletter__height--{{ section.settings.height }} {% endif %}">
+          <div class="newsletter--signup__content conntent--{{ section.settings.content_alignment }}">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when '@app' -%}
+                  {% render block %}
+                {%- when 'heading' -%}
+                  <h2
+                    class="newsltter__signup--title {{ block.settings.heading_size }} mb-0"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{- block.settings.heading | replace: 'p>', 'span>' -}}
+                  </h2>
+                {%- when 'paragraph' -%}
+                  <div class="newsletter__subheading rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+                {%- when 'button' -%}
+                  {% liquid
+                    if block.settings.button_style == 'primary'
+                      assign button_class = ''
+                    else
+                      assign button_class = 'button--secondary'
+                    endif
+                  %}
+                  <div class="button--wrapper">
+                    <a
+                      {% if block.settings.button_link == blank %}
+                        aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link }}"
+                      {% endif %}
+                      class="button button--{{ block.settings.button_size }} {{ button_class }}"
+                      {{ block.shopify_attributes }}
+                    >
+                      {{ block.settings.button_label | escape }}
+                    </a>
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+          <div class="newsletter--signup__form {% unless section.settings.form_position == "top" and section.settings.form_position == "bottom" %} form__width {% endunless %}">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'email_form' -%}
+                  <div
+                    class="newsletter__form_wrapper"
+                    {{ block.shopify_attributes }}
+                    style="--color-newsletter-input-radius: {{ block.settings.border_radius }}px"
+                  >
+                    {% form 'customer', class: 'newsletter-form' %}
+                      <input type="hidden" name="contact[tags]" value="newsletter">
+                      <div class="newsletter-form__field-wrapper">
+                        <div class="input__field_form">
+                          <label class="field__label visually-hidden" for="NewsletterForm--{{ section.id }}">
+                            {{ 'newsletter.label' | t }}
+                          </label>
+                          <input
+                            id="NewsletterForm--{{ section.id }}"
+                            type="email"
+                            name="contact[email]"
+                            class="input__field h5"
+                            value="{{ form.email }}"
+                            aria-required="true"
+                            autocorrect="off"
+                            autocapitalize="off"
+                            autocomplete="email"
+                            {% if form.errors %}
+                              autofocus
+                              aria-invalid="true"
+                              aria-describedby="Newsletter-error--{{ section.id }}"
+                            {% elsif form.posted_successfully? %}
+                              aria-describedby="Newsletter-success--{{ section.id }}"
+                            {% endif %}
+                            placeholder="{{ 'newsletter.label' | t }}"
+                            required
+                          >
+                          <button
+                            type="submit"
+                            class="input__field_form_button"
+                            name="commit"
+                            id="Subscribe"
+                            aria-label="{{ 'newsletter.button_label' | t }}"
+                          >
+                            {{ 'newsletter.button_label' | t }}
+                          </button>
+                        </div>
+
+                        {%- if form.errors -%}
+                          <small class="newsletter-form__message form__message" id="Newsletter-error--{{ section.id }}">
+                            {%- render 'icon-error' -%}
+                            {{- form.errors.translated_fields.email | capitalize }}
+                            {{ form.errors.messages.email -}}
+                          </small>
+                        {%- endif -%}
+                      </div>
+                      {%- if form.posted_successfully? -%}
+                        <h3
+                          class="newsletter-form__message newsletter-form__message--success form__message"
+                          id="Newsletter-success--{{ section.id }}"
+                          tabindex="-1"
+                          autofocus
+                        >
+                          {% render 'icon-success' -%}
+                          {{- 'newsletter.success' | t }}
+                        </h3>
+                      {%- endif -%}
+                    {% endform %}
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+ {
+   "name": "Email signup",
+   "disabled_on": {
+     "groups": ["header"]
+   },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+       "default": "background-1",
+         "label": "t:sections.header.settings.color_scheme.label"
+     },
+    {
+        "type": "color_scheme",
+        "id": "box_color_scheme",
+          "default": "background-2",
+           "label": "Boxed color scheme"
+       },
+     {
+       "type": "image_picker",
+       "id": "image",
+       "label": "Background image"
+     },
+     {
+       "type": "select",
+       "id": "height",
+       "options": [
+         {
+           "value": "small",
+           "label": "t:sections.image-with-text.settings.height.options__2.label"
+         },
+	  {
+           "value": "medium",
+           "label": "Medium"
+         },
+         {
+           "value": "large",
+           "label": "t:sections.image-with-text.settings.height.options__3.label"
+         }
+       ],
+       "default": "small",
+       "label": "t:sections.image-with-text.settings.height.label"
+     },
+  {
+       "type": "range",
+       "id": "image_overlay_opacity",
+       "min": 0,
+       "max": 100,
+       "step": 10,
+       "unit": "%",
+       "label": "Overlay opacity",
+       "default": 0
+     },
+  {
+       "type": "select",
+       "id": "form_position",
+       "options": [
+         {
+           "value": "left",
+           "label": "Left"
+         },
+	  {
+           "value": "right",
+           "label": "Right"
+         }
+       ],
+       "default": "right",
+       "label": "Email form position"
+     },
+   {
+        "type": "checkbox",
+        "id": "image_round_corner",
+        "default": true,
+        "label": "Round the corners of the box"
+      },
+  {
+       "type": "header",
+       "content": "Mobile settings"
+     },
+  {
+       "type": "select",
+       "id": "content_alignment",
+       "options": [
+         {
+           "value": "left",
+           "label": "Left"
+         },
+	  {
+           "value": "right",
+           "label": "Right"
+         },
+         {
+           "value": "center",
+           "label": "Center"
+         }
+       ],
+       "default": "center",
+       "label": "Content alignment"
+     },
+  {
+         "type": "header",
+         "content": "Section padding"
+       },
+	{
+         "type": "paragraph",
+         "content": "Desktop"
+       },
+       {
+         "type": "range",
+         "id": "padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 70
+       },
+       {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 70
+       },
+	{
+         "type": "paragraph",
+         "content": "Mobile"
+       },
+	{
+         "type": "range",
+         "id": "mobile_padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "mobile_padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       }
+],
+"blocks": [
+   {
+     "type": "heading",
+     "name": "Heading",
+     "limit": 1,
+     "settings": [
+       {
+           "type": "richtext",
+           "id": "heading",
+           "default": "<p>Subscribe to our emails</p>",
+           "label": "Heading"
+       },
+       {
+         "type": "select",
+         "id": "heading_size",
+         "options": [
+         {
+           "value": "h2",
+           "label": "Small"
+         },
+         {
+           "value": "h1",
+           "label": "Medium"
+         },
+         {
+           "value": "h0",
+           "label": "Large"
+         }
+         ],
+           "default": "h1",
+         	"label": "Heading size"
+         }
+     ]
+   },
+   {
+     "type": "paragraph",
+     "name": "Text",
+     "limit": 1,
+     "settings": [
+       {
+         "type": "richtext",
+         "id": "text",
+         "default": "<p>Be the first to know about new collections and exclusive offers.</p>",
+         "label": "Description"
+       }
+     ]
+   },
+{
+     "type": "button",
+     "name": "t:sections.rich-text.blocks.button.name",
+     "limit": 1,
+     "settings": [
+       {
+         "type": "text",
+         "id": "button_label",
+         "default": "Button label",
+         "label": "t:sections.rich-text.blocks.button.settings.button_label.label"
+       },
+       {
+         "type": "url",
+         "id": "button_link",
+         "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
+       },
+	{
+         "type": "select",
+         "id": "button_style",
+         "label": "Button style",
+         "default": "primary",
+         "options": [
+           {
+             "value": "secondary",
+             "label": "Secondary"
+           },
+           {
+             "value": "primary",
+             "label": "Primary"
+           }
+         ]
+       },
+       {
+         "type": "select",
+         "id": "button_size",
+         "label": "Button size",
+         "default": "large",
+         "options": [
+         {
+           "value": "large",
+           "label": "Large"
+         },
+         {
+           "value": "medium",
+           "label": "Medium"
+         },
+         {
+           "value": "small",
+           "label": "Small"
+           }
+         ]
+       }
+     ]
+   },
+   {
+     "type": "email_form",
+     "name": "Email form",
+     "limit": 1,
+     "settings": [
+       {
+        "type": "range",
+        "id": "border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Input border radius",
+        "default": 30
+      }
+     ]
+   },
+   {
+   	"type": "@app"
+   }
+  ],
+"presets": [
+   	{
+         "name": "Email signup",
+	  "blocks": [
+           {
+             "type": "heading"
+           },
+          {
+           "type" :"paragraph"
+          },
+           {
+             "type": "email_form"
+           }
+         ]
+       }
+ 	]
+ }
+{% endschema %}

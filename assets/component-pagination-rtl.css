@@ -1,0 +1,6 @@
+.pagination__item--next .icon {
+  transform: rotate(-90deg);
+}
+.pagination__item--prev .icon {
+  transform: rotate(90deg);
+}

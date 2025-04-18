@@ -1,0 +1,51 @@
+<div class="testimonial__card">
+  <div class="{% if card_background %}testimonial__card--body {% if box_shadow %} testimonial--card-box-shadow-true{% endif %} card--client-height  color-{{ section.settings.card_color_scheme }} gradient {% if round_image %}rounded--image{% endif %} {% endif %}">
+    <div class="{% if card_background %} testimonial__card--header{% endif %} {% unless card_background %}testimonial__card--body  {% if box_shadow %} testimonial--card-box-shadow-true{% endif %} card--client-height  color-{{ section.settings.card_color_scheme }} gradient {% if round_image %}rounded--image{% endif %} {% endunless %}">
+      <h3 class="h6">
+        {{- testimonial.heading | replace: 'p>', 'span>' -}}
+      </h3>
+      {{- testimonial.text | replace: 'p>', 'span>' -}}
+      {% unless testimonial.rating == 'none' %}
+        <div class="testimonial__card--review">
+          <div class="rating" role="img" aria-label="5.0 out of 5.0 stars">
+            <span
+              aria-hidden="true"
+              class="rating-star"
+              style="--rating: {{ testimonial.rating }}; --rating-max: 5.0; --rating-decimal: 0; --color-icon: {{ section.settings.rating_color }};"
+            ></span>
+          </div>
+        </div>
+      {% endunless %}
+    </div>
+    <div class="testimonial__card--footer">
+      <div class="testimonial__card--footer-inner {% if testimonial.author_image %}d-flex{% endif %}">
+        {% if testimonial.author_image %}
+          <div class="testimonial__card--media {% if testimonial.image != blank %} testimonial__author--media{% else %}placeholder testimonial__author--placeholder{% endif %}">
+            {%- if testimonial.image != blank -%}
+              <img
+                class="multicolumn-card__image"
+                srcset="
+                  {%- if testimonial.image.width >= 275 -%}{{ testimonial.image | image_url: width: 275 }} 275w,{%- endif -%}
+                  {%- if testimonial.image.width >= 550 -%}{{ testimonial.image | image_url: width: 550 }} 550w,{%- endif -%}
+                  {{ testimonial.image | image_url }} {{ testimonial.image.width }}w
+                "
+                src="{{ testimonial.image | image_url: width: 200 }}"
+                sizes="200px"
+                alt="{{ testimonial.image.alt }}"
+                height="{{ testimonial.image.height }}"
+                width="{{ testimonial.image.width }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        {% endif %}
+        <div class="testimonial__card--foter-content {% if testimonial.author_image %}testimonial__space{% endif %}">
+          <h4 class="testimonial__author--name h6">{{ testimonial.author_name }}</h4>
+          <span class="testimonial__author--title">{{ testimonial.author_designation }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

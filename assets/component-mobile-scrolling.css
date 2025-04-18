@@ -1,0 +1,24 @@
+@media (max-width: 749px) {
+  .mobile--scoller {
+    overflow: hidden;
+  }
+  .mobile--scoller-inner {
+    padding-bottom: 20px;
+    margin-bottom: -20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+  }
+  .mobile--scoller-inner .collage,
+  .mobile--scoller-inner .grid {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+  .mobile--scoller-inner .collage .collage__item:not(:only-of-type),
+  .mobile--scoller-inner .grid .grid__item:not(:only-of-type) {
+    width: 85%;
+    max-width: 85%;
+    flex: none;
+    scroll-snap-align: center;
+  }
+}

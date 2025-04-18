@@ -1,0 +1,100 @@
+.banner__list--media.media--adapt.placeholder {
+  padding-bottom: 100%;
+}
+.banner__list--item-content:not(.show__content--image-below) {
+  position: absolute;
+  z-index: 5;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  top: 2rem;
+}
+
+@media only screen and (min-width: 750px) {
+  .banner__list--content-position--medium:not(.show__content--image-below) {
+    bottom: 3rem;
+    left: 3rem;
+    right: 3rem;
+    top: 3rem;
+  }
+  .banner__list--content-position--large:not(.show__content--image-below) {
+    bottom: 4rem;
+    left: 4rem;
+    right: 4rem;
+    top: 4rem;
+  }
+  .banner__list--content-position--extra-large:not(
+      .show__content--image-below
+    ) {
+    bottom: 5rem;
+    left: 5rem;
+    right: 5rem;
+    top: 5rem;
+  }
+}
+.banner__list--item-content-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+.banner__list--item-content-inner > * {
+  align-self: var(--content-align-self);
+}
+.banner__list--item-overlay {
+  position: relative;
+  overflow: hidden;
+}
+.banner--list-text {
+  color: rgba(var(--color-foreground), 0.75);
+}
+.show__content--image-below .banner__list--item-content-inner {
+  margin-top: 2rem;
+  width: 100%;
+}
+.banner__list--media.rounded--image {
+  overflow: hidden;
+}
+.banner__list--media.media::before,
+.banner__list--media.placeholder::before {
+  position: absolute;
+  content: "";
+  background: #000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: var(--banner-list-media-overlay-opacity, 0.3);
+}
+.banner__list--item-content:not(.show__content--image-below)
+  .banner--list-text {
+  color: rgba(var(--color-foreground));
+}
+.banner__list--media.placeholder > svg.placeholder-svg {
+  max-width: 38rem;
+}
+.banner__list--media.media > img {
+  transition: all 0.7s ease 0s;
+}
+.banner__list--item:hover .banner__list--media.media > img {
+  transform: scale(1.05);
+}
+.banner__heading--space {
+  margin-bottom: 1rem;
+}
+.banner__list--item-content-inner .link.with--icon {
+  text-decoration: underline;
+  padding: 0;
+}
+@media only screena and (max-width: 749px) {
+  .media > .banner--card-desktop-image {
+    display: none;
+  }
+}
+.banner__list--media {
+  pointer-events: none;
+}
+.banner__list--item-content-inner button.link {
+  padding: 0;
+}

@@ -1,0 +1,20 @@
+{%- layout none -%}
+{% render 'product-card-item',
+  product_card_product: product,
+  className: 'swiper-slide',
+  media_size: 'adapt',
+  show_secondary_image: true,
+  show_vendor: false,
+  show_badge: true,
+  show_cart_button: true,
+  cart_button_style: 'style2',
+  cart_button_place: 'bottom_right',
+  show_countdown: true,
+  show_title: true,
+  show_price: true,
+  show_rating: false,
+  round_image: false,
+  recent_view_color_scheme: 'color-accent-2',
+  color_swatches: settings.color_swatches_recent_view_product,
+  section_id: 'mavon-recent-view-product-grid'
+%}

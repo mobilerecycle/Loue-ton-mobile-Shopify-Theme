@@ -1,0 +1,67 @@
+.menu__drawer--footer .list-social svg {
+    width: 2rem;
+}
+.quick__information--body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 35px;
+}
+.quick__information--container {
+    height: 100%;
+    padding: 1rem 0 4rem;
+}
+.quick__links {
+    padding: 0 0 2rem;
+}
+a.user--menu__icon>svg {
+	width: 1.5rem;
+}
+a.user--menu__icon {
+	display: flex;
+	align-items: center;
+	padding: 15px 20px;
+}
+.accounts__text--label {
+	margin-left: 1rem;
+}
+.list-social > .list-social__link + .list-social__link {
+    margin-left: 1.5rem;
+}
+.list-social + .localization__store {
+    margin-top: 2rem;
+}
+.menu__drawer--footer {
+    border-top: 1px solid rgba(var(--color-foreground), 0.15);
+    padding-top: 25px;
+    margin-top: 25px;
+}
+.menu__drawer--header {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+button.menu__drawer--close.link {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    text-decoration: none;
+    font-size: 1.6rem;
+}
+button.menu__drawer--close .icon-close {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+button.menu__drawer--close.link > span {
+    margin-right: 0.5rem;
+}
+.menu__drawer--footer button.dropdown__open_label {
+  background: none;
+  border: 1px solid rgba(var(--color-foreground),.15);
+    padding: 1rem 1.5rem;
+    border-radius: 3px; 
+}
+localization-form + localization-form .dropdown__open_list {
+    width: 150px;
+}

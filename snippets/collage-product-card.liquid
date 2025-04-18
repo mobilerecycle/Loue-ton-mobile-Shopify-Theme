@@ -1,0 +1,260 @@
+{%- liquid
+  assign variant = product_card_product.selected_or_first_available_variant
+
+  assign productCountdown = product_card_product.metafields.meta.product_countdown.value
+  assign todayDate = 'now' | date: '%s'
+  assign countDownDate = productCountdown | date: '%s'
+
+  assign first_variant_featured_media_check = false
+  if variant.featured_media == null
+    assign first_variant_featured_media_check = true
+  endif
+
+  assign second_img_position = 1
+
+  unless show_secondary_image
+    assign second_image_class = 'second--image__hide'
+  endunless
+
+  case settings.product_content_alignment
+    when 'left'
+      assign price_class = 'product-grid-item__price justify-content-start'
+    when 'right'
+      assign price_class = 'product-grid-item__price justify-content-end'
+    else
+      assign price_class = 'product-grid-item__price justify-content-center'
+  endcase
+
+  unless section.settings.show_cart_icon_mobile
+    assign car_icon_mobile = 'd-sm-none'
+  endunless
+
+  case cart_button_place
+    when 'top_left', 'bottom_left'
+      assign button_alignment = 'justify-content-start'
+    when 'top_right', 'bottom_right'
+      assign button_alignment = 'justify-content-end'
+    else
+      assign button_alignment = 'justify-content-center'
+  endcase
+
+  case cart_button_place
+    when 'top_left', 'top_right', 'top_center'
+      assign button_vetical_position = 'top_position'
+    else
+      assign button_vetical_position = ''
+  endcase
+-%}
+
+<div class="product-grid-item {{ className }}">
+  <div class="product-grid-item__thumbnail {{ second_image_class }}">
+    {%- if show_badge -%}
+      {%- render 'product-badge', product: product_card_product -%}
+    {%- endif -%}
+
+    {%- if product_card_product.featured_media -%}
+      {%- liquid
+        assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio
+
+        if product_card_product.featured_media.aspect_ratio == null
+          assign featured_media_aspect_ratio = 1
+        endif
+      -%}
+      <a
+        href="{{ product_card_product.url | default: '#' }}"
+        class="d-block product__media_thumbnail product__card--link"
+      >
+        {%- render 'product-card-media',
+          product_card_product: product_card_product,
+          variant: variant,
+          media_size: media_size,
+          featured_media_aspect_ratio: featured_media_aspect_ratio,
+          second_img_position: second_img_position,
+          show_secondary_image: show_secondary_image,
+          first_variant_featured_media_check: first_variant_featured_media_check,
+          round_image: round_image
+        -%}
+      </a>
+
+    {%- else -%}
+      <div class="card__content">
+        <a href="{{ product_card_product.url | default: '#' }}" class="d-block">
+          <div class="placeholder placeholder_svg_parent" style="padding-bottom: 125%">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        </a>
+      </div>
+    {%- endif -%}
+
+    {%- if show_cart_button -%}
+      <ul class="product-grid-item__actions {{ cart_button_style }} {{ button_alignment }} {{ button_vetical_position }} ">
+        {%- if show_cart_button -%}
+          <li>
+            {% if product_card_product.has_only_default_variant %}
+              <product-form>
+                <form action="/cart/add" method="post" enctype="multipart/form-data" data-type="add-to-cart-form">
+                  <input type="hidden" name="id" value="{{ variant.id }}">
+
+                  {%- if cart_button_style == 'style1' -%}
+                    <button
+                      type="submit"
+                      name="add"
+                      class="product-grid-item__actions__btn h6 mb-0"
+                      {% if product_card_product.selected_or_first_available_variant.available == false %}
+                        disabled
+                      {% endif %}
+                    >
+                      {%- if product_card_product.selected_or_first_available_variant.available -%}
+                        <span class="action__btn--text">
+                          {%- render 'cart-icon' -%}
+                          <span class="action__btn--text--label">
+                            {{ 'products.product.add_to_cart' | t }}
+                          </span>
+                        </span>
+                      {%- else -%}
+                        <span class="action__btn--text">
+                          <span class="action__btn--text--label">
+                            {{ 'products.product.sold_out' | t }}
+                          </span>
+                          {%- render 'cart-icon' -%}
+                        </span>
+                      {%- endif -%}
+                    </button>
+                  {%- else -%}
+                    <button
+                      type="submit"
+                      name="add"
+                      class="cart--icon-button button--icon h6 mb-0"
+                      {% if product_card_product.selected_or_first_available_variant.available == false %}
+                        disabled
+                      {% endif %}
+                      aria-label="{%- if product_card_product.selected_or_first_available_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}"
+                    >
+                      {%- if product_card_product.selected_or_first_available_variant.available -%}
+                        {%- render 'cart-icon' -%}
+                      {%- else -%}
+                        {%- render 'cart-icon' -%}
+                      {%- endif -%}
+                    </button>
+                  {%- endif -%}
+                </form>
+              </product-form>
+            {%- else -%}
+              {%- render 'quick-view',
+                product_card_product: product_card_product,
+                variant: variant,
+                car_icon_mobile: car_icon_mobile,
+                cart_button_style: cart_button_style
+              -%}
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
+  </div>
+
+  <div class="product-grid-item__content text-{{ settings.product_content_alignment }}">
+    {%- if show_vendor -%}
+      <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+      <div class="product__vendor">{{ product_card_product.vendor }}</div>
+    {%- endif -%}
+
+    {%- if show_title -%}
+      {% if product_card_product != blank %}
+        <h3 class="product-grid-item__title {{ settings.product_title_size }}">
+          <a href="{{ product_card_product.url | default: '#' }}">{{ product_card_product.title }}</a>
+        </h3>
+      {% else %}
+        <h3 class="roduct-grid-item__title {{ settings.product_title_size }}">
+          {{- 'onboarding.product_title' | t -}}
+        </h3>
+      {% endif %}
+    {%- endif -%}
+
+    <div class="collage__product--price-rating">
+      {%- if show_price -%}
+        {% render 'price', product: product_card_product, price_class: price_class %}
+      {%- endif -%}
+
+      {%- if show_rating and product_card_product.metafields.reviews.rating.value != blank -%}
+        {% liquid
+          assign rating_decimal = 0
+          assign decimal = product_card_product.metafields.reviews.rating.value.rating | modulo: 1
+          if decimal >= 0.3 and decimal <= 0.7
+            assign rating_decimal = 0.5
+          elsif decimal > 0.7
+            assign rating_decimal = 1
+          endif
+        %}
+        <div class="product__card--rating">
+          <div
+            class="rating"
+            role="img"
+            aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product_card_product.metafields.reviews.rating.value, rating_max: product_card_product.metafields.reviews.rating.value.scale_max }}"
+          >
+            <span
+              aria-hidden="true"
+              class="rating-star color-icon-{{ settings.accent_icons }}"
+              style="--rating: {{ product_card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product_card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+            ></span>
+          </div>
+          <p class="rating-text caption">
+            <span aria-hidden="true">
+              {{- product_card_product.metafields.reviews.rating.value }} /
+              {{ product_card_product.metafields.reviews.rating.value.scale_max -}}
+            </span>
+          </p>
+          <p class="rating-count caption">
+            <span aria-hidden="true">({{ product_card_product.metafields.reviews.rating_count }})</span>
+            <span class="visually-hidden">
+              {{- product_card_product.metafields.reviews.rating_count }}
+              {{ 'accessibility.total_reviews' | t -}}
+            </span>
+          </p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {% if settings.color_swatches %}
+      {% if color_swatches %}
+        {% render 'product-card-color-swatch', product: product_card_product, current_variant: variant %}
+      {% endif %}
+    {% endif %}
+
+    {%- if show_countdown -%}
+      {%- if todayDate < countDownDate -%}
+        <countdown-timer class="product__grid_timer collage--product-card-timer">
+          <div
+            class="product--card__countdown color-{{ time_color_scheme }} gradient {% unless corner_radius %} timer--box-no-radius{% endunless %}"
+            data-countdown="{{ productCountdown }}"
+          >
+            <div class="countdown-item Days">
+              <div class="countdown__inner">
+                <span class="countdown__digit">--</span>
+                <span class="countdown__labels">{{ 'products.product.countdown_timer.days' | t }}</span>
+              </div>
+            </div>
+            <div class="countdown-item Hrs">
+              <div class="countdown__inner">
+                <span class="countdown__digit">--</span>
+                <span class="countdown__labels">{{ 'products.product.countdown_timer.hours' | t }}</span>
+              </div>
+            </div>
+            <div class="countdown-item Min">
+              <div class="countdown__inner">
+                <span class="countdown__digit">--</span>
+                <span class="countdown__labels">{{- 'products.product.countdown_timer.minutes' | t }}</span>
+              </div>
+            </div>
+            <div class="countdown-item Sec">
+              <div class="countdown__inner">
+                <span class="countdown__digit">--</span>
+                <span class="countdown__labels">{{ 'products.product.countdown_timer.seconds' | t -}}</span>
+              </div>
+            </div>
+          </div>
+        </countdown-timer>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

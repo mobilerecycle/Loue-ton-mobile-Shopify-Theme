@@ -1,0 +1,99 @@
+.scrolling--text {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.scrolling--item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+.scrolling--item.scrolling--animated {
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: var(--duration);
+  animation-play-state: running;
+  width: max-content;
+  will-change: transform, width;
+}
+.scrolling--text--left .scrolling--animated {
+  animation-name: scrolling-left;
+}
+
+.scrolling--text--right .scrolling--animated {
+  animation-name: scrolling-right;
+}
+
+@media screen and (hover: hover) {
+  .scrolling--text:hover .scrolling--animated {
+    animation-play-state: paused;
+  }
+}
+
+.scrolling--text--paused .scrolling--animated {
+  animation-play-state: paused;
+}
+
+.scrolling--item__inner {
+  margin: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
+  --icon-height: 2.6rem;
+}
+.scrolling--text__content {
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 750px) {
+  .scrolling--text .scrolling--item__inner {
+    margin: 0 2.5rem;
+  }
+  .scrolling--item__inner.column--gap-medium {
+    margin: 0 5rem;
+  }
+  .scrolling--item__inner.column--gap-large {
+    margin: 0 8rem;
+  }
+}
+
+@keyframes scrolling-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes scrolling-right {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@supports (-webkit-text-stroke: 0.1rem rgba(var(--color-foreground))) {
+  .scrolling--item__text--stroke {
+    color: rgba(0, 0, 0, 0);
+    -webkit-text-stroke-color: rgba(var(--color-foreground));
+    -webkit-text-stroke-width: 0.1rem;
+  }
+}
+.media .image--fit {
+  position: relative;
+  width: auto;
+  max-width: 100%;
+  height: var(--scrolling-image-height, 150px);
+}
+.scrolling-logo--placeholder {
+  max-width: var(--scrolling-image-height, 15rem);
+}
+.scrolling-logo--placeholder .new-placeholder-svg {
+  height: auto;
+  max-width: 100%;
+}

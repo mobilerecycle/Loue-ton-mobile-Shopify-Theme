@@ -1,0 +1,247 @@
+{% liquid
+  if section.settings.logo_2 != blank
+    assign sm_none = 'd-sm-none'
+    assign sm_visible = 'd-sm-only-visible'
+  else
+    assign sm_visible = 'd-none'
+  endif
+
+  unless request.page_type == 'index'
+    if section.settings.logo_2 != blank
+      assign sm_none_other = 'd-sm-none'
+      assign sm_visible_other = 'd-sm-only-visible'
+    else
+      assign sm_visible_other = 'd-none'
+    endif
+  endunless
+%}
+
+<div class="{% if section.settings.full_width %}container-fluid header--secion-{{ section.id }}{% else %}container{% endif %}">
+  <div class="header__inner header-logo-menu--2-lines row">
+    <div class="col-auto d-none menu--bar-lines d-md-only-block">
+      <div class="mobile__menu_bar header__actions_btn--menu inline-y-center">
+        {% render 'icon-hamburger' %}
+      </div>
+    </div>
+
+    <!-- Header Logo Start -->
+    <div class="header__logo logo--space-in-header col-auto col-lg-4">
+      <div class="logo--center-in-header">
+        {% if section.settings.transparent_header
+          and section.settings.logo_3 != blank
+          and request.page_type == 'index'
+        %}
+          {%- if request.page_type == 'index' -%}
+            <h1 class="header__heading mb-0 {{ sm_none }}">
+          {%- endif -%}
+          {%- render 'header-logo-3',
+            className: 'header__logo_link',
+            none: sm_none_other,
+            logo_inner: section.settings.logo_inner
+          -%}
+          {%- if request.page_type == 'index' -%}
+            </h1>
+          {%- endif -%}
+        {% else %}
+          {%- if request.page_type == 'index' -%}
+            <h1 class="header__heading mb-0 {{ sm_none }}">
+          {%- endif -%}
+          {%- render 'header-logo',
+            className: 'header__logo_link',
+            none: sm_none_other,
+            logo_inner: section.settings.logo_inner
+          -%}
+          {%- if request.page_type == 'index' -%}
+            </h1>
+          {%- endif -%}
+        {% endif %}
+
+        {%- if section.settings.logo_2 != blank -%}
+          {%- if request.page_type == 'index' -%}
+            <h1 class="header__heading mb-0 {{ sm_visible }}">
+          {%- endif -%}
+          {%- render 'header-logo-2', className: 'header__logo_link', none: sm_visible_other -%}
+          {%- if request.page_type == 'index' -%}
+            </h1>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+    <!-- Header Logo End -->
+
+    <!-- Header Actions Start -->
+    <div class="header__actions col-auto menu--bottom-logo-left col-lg-8">
+      {% if section.settings.show_search %}
+        <button
+          class="header__actions_btn header__actions_btn--search d-md-only-visible"
+          aria-label="{{ 'general.search.search' | t }}"
+        >
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.792 12.792L16.5837 16.5837M1.41699 7.91699C1.41699 8.77058 1.58512 9.61582 1.91178 10.4044C2.23843 11.1931 2.71722 11.9096 3.3208 12.5132C3.92438 13.1168 4.64093 13.5956 5.42955 13.9222C6.21817 14.2489 7.0634 14.417 7.91699 14.417C8.77058 14.417 9.61582 14.2489 10.4044 13.9222C11.1931 13.5956 11.9096 13.1168 12.5132 12.5132C13.1168 11.9096 13.5956 11.1931 13.9222 10.4044C14.2489 9.61582 14.417 8.77058 14.417 7.91699C14.417 6.19308 13.7322 4.53978 12.5132 3.3208C11.2942 2.10181 9.6409 1.41699 7.91699 1.41699C6.19308 1.41699 4.53978 2.10181 3.3208 3.3208C2.10181 4.53978 1.41699 6.19308 1.41699 7.91699V7.91699Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {%- endif -%}
+
+      {% if section.settings.show_search %}
+        {% if section.settings.search_style == 'search_popup' %}
+          <button
+            class="header__actions_btn header__actions_btn--search d-md-none"
+            aria-label="{{ 'general.search.search' | t }}"
+          >
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.792 12.792L16.5837 16.5837M1.41699 7.91699C1.41699 8.77058 1.58512 9.61582 1.91178 10.4044C2.23843 11.1931 2.71722 11.9096 3.3208 12.5132C3.92438 13.1168 4.64093 13.5956 5.42955 13.9222C6.21817 14.2489 7.0634 14.417 7.91699 14.417C8.77058 14.417 9.61582 14.2489 10.4044 13.9222C11.1931 13.5956 11.9096 13.1168 12.5132 12.5132C13.1168 11.9096 13.5956 11.1931 13.9222 10.4044C14.2489 9.61582 14.417 8.77058 14.417 7.91699C14.417 6.19308 13.7322 4.53978 12.5132 3.3208C11.2942 2.10181 9.6409 1.41699 7.91699 1.41699C6.19308 1.41699 4.53978 2.10181 3.3208 3.3208C2.10181 4.53978 1.41699 6.19308 1.41699 7.91699V7.91699Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% else %}
+          {% comment %} Search Box Start {% endcomment %}
+          <div class="search--box-wrapper d-md-none">
+            {%- if settings.predictive_search_enabled -%}
+              <predictive-search
+                class="search--predictive-in-header"
+                data-loading-text="{{ 'accessibility.loading' | t }}"
+              >
+            {% else %}
+              <search-form class="search--predictive-in-header">
+            {%- endif -%}
+            <form
+              action="{{ routes.search_url }}"
+              method="get"
+              role="search"
+              class="search search--from-in-header"
+              style="--search-modal-input-radius: {{ settings.search_modal_input_border_radius }}px"
+            >
+              <div class="search__input_field input__field_form">
+                <label class="visually-hidden" for="Search-In-Header">{{ 'general.search.search' | t }}</label>
+                <input
+                  class="search__input input__field"
+                  id="Search-In-Header"
+                  type="search"
+                  name="q"
+                  value=""
+                  placeholder="{{ 'general.search.search' | t }}"
+                  {%- if settings.predictive_search_enabled -%}
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-owns="predictive-search-results-list"
+                    aria-controls="predictive-search-results-list"
+                    aria-haspopup="listbox"
+                    aria-autocomplete="list"
+                    autocorrect="off"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                  {%- endif -%}
+                >
+                <input type="hidden" name="options[prefix]" value="last">
+                <button
+                  type="reset"
+                  class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
+                  aria-label="{{ 'general.search.reset' | t }}"
+                >
+                  <svg class="icon icon-close" aria-hidden="true" focusable="false">
+                    <use xlink:href="#icon-reset">
+                  </svg>
+                </button>
+                <button
+                  class="search__button input__field_form_button"
+                  aria-label="{{ 'general.search.search' | t }}"
+                >
+                  <svg class="icon icon-search" aria-hidden="true" focusable="false" role="presentation">
+                    <use href="#icon-search">
+                  </svg>
+                </button>
+              </div>
+
+              {%- if settings.predictive_search_enabled -%}
+                <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+                  <div class="predictive-search__loading-state">
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      role="presentation"
+                      class="spinner"
+                      viewBox="0 0 66 66"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                  </div>
+                </div>
+
+                <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+              {%- endif -%}
+            </form>
+            {%- if settings.predictive_search_enabled -%}
+              </predictive-search>
+            {%- else -%}
+              </search-form>
+            {%- endif -%}
+          </div>
+          {% comment %} Search Box End {% endcomment %}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- unless template contains 'cart' or cart_icon != true -%}
+        {%- if settings.cart_type == 'drawer' -%}
+          <open-minicart>
+            <a class="header__actions_btn header__actions_btn--cart" href="{{ routes.cart_url }}">
+              <svg viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.3679 6.22188C21.2916 6.13269 21.1969 6.06109 21.0903 6.012C20.9837 5.96291 20.8678 5.93749 20.7504 5.9375H15.8754V2.6875C15.8754 2.04103 15.6186 1.42105 15.1615 0.963927C14.7044 0.506807 14.0844 0.25 13.4379 0.25H8.56291C7.91645 0.25 7.29646 0.506807 6.83934 0.963927C6.38222 1.42105 6.12541 2.04103 6.12541 2.6875V5.9375H1.25041C1.13264 5.93617 1.01598 5.96045 0.908523 6.00868C0.801067 6.05691 0.705381 6.12792 0.628094 6.2168C0.550808 6.30568 0.493769 6.4103 0.46093 6.52342C0.428091 6.63653 0.420237 6.75543 0.437912 6.87188L1.96541 16.7438C2.02417 17.1312 2.221 17.4844 2.51961 17.7383C2.81823 17.9921 3.19852 18.1294 3.59041 18.125H18.4267C18.8186 18.1294 19.1988 17.9921 19.4975 17.7383C19.7961 17.4844 19.9929 17.1312 20.0517 16.7438L21.5629 6.87188C21.5792 6.75588 21.5702 6.63773 21.5365 6.52554C21.5029 6.41335 21.4454 6.30976 21.3679 6.22188V6.22188ZM7.75041 2.6875C7.75041 2.47201 7.83602 2.26535 7.98839 2.11298C8.14076 1.9606 8.34742 1.875 8.56291 1.875H13.4379C13.6534 1.875 13.8601 1.9606 14.0124 2.11298C14.1648 2.26535 14.2504 2.47201 14.2504 2.6875V5.9375H7.75041V2.6875ZM18.4267 16.5H3.57416L2.20104 7.5625H19.7998L18.4267 16.5Z" fill="currentColor"/>
+              </svg>
+
+              <div class="cart-count-bubble header__actions_btn_cart_num">
+                {%- if cart.item_count < 100 -%}
+                  <span id="cart-notification-count" aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            </a>
+          </open-minicart>
+        {%- else -%}
+          <a href="{{ routes.cart_url }}" class="header__actions_btn header__actions_btn--cart">
+            <svg viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.3679 6.22188C21.2916 6.13269 21.1969 6.06109 21.0903 6.012C20.9837 5.96291 20.8678 5.93749 20.7504 5.9375H15.8754V2.6875C15.8754 2.04103 15.6186 1.42105 15.1615 0.963927C14.7044 0.506807 14.0844 0.25 13.4379 0.25H8.56291C7.91645 0.25 7.29646 0.506807 6.83934 0.963927C6.38222 1.42105 6.12541 2.04103 6.12541 2.6875V5.9375H1.25041C1.13264 5.93617 1.01598 5.96045 0.908523 6.00868C0.801067 6.05691 0.705381 6.12792 0.628094 6.2168C0.550808 6.30568 0.493769 6.4103 0.46093 6.52342C0.428091 6.63653 0.420237 6.75543 0.437912 6.87188L1.96541 16.7438C2.02417 17.1312 2.221 17.4844 2.51961 17.7383C2.81823 17.9921 3.19852 18.1294 3.59041 18.125H18.4267C18.8186 18.1294 19.1988 17.9921 19.4975 17.7383C19.7961 17.4844 19.9929 17.1312 20.0517 16.7438L21.5629 6.87188C21.5792 6.75588 21.5702 6.63773 21.5365 6.52554C21.5029 6.41335 21.4454 6.30976 21.3679 6.22188V6.22188ZM7.75041 2.6875C7.75041 2.47201 7.83602 2.26535 7.98839 2.11298C8.14076 1.9606 8.34742 1.875 8.56291 1.875H13.4379C13.6534 1.875 13.8601 1.9606 14.0124 2.11298C14.1648 2.26535 14.2504 2.47201 14.2504 2.6875V5.9375H7.75041V2.6875ZM18.4267 16.5H3.57416L2.20104 7.5625H19.7998L18.4267 16.5Z" fill="currentColor"/>
+            </svg>
+            <div class="cart-count-bubble header__actions_btn_cart_num">
+              {%- if cart.item_count < 100 -%}
+                <span id="cart-notification-count" aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+              <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endunless -%}
+
+      {%- if shop.customer_accounts_enabled and section.settings.user_icon -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <a
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="header__actions_btn header__actions_btn--user d-md-none"
+          >
+            <svg viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.7941 8.67198C11.0535 9.37141 10.0485 9.76481 9 9.76481C7.9515 9.76481 6.94648 9.37141 6.2059 8.67198C5.46542 7.97264 5.05 7.02475 5.05 6.03704C5.05 5.04932 5.46542 4.10144 6.2059 3.4021C6.94648 2.70266 7.9515 2.30926 9 2.30926C10.0485 2.30926 11.0535 2.70266 11.7941 3.4021C12.5346 4.10144 12.95 5.04932 12.95 6.03704C12.95 7.02475 12.5346 7.97264 11.7941 8.67198ZM5.19443 9.63511C6.20419 10.5888 7.57314 11.1241 9 11.1241C10.4269 11.1241 11.7958 10.5888 12.8056 9.63511C13.8154 8.68136 14.3833 7.38716 14.3833 6.03704C14.3833 4.68692 13.8154 3.39272 12.8056 2.43896C11.7958 1.4853 10.4269 0.95 9 0.95C7.57314 0.95 6.20419 1.4853 5.19443 2.43896C4.18457 3.39272 3.61667 4.68692 3.61667 6.03704C3.61667 7.38716 4.18457 8.68136 5.19443 9.63511ZM15.6167 15.4815V17.3704C15.6167 17.5516 15.6929 17.7247 15.8276 17.8519C15.9622 17.9791 16.1442 18.05 16.3333 18.05C16.5225 18.05 16.7045 17.9791 16.8391 17.8519C16.9738 17.7247 17.05 17.5516 17.05 17.3704V15.4815C17.05 14.6323 16.6928 13.8186 16.058 13.2191C15.4233 12.6196 14.5631 12.2833 13.6667 12.2833H4.33333C3.43691 12.2833 2.57667 12.6196 1.94198 13.2191C1.30719 13.8186 0.95 14.6323 0.95 15.4815V17.3704C0.95 17.5516 1.02624 17.7247 1.16093 17.8519C1.29552 17.9791 1.47749 18.05 1.66667 18.05C1.85585 18.05 2.03781 17.9791 2.1724 17.8519C2.30709 17.7247 2.38333 17.5516 2.38333 17.3704V15.4815C2.38333 14.9947 2.58804 14.5273 2.95345 14.1822C3.31896 13.837 3.81527 13.6426 4.33333 13.6426H13.6667C14.1847 13.6426 14.681 13.837 15.0465 14.1822C15.412 14.5273 15.6167 14.9947 15.6167 15.4815Z" fill="currentColor" stroke="currentColor" stroke-width="0.1"/>
+            </svg>
+            <span class="visually-hidden">
+              {%- liquid
+                if customer
+                  echo 'customer.account_fallback' | t
+                else
+                  echo 'customer.log_in' | t
+                endif
+              -%}
+            </span>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+<div class="header--navigation-bar d-md-none">
+  <div class="{% if section.settings.full_width %}container-fluid{% else %}container{% endif %}">
+    <!-- Header Menu Start -->
+    <nav class="header__menu header--nav-bottom-line  col d-md-none justify-content-{{ section.settings.menu_position }}">
+      {%- render 'menu-nav', font: section.settings.menu_font -%}
+    </nav>
+    <!-- Header Menu End -->
+  </div>
+</div>

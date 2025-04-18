@@ -1,0 +1,83 @@
+.rich-text {
+  text-align: center;
+}
+.rich-text__blocks {
+  margin: auto;
+  /* 2.5rem margin on left & right */
+  width: 100%;
+}
+
+.rich-text__blocks * {
+  overflow-wrap: break-word;
+}
+
+
+.rich-text:not(.color-background-1) {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.container-fluid .rich-text__blocks {
+  /* 4rem (1.5rem + 2.5rem) margin on left & right */
+  width: calc(100% - 8rem / var(--font-body-size));
+}
+
+
+@media screen and (min-width: 750px) {
+  .rich-text__blocks {
+    max-width: 50rem;
+  }
+
+  .container-fluid .rich-text__blocks {
+    /* 7.5rem (5rem + 2.5rem) margin on left & right */
+    width: calc(100% - 15rem);
+  }
+}
+
+
+@media screen and (min-width: 990px) {
+  .rich-text__blocks {
+    max-width: 90rem;
+  }
+}
+
+/* Blocks */
+
+.rich-text__blocks > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.rich-text__blocks > * + * {
+  margin-top: 2rem;
+}
+
+.rich-text__blocks > * + a {
+  margin-top: 3rem;
+}
+/* Rich text size */
+.rich-text__small{
+  font-size: 1.6rem; 
+}
+.rich-text__medium{
+  font-size: 2rem; 
+}
+.rich-text__large{
+  font-size: 2.2rem; 
+}
+@media only screen and (min-width: 750px){
+  .rich-text__large{
+    font-size: 2.8rem; 
+  }
+}
+@media only screen and (min-width: 991px){
+  .rich-text__medium{
+    font-size: 2.4rem; 
+  }
+  .rich-text__large{
+    font-size: 3.2rem; 
+  }
+}
+.richt_text--heading{
+  color: rgba(var(--color-foreground));
+}

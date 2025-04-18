@@ -1,0 +1,107 @@
+@media only screen and (min-width: 750px) {
+  .video-hero-height--extra-small {
+    height: 35rem;
+  }
+  .video-hero-height--small {
+    height: 45rem;
+  }
+  .video-hero-height--medium {
+    height: 55rem;
+  }
+  .video-hero-height--large {
+    height: 65rem;
+  }
+  .video-hero-height--extra-large {
+    height: 72rem;
+  }
+}
+
+@media only screen and (max-width: 749px) {
+  .video-hero-mobile-height--extra-small {
+    height: 22rem;
+  }
+  .video-hero-mobile-height--small {
+    height: 28rem;
+  }
+  .video-hero-mobile-height--medium {
+    height: 35rem;
+  }
+  .video-hero-mobile-height--large {
+    height: 42rem;
+  }
+  .video-hero-mobile-height--extra-large {
+    height: 50rem;
+  }
+}
+
+.video--hero-inner video {
+  position: relative;
+  object-fit: cover;
+}
+.video--hero-inner video,
+.video--hero-inner iframe {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.video--hero-inner iframe {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  max-width: none;
+}
+@media only screen and (min-width: 1200px) {
+  .video--hero-inner iframe {
+    width: 100%;
+    height: 300%;
+    left: auto;
+    top: -100%;
+  }
+}
+.video--hero-text-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  padding: 3rem;
+}
+.video--hero-inner {
+  position: relative;
+}
+.video--hero-text-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  padding: 3rem;
+  background: rgba(0, 0, 0, var(--video-overlay-opacity, 0.5));
+}
+.video--hero-inner {
+  position: relative;
+}
+.video--hero-radius {
+  border-radius: 2.5rem;
+  overflow: hidden;
+}
+.video--hero-text-inner > .video--hero-text + * {
+  margin-top: 1.5rem;
+}
+.video--hero-text-inner > * + .video--hero-text {
+  margin-top: 1rem;
+}
+.video--hero-text-content-width {
+  height: 100%;
+  width: 100%;
+  max-width: calc(var(--container-lg-width) - 3rem);
+  margin: 0 auto;
+}
+.video--hero-text-inner > * + a {
+  margin-top: 2rem;
+}
+.video--hero-text {
+  max-width: 70rem;
+}

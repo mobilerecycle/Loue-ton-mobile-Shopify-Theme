@@ -1,0 +1,47 @@
+<div class="quick-add no-js-hidden">
+  <modal-opener data-modal="#QuickAdd-{{ product_card_product.id }}">
+    <button
+      id="{{ product_form_id }}-submit"
+      type="submit"
+      name="add"
+      class="quick-add__submit {% if cart_button_style == 'style1' %}product-grid-item__actions__btn{% else %} cart--icon-button button--icon{% endif %} h6  mb-0"
+      aria-haspopup="dialog"
+      aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ product_card_product.id }}"
+      data-product-url="{{ product_card_product.url }}"
+    >
+      {%- if cart_button_style == 'style1' -%}
+        <span class="action__btn--text">
+          {%- render 'cart-plus' -%}
+          <span class="action__btn--text--label">
+            {{ 'products.product.select_options' | t }}
+          </span>
+        </span>
+
+      {%- else -%}
+        {%- render 'cart-plus' -%}
+      {%- endif -%}
+    </button>
+  </modal-opener>
+  <quick-add-modal
+    id="QuickAdd-{{ product_card_product.id }}"
+    class="quick-add-modal"
+  >
+    <div
+      role="dialog"
+      aria-label="{{ 'products.product.choose_product_options' | t: product_name: product_card_product.title | escape }}"
+      aria-modal="true"
+      class="quick-add-modal__content global-settings-popup {% if settings.quick_view_round_corner %}rounded--corner{% endif %}"
+      tabindex="-1"
+    >
+      <button
+        id="ModalClose-{{ product_card_product.id }}"
+        type="button"
+        class="quick-add-modal__toggle"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </button>
+      <div id="QuickAddInfo-{{ product_card_product.id }}" class="quick-add-modal__content-info"></div>
+    </div>
+  </quick-add-modal>
+</div>

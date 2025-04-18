@@ -1,0 +1,67 @@
+<style type="text/css">
+  .template-404 .title + * {
+    margin-top: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .template-404 .title + * {
+      margin-top: 2rem;
+    }
+  }
+  .template-404{
+  	height: 70vh;
+  }
+</style>
+
+<div class="template-404 text-center color-{{ section.settings.color_scheme }} section--padding d-flex align-items-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="title">
+          {{ 'templates.404.title' | t }}
+        </h1>
+        <p>
+          {{ 'templates.404.subtext' | t }}
+        </p>
+        <a href="{{ routes.all_products_collection_url }}" class="button">
+          {{ 'general.continue_shopping' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "404",
+    "settings": [
+		{
+          "type": "select",
+          "id": "color_scheme",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "t:sections.main-password-footer.settings.color_scheme.options__1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:sections.main-password-footer.settings.color_scheme.options__2.label"
+            },
+            {
+              "value": "background-1",
+              "label": "t:sections.main-password-footer.settings.color_scheme.options__3.label"
+            },
+            {
+              "value": "background-2",
+              "label": "t:sections.main-password-footer.settings.color_scheme.options__4.label"
+            },
+            {
+              "value": "inverse",
+              "label": "t:sections.main-password-footer.settings.color_scheme.options__5.label"
+            }
+          ],
+          "default": "background-1",
+          "label": "t:sections.main-password-footer.settings.color_scheme.label"
+        }
+	]
+  }
+{% endschema %}

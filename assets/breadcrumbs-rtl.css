@@ -1,0 +1,10 @@
+.breadcrumbs__item + .breadcrumbs__item {
+  margin-left: 0;
+  padding-left: 0;
+  margin-right: 15px;
+  padding-right: 15px;
+}
+.breadcrumbs__item + .breadcrumbs__item::before {
+  left: auto;
+  right: -4px;
+}

@@ -1,0 +1,239 @@
+<link rel="stylesheet" href="{{ 'mobile-offcanvas-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'mobile-offcanvas-menu.css' | asset_url | stylesheet_tag }}</noscript>
+
+<style>
+                .offcanvas-header {
+                     position: fixed;
+                     z-index: 9999;
+                     top: 0;
+                     right: auto;
+                     left: 0;
+                     width: 100%;
+                     max-width: 320px;
+                     height: 100vh;
+                     transition: var(--transition);
+                     transform: translateX(-100%);
+                     background-color: rgba(var(--color-background));
+                     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+                     visibility: collapse;
+                     padding-bottom: 3rem;
+                     overflow-y: scroll;
+                 }
+                      .offcanvas-overlay {
+                        position: fixed;
+                        z-index: 98;
+                        top: 0;
+                        left: 0;
+                        visibility: hidden;
+                        width: 100%;
+                        height: 100%;
+                        transition: var(--transition);
+                        opacity: 0;
+                        background-color: #000;
+                        cursor: crosshair;
+                        opacity: 0;
+                        display: none;
+                      }
+                      .offcanvas__inner {
+                        position: relative;
+                        height: 100%;
+                      }
+
+                      /* Offacnvas Logo */
+                      .offcanvas__logo {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                        padding: 20px;
+                         background-color: rgba(var(--color-background));
+                      }
+                      .offcanvas__logo_link {
+                        position: relative;
+                        display: block;
+                        max-width: 100%;
+                        word-break: break-word;
+                        padding-right: 10px;
+                      }
+                      .offcanvas__close_btn {
+                        position: relative;
+                        align-self: center;
+                        width: 20px;
+                        height: 15px;
+                        padding: 0;
+                        text-indent: -9999px;
+                        border: none;
+                        background-color: transparent;
+                        flex-shrink: 0;
+                      }
+                      .offcanvas__close_btn::before, .offcanvas__close_btn::after {
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        width: 100%;
+                        height: 2px;
+                        margin-top: -1px;
+                        content: "";
+                        transform: rotate(45deg);
+                        background-color:  rgba(var(--color-foreground));
+                      }
+                      .offcanvas__close_btn::after {
+                        transform: rotate(-45deg);
+                      }
+
+                      /* Mobile Menu */
+                      .offcanvas__menu {
+                        overflow-y: auto;
+                        height: 100%;
+                      }
+
+                      .offcanvas__menu_ul {
+                        overflow: auto;
+                        margin: 0;
+                        padding: 0;
+                        list-style: none;
+                      }
+
+                      .offcanvas__menu_li {
+                        position: relative;
+                        border-bottom: 1px solid  rgba(var(--color-foreground),0.15);
+                      }
+                      .offcanvas__menu_li:first-child {
+                        border-top: 1px solid rgba(var(--color-foreground),0.15);
+                      }
+
+                      .offcanvas__menu_item {
+                          line-height: 1;
+                          display: block;
+                          padding: 15px 20px;
+                          word-break: break-word;
+                          font-size: 1.6rem;
+                          color: rgba(var(--color-foreground), 0.8);
+                      }
+                        .offcanvas__menu_item:hover{
+                             color: rgba(var(--color-foreground));
+                        }
+                      /* Mobile Sub Menu */
+                      .offcanvas__sub_menu {
+                        display: none;
+                        margin: 0;
+                        padding: 0;
+                        list-style: none;
+                      }
+                      {% if theme_rtl %}
+                     .offcanvas__sub_menu_toggle {
+                        font-size: 20px;
+                        position: absolute;
+                        z-index: 9;
+                        top: 0;
+                        left: 0;
+                        width: 40px;
+                        height: 46px;
+                        padding: 0;
+                        border: none;
+                        border-radius: 0;
+                        background-color: transparent;
+                      }
+                       {% else %}
+                       .offcanvas__sub_menu_toggle {
+                        font-size: 20px;
+                        position: absolute;
+                        z-index: 9;
+                        top: 0;
+                        right: 0;
+                        width: 40px;
+                        height: 46px;
+                        padding: 0;
+                        border: none;
+                        border-radius: 0;
+                        background-color: transparent;
+                      }
+                        {% endif %}
+
+                      .offcanvas__sub_menu_toggle::before, .offcanvas__sub_menu_toggle::after {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 12px;
+                        height: 2px;
+                        content: "";
+                        transition: var(--transition);
+                          transform: translateX(-50%) translateY(-50%);
+                          background-color: rgba(var(--color-foreground));
+                          }
+                      .offcanvas__sub_menu_toggle:not(.active)::after {
+                        transform: translateX(-50%) translateY(-50%) rotate(90deg);
+                      }
+                      .offcanvas__logo span.h2 {
+                        margin: 0;
+                      }
+                      .offcanvas__inner .quick__links {
+                        padding-top: 0;
+                      }
+                      .offcanvas__inner .quick__links {
+                        padding-bottom: 1.5rem;
+                      }
+                        #predictive__search_overlay.active + .offcanvas-overlay, #quick__information_overlay.active + .offcanvas-overlay {
+                        visibility: visible;
+                        opacity: 0.5;
+                        display: block;
+                      }
+                   .quick__information--body {
+                flex-grow: 1;
+                display: flex;
+                padding-bottom: 3rem;
+                flex-direction: column;
+            }
+                .offcanvas__inner {
+                  display: flex;
+                  flex-direction: column;
+              }
+            .localization__store.mobile-drawer--localization-form {
+              justify-content: center;
+          }
+
+        .mobile-drawer--localization-form button.dropdown__open_label {
+            border: 0.1rem solid rgba(var(--color-foreground),0.1);
+            padding: 0.3rem 1.2rem;
+            border-radius: var(--button-border-radius);
+        }
+      .menu__drawer--footer .mobile-drawer--localization-form + .list-social {
+        margin-top: 0.8rem;
+    }
+    .mobile-drawer--localization-form localization-form:not(:only-child):last-child .dropdown__open_list.dropdown__top--right-position.mobile--drawer {
+      width: 15rem;
+  }
+</style>
+
+<div class="offcanvas-header" tabindex="-1">
+  <div class="offcanvas__inner">
+    <div class="offcanvas__logo">
+      {%- render 'header-logo', className: 'offcanvas__logo_link' -%}
+      <button class="offcanvas__close_btn">close</button>
+    </div>
+    <div class="quick__information--body">
+      <div class="quick__links flex-grow-1 y_scroll">
+        <nav class="offcanvas__menu">
+          {%- render 'mobile-menu-nav' -%}
+        </nav>
+      </div>
+      {%- if section.settings.social_media or section.settings.enable_currency or section.settings.enable_language -%}
+        <div class="menu__drawer--footer">
+          {% render 'localization-form',
+            className: 'mobile-drawer--localization-form',
+            form_currency_id: 'MobileDrawerCountryForm-2',
+            form_language_id: 'MobileDrawerLanguageForm-2',
+            dropdown_position: 'dropdown__top--right-position mobile--drawer',
+            enable_country_selector: section.settings.enable_currency,
+            enable_language_selector: section.settings.enable_language,
+            place: 'header--drawer'
+          %}
+
+          {%- if section.settings.social_media -%}
+            {%- render 'social-media', className: 'text-center' -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+<div class="offcanvas-overlay"></div>

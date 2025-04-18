@@ -1,0 +1,17 @@
+@media only screen and (min-width: 1200px) {
+  .slide__placeholder {
+    transform: translate(30%, -50%);
+  }
+  .slide__placeholder {
+    right: 50%;
+    left: 0;
+  }
+}
+.slideshow--slider .slideshow--nav-button > svg {
+  transform: rotate(-180deg);
+}
+@media only screen and (min-width: 750px) {
+  .slideshow__text.banner__box {
+    text-align: right;
+  }
+}

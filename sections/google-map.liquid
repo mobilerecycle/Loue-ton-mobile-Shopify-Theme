@@ -1,0 +1,197 @@
+{%- style -%}
+    .google__map--wrapper iframe{
+      width: 100% !important;
+      height: 50rem !important;
+    }
+   .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+     --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+
+  #MainContent > :first-child .section--top-space-{{ section.id }} {
+    padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+  }
+
+  {%- if section.settings.image != blank -%}
+    @media screen and (max-width: 767px) {
+      .google__map--media--large {
+        min-height: 39rem;
+      }
+      .google__map--media--medium {
+        min-height: 34rem;
+      }
+      .google__map--media--small {
+        min-height: 28rem;
+      }
+    }
+
+    @media screen and (min-width: 768px){
+      .google__map--media--large {
+        min-height: 72rem;
+      }
+      .google__map--media--medium {
+        min-height: 56rem;
+      }
+      .google__map--media--small {
+        min-height: 42rem;
+      }
+    }
+  {%- endif -%}
+  h2.google__map--placeholder-heading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+  }
+{%- endstyle -%}
+
+<div class="google__map--wrapper section--top-space-{{ section.id }} section-{{ section.id }}-padding {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+  <div class="container">
+    {%- if section.settings.image != blank -%}
+      <div
+        class="google__map--media--{{ section.settings.image_height }} media"
+        {% if section.settings.image_height == 'adapt' and section.settings.image != blank %}
+          style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+        {% endif %}
+      >
+        {% liquid
+          assign height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio | round
+        %}
+        {{
+          section.settings.image
+          | image_url: width: 1920
+          | image_tag:
+            loading: 'lazy',
+            height: height,
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+        }}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.map == blank and section.settings.image == blank -%}
+      <div class="google__map--media placeholder">
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-2' }}
+        <h2 class="google__map--placeholder-heading h1 text-center">Add Map iframe code or placholder</h2>
+      </div>
+    {%- endif -%}
+
+    {{ section.settings.map }}
+  </div>
+</div>
+
+{% schema %}
+ {
+   "name": "Google map",
+   "disabled_on": {
+      "groups": ["header"]
+    },
+   "settings": [
+	{
+         "type": "image_picker",
+         "id": "image",
+         "label": "Map placeholder image"
+       },
+	{
+         "type": "select",
+         "id": "image_height",
+         "options": [
+           {
+             "value": "adapt",
+             "label": "Adapt to image"
+           },
+           {
+             "value": "small",
+             "label": "Small"
+           },
+           {
+             "value": "medium",
+             "label": "Medium"
+           },
+           {
+             "value": "large",
+             "label": "Large"
+           }
+         ],
+         "default": "adapt",
+         "label": "Image height"
+       },
+	{
+         "type": "textarea",
+         "id": "map",
+         "label": "Map iframe code"
+       },
+	{
+         "type": "header",
+         "content": "Get iframe code",
+         "info": "[Click here](https:\/\/www.maps.ie\/create-google-map)"
+       },
+	{
+     "type": "header",
+     "content": "Section padding"
+   },
+   {
+         "type": "paragraph",
+         "content": "Desktop"
+       },
+       {
+         "type": "range",
+         "id": "padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 0
+       },
+       {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 0
+       },
+	{
+         "type": "paragraph",
+         "content": "Mobile"
+       },
+	{
+         "type": "range",
+         "id": "mobile_padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 0
+       },
+       {
+         "type": "range",
+         "id": "mobile_padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 0
+       }
+],
+"presets": [
+     {
+     	"name": "Google map"
+     }
+   ]
+ }
+{% endschema %}

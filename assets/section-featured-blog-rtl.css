@@ -1,0 +1,16 @@
+p.article-card__excerpt,
+h2.article-card__title {
+  padding-right: 0;
+  padding-left: 6rem;
+}
+h2.article-card__title > svg {
+  right: auto;
+  left: 0;
+  transform: rotate(-180deg);
+}
+@media only screen and (min-width: 767px) {
+  .blog-articles__article.first--article .article-card__info {
+    padding-left: 0;
+    padding-right: 50px;
+  }
+}

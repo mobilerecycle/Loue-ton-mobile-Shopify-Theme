@@ -1,0 +1,16 @@
+.article-next-previous-button.preview__blog--post > svg {
+  transform: inherit;
+}
+.article-next-previous-button.next__blog--post > svg {
+  margin-left: 0;
+  transform: rotate(-180deg);
+  margin-right: 1rem;
+}
+.article-next-previous-button.preview__blog--post > svg {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+.single-comment__content {
+  margin-left: 0;
+  margin-right: 2.5rem;
+}

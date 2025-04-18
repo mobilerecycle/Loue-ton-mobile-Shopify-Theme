@@ -1,0 +1,11 @@
+.header__logo_link {
+  word-break: break-word;
+  max-width: 500px;
+  padding: 10px 0;
+  line-height: 1;
+  display: inline-block;
+}
+.header__heading-logo {
+  width: 100%;
+  height: auto;
+}

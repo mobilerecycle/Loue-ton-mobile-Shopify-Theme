@@ -1,0 +1,31 @@
+{{ 'gift-card-header.css' | asset_url | stylesheet_tag }}
+<header class="gift-card__title">
+  <a href="{{ routes.root_url }}" class="header__logo_link">
+    {%- if section.settings.logo != blank -%}
+      {%- assign image_size = section.settings.logo_width | append: 'x' -%}
+      <img
+        srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+        src="{{ section.settings.logo | img_url: image_size }}"
+        loading="lazy"
+        class="header__heading-logo"
+        width="{{ section.settings.logo.width }}"
+        height="{{ section.settings.logo.height }}"
+        alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+      >
+    {%- else -%}
+      <span class="h2">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+</header>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,199 @@
+<div class="cart_notification_topbar">
+  <div class="cart-notification__header">
+    <h2 class="cart-notification__heading caption-large">
+      <div class="item__empty_message {% if cart != empty %} no-js-inline {% endif %}">
+        {%- render 'icon-checkmark' -%}
+        {{ 'Shopping Cart' }}
+      </div>
+      <div class="item__success_message {% if cart == empty %} no-js-inline {% endif %}">
+        {%- render 'icon-checkmark' -%}
+        {{ 'general.cart.item_added' | t }}
+      </div>
+    </h2>
+  </div>
+
+  <div class="empty__cart__item {% if cart != empty %}no-js-inline {% endif %}">
+    <h3 class="mb-0">{{ 'sections.cart.empty' | t }}</h3>
+    {%- if settings.continue_shopping_enable -%}
+      <a class="link button-label" href="{{ settings.continue_shopping_link }}">
+        {{- 'general.continue_shopping' | t -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+<div class="cart__items {% if cart == empty %}no-js-inline {% endif %} flex-grow-1 y_scroll" id="min-cart-items">
+  <form action="{{ routes.cart_url }}" method="post" id="cart" class="w-100">
+    <div class="js-contents">
+      <div id="cart-notification-product">
+        {%- render 'cart-notification-product' -%}
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="cart-notification__links {% if cart == empty %} no-js-inline {% endif %}" id="empty__cart__button">
+  {%- if settings.cart_note_enable or settings.shipping_calc_enable -%}
+    <div class="cart_notification_footer d-flex justify-content-between">
+      {%- if settings.cart_note_enable -%}
+        <cart-action-popup class="cart--action-popup-item">
+          <button data-action="note" class="cart_notification_action_button cart_notification--title">
+            {%- render 'icon-pen' -%}
+            {{ 'general.add_cart_note.button_title' | t }}
+          </button>
+          <div class="notification_action_drawer" id="cart_note_drawer">
+            <div class="action_drawer_heading">
+              <h6 class="mb-15 mt-0 cart_notification--title">
+                {%- render 'icon-pen' -%}
+                {{ 'general.add_cart_note.popup_title' | t }}
+              </h6>
+            </div>
+            <div class="action_drawer_body mb-20">
+              <textarea
+                class="text-area"
+                name="note"
+                id="cartNote"
+                class="form-control"
+                rows="3"
+                placeholder="{{ 'general.add_cart_note.textbox_placeholder' | t }}"
+                spellcheck="false"
+              ></textarea>
+            </div>
+            <div class="action_drawer_footer d-flex justify-content-between cart_notification--footer">
+              <button class="button button--secondary button__save w-100" data-action="note">
+                {{ 'general.add_cart_note.save_button' | t }}
+              </button>
+              <button class="button button__cancel w-100" data-action="close">
+                {{ 'general.add_cart_note.cancel_title' | t }}
+              </button>
+            </div>
+          </div>
+        </cart-action-popup>
+      {%- endif -%}
+      {%- if settings.shipping_calc_enable -%}
+        <cart-action-popup class="cart--action-popup-item">
+          <button data-action="shipping" class="cart_notification_action_button cart_notification--title">
+            {%- render 'icon-car' -%}
+            {{ 'general.shipping_calculator.button_title' | t }}
+          </button>
+
+          <div class="notification_action_drawer" id="shipping_drawer">
+            <div class="action_drawer_heading">
+              <h6 class="mb-15 mt-0 estimate__shipping--title">
+                {{ 'general.shipping_calculator.popup_title' | t }}
+                {%- render 'icon-help' -%}
+              </h6>
+            </div>
+            <div class="action_drawer_body">
+              <div class="select__field_form mb-20">
+                <select
+                  id="AddressCountry_Shipping"
+                  name="address[country]"
+                  autocomplete="country"
+                >
+                  {{ all_country_option_tags }}
+                </select>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6">
+                  <use href="#icon-caret" />
+                </svg>
+              </div>
+
+              <div id="AddressProvinceContainerNewShiping" class="select__field_form mb-20" style="display: none">
+                <select
+                  id="AddressProvince_shipping"
+                  name="address[province]"
+                  autocomplete="address-level1"
+                ></select>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6">
+                  <use href="#icon-caret" />
+                </svg>
+              </div>
+
+              <div class="input__field_form mb-20">
+                <input
+                  type="text"
+                  class="input__field"
+                  id="ShippingAddressZip"
+                  autocapitalize="characters"
+                  autocomplete="postal-code"
+                  placeholder="{{ 'customer.addresses.zip' | t }}"
+                >
+              </div>
+            </div>
+            <div class="action_drawer_footer d-flex justify-content-between cart_notification--footer">
+              <button class="button button--secondary button__save flex-grow-1" data-action="shipping">
+                {{ 'general.shipping_calculator.calculate_button' | t }}
+              </button>
+              <button class="button button__cancel" data-action="close">
+                {{ 'general.shipping_calculator.cancel_button' | t }}
+              </button>
+            </div>
+            <div class="shipping_rate_message mt-15 no-js-inline">
+              <p>
+                {{ 'general.shipping_calculator.address_first_label' | t }}
+                <span class="shipping_address_count"></span>
+                {{ 'general.shipping_calculator.address_second_label' | t }}
+              </p>
+            </div>
+            <div class="shipping_rate_package"></div>
+          </div>
+        </cart-action-popup>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="cart_notification_links_inner">
+    <div class="totals">
+      <div class="d-flex justify-content-between align-items-center mb-15">
+        <h3 class="totals__subtotal  mb-0">{{ 'sections.cart.subtotal' | t }}</h3>
+        <p id="cart-notification-subtotal">{{ cart.total_price | money_with_currency }}</p>
+      </div>
+      <div id="cart-notification-discount">
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <div class="cart_notification--discount mb-20">
+            <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+              {%- for discount in cart.cart_level_discount_applications -%}
+                <li class="discounts__discount d-flex justify-content-between">
+                  <span class="discount__title">
+                    {%- render 'icon-discount' -%}
+                    {{ discount.title }}
+                  </span>
+                  <span class="discount__amount"> (-{{ discount.total_allocated_amount | money }})</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {% if settings.cart_tax_note %}
+      <div class="tax-note caption-large rte mb-15">
+        {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+          {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- elsif cart.taxes_included -%}
+          {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+        {%- elsif shop.shipping_policy.body != blank -%}
+          {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+        {%- else -%}
+          {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+        {%- endif -%}
+      </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-between cart_notification--footer">
+      {%- if settings.cart_btn_enable -%}
+        <a class="button button--secondary button--full-width mb-15" href="{{ routes.cart_url }}">
+          {{- 'general.cart.view' | t -}}
+        </a>
+      {% endif %}
+      {%- if settings.checkout_btn_enable -%}
+        <div class="w-100">
+          <button type="submit" class="button button--primary button--full-width" name="checkout" form="cart">
+            {{ 'sections.cart.checkout' | t }}
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

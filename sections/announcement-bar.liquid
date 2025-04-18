@@ -1,0 +1,566 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+
+<script src="{{ 'announcement-bar.js' | asset_url }}" defer="defer"></script>
+{%- if section.settings.announcement_enable and section.blocks.size >= 1 -%}
+  {{ 'announcement-bar.css' | asset_url | stylesheet_tag }}
+  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+  <link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+
+  <style>
+        .announcement-collapsible-content{
+          display: none;
+        }
+        .announcement-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            gap: 2rem;
+        }
+        .close__announcement--bar.modal__close-button.link {
+          width: auto;
+          height: 42px;
+      }
+        .announcement__image {
+          line-height: 1;
+        }
+        #shopify-section-announcement-bar {
+          z-index: 4;
+        }
+        .announcement__icon--arrow{
+          width: 3.5rem;
+        }
+        .button__icon--arrow_svg{
+          max-width: 2.5rem;
+        }
+       {%- for block in section.blocks -%}
+         {%- case block.type -%}
+            {%- when 'announcement' -%}
+              .collapsible__content--background-image::before {
+                background-color: rgba(var(--color-background), {{ block.settings.image_overlay_opacity | divided_by: 100.0 }});
+              }
+        {%- endcase -%}
+      {%- endfor -%}
+
+     .button--announcement {
+        border-width: 0.1rem;
+        font-size: 1.2rem;
+        font-weight: 400;
+        gap:  0.5rem;
+      }
+      @media only screen and (min-width: 992px) {
+        .button--announcement {
+          padding: 0.2rem 1rem;
+        }
+      }
+      {% if section.settings.full_width %}
+    @media only screen and (min-width: 1600px){
+      .container-fluid.announcement-bar-{{ section.id }}{
+        --offset-fluid: 3rem;
+      }
+    }
+    @media only screen and (max-width: 1599px){
+      .container-fluid.announcement-bar-{{ section.id }}{
+        --offset-fluid: 1.5rem;
+      }
+    }
+        {% endif %}}
+  </style>
+
+  <div
+    class="announcement__area "
+    data-section-id="{{ section.id }}"
+    data-section-type="announcement-bar"
+  >
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'announcement' -%}
+          {%- liquid
+            assign page = false
+            assign grid = false
+            assign background_image = false
+
+            unless request.page_type == 'index'
+              assign page = block.settings.index
+            endunless
+
+            if request.page_type == 'index'
+              assign page = block.settings.no_index
+            endif
+
+            if block.settings.image != blank and block.settings.background_image == false
+              assign grid = true
+            endif
+
+            if block.settings.image != blank and block.settings.background_image
+              assign background_image = true
+            endif
+
+            assign link_button = true
+            if block.settings.collapsible_content
+              assign link_button = false
+            endif
+          -%}
+          {%- unless page == true -%}
+            <div class="announcement__wrapper color-{{ section.settings.color_scheme }} ">
+              <div class="announcement-bar-innner {% if section.settings.full_width %}container-fluid announcement-bar-{{ section.id }}{% else %}container{% endif %}">
+                <div class="d-md-none">
+                  {% if section.settings.social_media %}
+                    {%- render 'social-media', className: 'announment--bar-social-media' -%}
+                  {% endif %}
+                </div>
+
+                <div
+                  class="announcement-bar"
+                  role="region"
+                  aria-label="{{ 'sections.header.announcement' | t }}"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if block.settings.text != blank -%}
+                    <div class="announcement-bar--content">
+                      {% if link_button -%}
+                        <a href="{{ block.settings.link }}" class="announcment--link-button">
+                      {%- endif %}
+                      <span class="announcement-bar__message h6 mb-0">
+                        {{ block.settings.text | escape }}
+                      </span>
+                      {% if link_button %}
+                        <span class="arrow__link--button">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="feather feather-arrow-right"
+                          >
+                            <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </span>
+                        </a>
+                      {% endif %}
+                    </div>
+                  {%- endif -%}
+
+                  {% if block.settings.collapsible_content %}
+                    <button
+                      id="announcement-more-info"
+                      class="button button--announcement button--secondary d-flex align-items-center"
+                      aria-label="Open announcement bar panel"
+                    >
+                      <span class="d-md-none">{{ block.settings.toggle_button }}</span> {% render 'icon-caret' %}
+                    </button>
+                  {% endif %}
+                </div>
+
+                <div class=" d-flex justify-content-end d-md-none">
+                  {% render 'localization-form',
+                    form_currency_id: 'headerCountryForm-2',
+                    form_language_id: 'headerLanguageForm-2',
+                    dropdown_position: 'dropdown__bottom--right-position',
+                    enable_country_selector: section.settings.country_selector,
+                    enable_language_selector: section.settings.language_selector,
+                    place: 'header',
+                    theme_rtl: theme_rtl
+                  %}
+                </div>
+              </div>
+
+              {% if block.settings.collapsible_content %}
+                <div class="announcement-collapsible-content">
+                  <div class="container announcement-collapsible__inner">
+                    <div class="announcement-collapsible-content-close d-flex align-items-center">
+                      <div class="announcement-collapsible-content-close-inner container d-flex justify-content-end align-items-center">
+                        <button type="button" class="close__announcement--bar modal__close-button link">
+                          {%- render 'icon-close' -%}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="collapsible-content--template  {% if grid %} collapsible-content--template-grid {% endif %} {% if background_image %} collapsible__content--background-image {% endif %}">
+                      <div class="collapsible-content--template-content {% if background_image %} collapsible--background__media--{{ block.settings.section_height }} {% endif %}">
+                        <div class="collapsible-content--template-inner text-{{ block.settings.alignment }} {% if background_image %}background-image--in-collapsible-content{% endif %} {% if block.settings.image == blank %}no-image--in-collapsible-content{% endif %}">
+                          {% if block.settings.subheading != blank %}
+                            <div class="announcement-collapsible-subheading">{{ block.settings.subheading }}</div>
+                          {% endif %}
+                          {% if block.settings.heading != blank %}
+                            <h2 class="announcement-collapsible-heading mb-0 {{ block.settings.heading_size }}">
+                              {{ block.settings.heading }}
+                            </h2>
+                          {% endif %}
+
+                          {% if block.settings.description != blank %}
+                            <div class="announcement-collapsible-text rte">
+                              {{ block.settings.description }}
+                            </div>
+                          {% endif %}
+                          <div class="announcement-collapsible-button">
+                            {% liquid
+                              if block.settings.button_style == 'primary'
+                                assign button_class = ''
+                              else
+                                assign button_class = 'button--secondary'
+                              endif
+                            %}
+
+                            <a
+                              {% if block.settings.button_link == blank %}
+                                aria-disabled="true"
+                              {% else %}
+                                href="{{ block.settings.button_link }}"
+                              {% endif %}
+                              class="button button--{{ block.settings.button_size }} {{ button_class }}"
+                            >
+                              {{ block.settings.button_label | escape }}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      {% if block.settings.image %}
+                        <div class="collapsible__content--with-image {% if background_image %} background--image{% endif %}">
+                          <div
+                            class="{% unless background_image %} image-with-text__media image-with-text__media--{{ block.settings.height }} {% endunless %} media"
+                            {% if block.settings.height == 'adapt'
+                              and block.settings.image != blank
+                              and background_image == false
+                            %}
+                              style="padding-bottom: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%;"
+                            {% endif %}
+                          >
+                            {%- if block.settings.image != blank -%}
+                              {%- capture sizes -%}{% if background_image %} (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 }}px, (min-width: 750px) calc(100vw - 130px) {% else %}(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc((100vw - 130px) / 2){% endif %}, calc(100vw - 50px){%- endcapture -%}
+                              {{
+                                block.settings.image
+                                | image_url: width: 1500
+                                | image_tag:
+                                  loading: 'lazy',
+                                  sizes: sizes,
+                                  widths: '165, 360, 535, 750, 1070, 1500, 1700, 2200, 3000'
+                              }}
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          {%- endunless -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.announcement-bar.name",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "announcement_enable",
+      "label": "Show announcement",
+      "default": true
+    },
+    {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Make section full width on desktop",
+        "default": false
+      },
+    {
+     "type": "header",
+     "content": "Social media"
+   },
+    {
+     "type": "checkbox",
+     "id": "social_media",
+     "default": true,
+     "label": "Enable"
+   },
+    {
+     "type": "header",
+     "content": "t:sections.footer.settings.header__3.content",
+     "info": "t:sections.footer.settings.header__4.info"
+   },
+   {
+     "type": "checkbox",
+     "id": "country_selector",
+     "default": true,
+     "label": "Enable"
+   },
+   {
+     "type": "header",
+     "content": "t:sections.footer.settings.header__5.content",
+     "info": "t:sections.footer.settings.header__6.info"
+   },
+   {
+     "type": "checkbox",
+     "id": "language_selector",
+     "default": true,
+     "label": "Enable"
+   },
+    {
+     "type": "header",
+     "content": "colors"
+   },
+   {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "accent-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "index",
+          "label": "Show on home page only",
+          "default": true
+        },
+		{
+          "type": "checkbox",
+          "id": "no_index",
+          "label": "Hide on home page only",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Welcome to our store",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+        },
+        {
+         "type": "header",
+         "content": "Collapsible content"
+       },
+       {
+          "type": "checkbox",
+          "id": "collapsible_content",
+          "label": "Enable",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "toggle_button",
+          "default": "More",
+          "label": "Toggle button label"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "default": "Subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Announcement title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__3.label"
+            },
+             {
+              "value": "hxl",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__4.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading_size.label"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Include information about availability, style, or even a review.</p>",
+          "label": "t:sections.rich-text.blocks.text.settings.text.label"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "t:sections.rich-text.blocks.button.settings.button_label.label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
+        },
+		{
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "primary",
+              "label": "Primary"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+          {
+            "value": "large",
+            "label": "Large"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "small",
+            "label": "Small"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__2.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__3.label"
+            }
+          ],
+          "default": "center",
+          "label": "Content alignment"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "height",
+          "options": [
+            {
+              "value": "adapt",
+              "label": "t:sections.image-with-text.settings.height.options__1.label"
+            },
+            {
+              "value": "small",
+              "label": "t:sections.image-with-text.settings.height.options__2.label"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.image-with-text.settings.height.options__3.label"
+            }
+          ],
+          "default": "adapt",
+          "label": "Image height",
+          "info": "It works unless you enable \"Show as a background image\""
+        },
+        {
+          "type": "checkbox",
+          "id": "background_image",
+          "label": "Show as a background image",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "image_overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "unit": "%",
+          "label": "Overlay opacity on image",
+          "default": 0,
+          "info": "Applicable when the \"show as a background image\" is enabled"
+        },
+        {
+          "type": "select",
+          "id": "section_height",
+          "options": [
+            {
+              "value": "small",
+              "label": "t:sections.image-with-text.settings.height.options__2.label"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.image-with-text.settings.height.options__3.label"
+            }
+          ],
+          "default": "medium",
+          "label": "Section height",
+          "info": "It works when you enable \"Show as a background image\""
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

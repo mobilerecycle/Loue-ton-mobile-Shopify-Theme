@@ -1,0 +1,202 @@
+{%- liquid
+  assign variant = product_card_product.selected_or_first_available_variant
+
+  assign productCountdown = product_card_product.metafields.meta.product_countdown.value
+  assign todayDate = 'now' | date: '%s'
+  assign countDownDate = productCountdown | date: '%s'
+
+  assign first_variant_featured_media_check = false
+  if variant.featured_media == null
+    assign first_variant_featured_media_check = true
+  endif
+
+  assign second_img_position = 1
+
+  assign product_card_option = settings.pcard_option_design
+  assign product_card_option_display = settings.pcard_option_display
+
+  unless show_secondary_image
+    assign second_image_class = 'second--image__hide'
+  endunless
+
+  assign pcard_option_values_limit = settings.product_option_values_limit
+
+  assign price_class = 'product-grid-item__price justify-content-start'
+
+  unless section.settings.show_cart_icon_mobile
+    assign car_icon_mobile = 'd-sm-none'
+  endunless
+
+  case cart_button_place
+    when 'top_left', 'bottom_left'
+      assign button_alignment = 'justify-content-start'
+    when 'top_right', 'bottom_right'
+      assign button_alignment = 'justify-content-end'
+    else
+      assign button_alignment = 'justify-content-center'
+  endcase
+
+  case cart_button_place
+    when 'top_left', 'top_right', 'top_center'
+      assign button_vetical_position = 'top_position'
+    else
+      assign button_vetical_position = ''
+  endcase
+-%}
+
+<div class="product-grid-item {{ className }}">
+  <div class="product-grid-item__thumbnail {{ second_image_class }}">
+    {%- if show_badge -%}
+      {%- render 'product-badge', product: product_card_product -%}
+    {%- endif -%}
+
+    {%- if product_card_product.featured_media -%}
+      {%- liquid
+        assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio
+
+        if product_card_product.featured_media.aspect_ratio == null
+          assign featured_media_aspect_ratio = 1
+        endif
+      -%}
+      <a href="{{ product_card_product.url | default: '#' }}" class="d-block product__media_thumbnail">
+        {%- render 'product-card-media',
+          product_card_product: product_card_product,
+          variant: variant,
+          media_size: media_size,
+          featured_media_aspect_ratio: featured_media_aspect_ratio,
+          second_img_position: second_img_position,
+          show_secondary_image: show_secondary_image,
+          first_variant_featured_media_check: first_variant_featured_media_check,
+          round_image: round_image
+        -%}
+      </a>
+
+    {%- else -%}
+      <div class="card__content">
+        <a href="{{ product_card_product.url | default: '#' }}" class="d-block">
+          <div class="placeholder placeholder_svg_parent" style="padding-bottom: 100%">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="complementary--product-card-content">
+    <div class="complementary--product-content-grid">
+      {%- if show_vendor -%}
+        <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+        <div class="product__vendor">{{ product_card_product.vendor }}</div>
+      {%- endif -%}
+
+      {%- if show_title -%}
+        <h3 class="product-grid-item__title h6 mb-0">
+          <a class="complementary--product__title--link" href="{{ product_card_product.url | default: '#' }}">
+            {{- product_card_product.title -}}
+          </a>
+        </h3>
+      {%- endif -%}
+
+      {%- if show_price -%}
+        {% render 'price', product: product_card_product, price_class: price_class %}
+      {%- endif -%}
+
+      {%- if show_rating and product_card_product.metafields.reviews.rating.value != blank -%}
+        {% liquid
+          assign rating_decimal = 0
+          assign decimal = product_card_product.metafields.reviews.rating.value.rating | modulo: 1
+          if decimal >= 0.3 and decimal <= 0.7
+            assign rating_decimal = 0.5
+          elsif decimal > 0.7
+            assign rating_decimal = 1
+          endif
+        %}
+
+        <div class="complementary-product__card--rating">
+          <div
+            class="rating"
+            role="img"
+            aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product_card_product.metafields.reviews.rating.value, rating_max: product_card_product.metafields.reviews.rating.value.scale_max }}"
+          >
+            <span
+              aria-hidden="true"
+              class="rating-star color-icon-{{ settings.accent_icons }}"
+              style="--rating: {{ product_card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product_card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+            ></span>
+          </div>
+          <p class="rating-text caption">
+            <span aria-hidden="true">
+              {{- product_card_product.metafields.reviews.rating.value }} /
+              {{ product_card_product.metafields.reviews.rating.value.scale_max -}}
+            </span>
+          </p>
+          <p class="rating-count caption">
+            <span aria-hidden="true">({{ product_card_product.metafields.reviews.rating_count }})</span>
+            <span class="visually-hidden">
+              {{- product_card_product.metafields.reviews.rating_count }}
+              {{ 'accessibility.total_reviews' | t -}}
+            </span>
+          </p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if show_cart_button -%}
+      <div class="complementary--product__cart--btn">
+        {%- if show_cart_button -%}
+          {% if product_card_product.has_only_default_variant %}
+            <product-form>
+              <form action="/cart/add" method="post" enctype="multipart/form-data" data-type="add-to-cart-form">
+                <input type="hidden" name="id" value="{{ variant.id }}">
+                <button
+                  type="submit"
+                  name="add"
+                  class="complementary__product--cart-btn"
+                  {% if product_card_product.selected_or_first_available_variant.available == false %}
+                    disabled
+                  {% endif %}
+                >
+                  {%- if product_card_product.selected_or_first_available_variant.available -%}
+                    <span class="complementary__product--cart-btn-inner">
+                      <svg viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.3679 6.22188C21.2916 6.13269 21.1969 6.06109 21.0903 6.012C20.9837 5.96291 20.8678 5.93749 20.7504 5.9375H15.8754V2.6875C15.8754 2.04103 15.6186 1.42105 15.1615 0.963927C14.7044 0.506807 14.0844 0.25 13.4379 0.25H8.56291C7.91645 0.25 7.29646 0.506807 6.83934 0.963927C6.38222 1.42105 6.12541 2.04103 6.12541 2.6875V5.9375H1.25041C1.13264 5.93617 1.01598 5.96045 0.908523 6.00868C0.801067 6.05691 0.705381 6.12792 0.628094 6.2168C0.550808 6.30568 0.493769 6.4103 0.46093 6.52342C0.428091 6.63653 0.420237 6.75543 0.437912 6.87188L1.96541 16.7438C2.02417 17.1312 2.221 17.4844 2.51961 17.7383C2.81823 17.9921 3.19852 18.1294 3.59041 18.125H18.4267C18.8186 18.1294 19.1988 17.9921 19.4975 17.7383C19.7961 17.4844 19.9929 17.1312 20.0517 16.7438L21.5629 6.87188C21.5792 6.75588 21.5702 6.63773 21.5365 6.52554C21.5029 6.41335 21.4454 6.30976 21.3679 6.22188V6.22188ZM7.75041 2.6875C7.75041 2.47201 7.83602 2.26535 7.98839 2.11298C8.14076 1.9606 8.34742 1.875 8.56291 1.875H13.4379C13.6534 1.875 13.8601 1.9606 14.0124 2.11298C14.1648 2.26535 14.2504 2.47201 14.2504 2.6875V5.9375H7.75041V2.6875ZM18.4267 16.5H3.57416L2.20104 7.5625H19.7998L18.4267 16.5Z" fill="currentColor"></path>
+                      </svg>
+                      <span class="complementary__action--btn-label">
+                        {{ 'products.product.add_to_cart' | t }}
+                      </span>
+                    </span>
+                  {%- else -%}
+                    <span class="complementary__product--cart-btn-inner">
+                      <svg viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.3679 6.22188C21.2916 6.13269 21.1969 6.06109 21.0903 6.012C20.9837 5.96291 20.8678 5.93749 20.7504 5.9375H15.8754V2.6875C15.8754 2.04103 15.6186 1.42105 15.1615 0.963927C14.7044 0.506807 14.0844 0.25 13.4379 0.25H8.56291C7.91645 0.25 7.29646 0.506807 6.83934 0.963927C6.38222 1.42105 6.12541 2.04103 6.12541 2.6875V5.9375H1.25041C1.13264 5.93617 1.01598 5.96045 0.908523 6.00868C0.801067 6.05691 0.705381 6.12792 0.628094 6.2168C0.550808 6.30568 0.493769 6.4103 0.46093 6.52342C0.428091 6.63653 0.420237 6.75543 0.437912 6.87188L1.96541 16.7438C2.02417 17.1312 2.221 17.4844 2.51961 17.7383C2.81823 17.9921 3.19852 18.1294 3.59041 18.125H18.4267C18.8186 18.1294 19.1988 17.9921 19.4975 17.7383C19.7961 17.4844 19.9929 17.1312 20.0517 16.7438L21.5629 6.87188C21.5792 6.75588 21.5702 6.63773 21.5365 6.52554C21.5029 6.41335 21.4454 6.30976 21.3679 6.22188V6.22188ZM7.75041 2.6875C7.75041 2.47201 7.83602 2.26535 7.98839 2.11298C8.14076 1.9606 8.34742 1.875 8.56291 1.875H13.4379C13.6534 1.875 13.8601 1.9606 14.0124 2.11298C14.1648 2.26535 14.2504 2.47201 14.2504 2.6875V5.9375H7.75041V2.6875ZM18.4267 16.5H3.57416L2.20104 7.5625H19.7998L18.4267 16.5Z" fill="currentColor"></path>
+                      </svg>
+                      <span class="complementary__action--btn-label">
+                        {{ 'products.product.sold_out' | t }}
+                      </span>
+                    </span>
+                  {%- endif -%}
+                </button>
+              </form>
+            </product-form>
+          {%- else -%}
+            <quick-view-modal>
+              <button
+                aria-haspopup="dialog"
+                type="button"
+                class="complementary__product--cart-btn"
+                data-product-handle="{{ product_card_product.handle }}"
+              >
+                <span class="complementary__product--cart-btn-inner">
+                  {%- render 'cart-plus' -%}
+                  <span class="complementary__action--btn-label">
+                    {{ 'products.product.select_options' | t }}
+                  </span>
+                </span>
+              </button>
+            </quick-view-modal>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

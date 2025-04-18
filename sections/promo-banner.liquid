@@ -1,0 +1,304 @@
+{{ 'promo-banner.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+   .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+     --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+  #MainContent > :first-child .section--top-space-{{ section.id }} {
+    padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+  }
+
+  {% if section.settings.custom_colors %}
+    .promo--banner-{{ section.id }}{
+      --color-foreground: {{ section.settings.foreground.red }}, {{ section.settings.foreground.green }}, {{ section.settings.foreground.blue }};
+      --color-background: {{ section.settings.background.red }}, {{ section.settings.background.green }}, {{ section.settings.background.blue }};
+    }
+    {% endif %}
+{%- endstyle -%}
+<div class="promo--banner-wrapper section--top-space-{{ section.id }} section-{{ section.id }}-padding">
+  <div class="container">
+    <div class="promo--banner-inner {% if section.settings.border %}promo--banner-border{% endif %} {% if section.blocks.size == 1 %} not-promo--banner-grid{% endif %} color-{{ section.settings.color_scheme }} {% if section.settings.custom_colors  %} promo--banner-{{ section.id }} {% else %}gradient {% endif %} {% if section.settings.round_corner %} rounded--box{% endif %} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'text' %}
+            <!-- Promo Banner Content -->
+            <div
+              class="promo--banner-content promo--banner-content-{{ block.settings.content_alignment }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="promo--banner-content--subheading">{{ block.settings.subheading }}</div>
+              <h2 class="promo--banner-content--heading {{ block.settings.heading_size }} mb-0">
+                <span class="promo--banner-content--heading">{{ block.settings.heading }}</span>
+                <span class="promo--banner-content--heading-sub">{{ block.settings.heading_stroke }}</span>
+              </h2>
+              {% if block.settings.button_label != blank %}
+                <div class="promo--banner-content--button">
+                  {% if block.settings.button_link != blank %}
+                    <a class="link promo--banner-content--button--link" href="{{ block.settings.button_link }}">
+                      {{ block.settings.button_label }}
+                    </a>
+                  {% else %}
+                    <span class="link promo--banner-content--button--link"> {{ block.settings.button_label }} </span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+            <!-- Promo Banner Content ./ -->
+
+          {% when 'image' %}
+            <!-- Promo banner media -->
+            <div
+              class="promo--banner-media-wrapper {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.banner_link != blank and block.settings.image != blank %}
+                <a href="{{ block.settings.banner_link }}" class="promo--banner-media-link">
+              {% endif %}
+              <div
+                class="promo--banner-media {% if block.settings.image != blank %}media{% else %} placeholder{% endif %}"
+              >
+                {%- if block.settings.image != blank -%}
+                  {%- capture sizes -%}{% if section.blocks.size == 1  %} (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 }}px, (min-width: 750px) calc(100vw - 130px) {% else %}(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc((100vw - 130px) / 2){% endif %}, calc(100vw - 50px){%- endcapture -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1500
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: sizes,
+                      widths: '165, 360, 535, 750, 1070, 1500, 1700, 2200, 3000'
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+              {% if block.settings.banner_link != blank and block.settings.image != blank %}
+                </a>
+              {% endif %}
+            </div>
+            <!-- Promo banner media ./ -->
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "class": "promo--banner-section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Border"
+    },
+    {
+      "type": "checkbox",
+      "id": "border",
+      "label": "Enable",
+      "default": true
+    },
+    {
+        "type": "checkbox",
+        "id": "round_corner",
+        "default": true,
+        "label": "Round the corners of the box"
+      },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+     {
+          "type": "header",
+          "content": "Colors"
+        },
+       {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "background-2",
+        "label": "t:sections.header.settings.color_scheme.label"
+       },
+    {
+      "type": "checkbox",
+      "id": "custom_colors",
+      "label": "Replace with your custom colors",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "foreground",
+      "default": "#121212",
+      "label": "Foreground color"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "default": "#fff",
+      "label": "Background color"
+    }
+  ],
+   "blocks": [
+      {
+        "type": "text",
+        "name": "Text",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "subheading",
+            "default": "LIMITED TIME OFFER",
+            "label": "Subheading"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "50%",
+            "label": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "heading_stroke",
+            "default": "OFF",
+            "label": "Heading stroke"
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "options": [
+              {
+                "value": "h2",
+                "label": "Small"
+              },
+              {
+                "value": "h1",
+                "label": "Medium"
+              },
+              {
+                "value": "h0",
+                "label": "Large"
+              }
+            ],
+            "default": "h1",
+            "label": "Heading size"
+          },
+          {
+            "type": "text",
+            "id": "button_label",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          },
+          {
+            "type": "select",
+            "id": "content_alignment",
+            "options": [
+              {
+                "value": "left",
+                "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__1.label"
+              },
+              {
+                "value": "center",
+                "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__2.label"
+              },
+              {
+                "value": "right",
+                "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__3.label"
+              }
+            ],
+            "default": "center",
+            "label": "Desktop content alignment"
+          }
+        ]
+      },
+     {
+        "type": "image",
+        "name": "Image",
+        "limit": 1,
+        "settings": [
+             {
+              "type": "image_picker",
+              "id": "image",
+              "label": "Image"
+            },
+            {
+              "type": "url",
+              "id": "banner_link",
+              "label": "Image link"
+            }
+        ]
+      }
+   ],
+  "presets": [
+    {
+      "name": "Promo banner",
+      "blocks":[
+          {
+            "type": "text"
+          },
+          {
+            "type": "image"
+          }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,104 @@
+.faq__media--adapt.placeholder {
+    height: 40rem;
+}
+.faq__media--small {
+    height: 30.4rem;
+}
+.faq__media--medium {
+  height: 35rem;
+}
+.faq__media--large {
+    height: 43.5rem;
+}
+h2.faq__list--wrapper--heading + div {
+    margin-top: 4rem;
+}
+
+@media screen and (min-width: 768px) {
+  .faq__media--small {
+    height: 40rem;
+  }
+  .faq__media--medium {
+    height: 50rem;
+  }
+  .faq__media--large {
+    height: 60rem;
+  }
+  .faq__media--adapt.placeholder {
+    height: 60rem;
+  }
+  h2.faq__list--wrapper--heading + div {
+    margin-top: 5rem;
+  }
+}
+@media only screen and (min-width: 992px){
+  .faq__list--wrapper {
+    padding: 5.5rem 0;
+  }
+}
+@media only screen and (min-width: 1400px){
+  .faq__list--wrapper {
+    padding-right: 9rem;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1400px){
+  h2.faq__list--wrapper--heading.h1 {
+    font-size: calc(var(--font-heading-size) * 3rem);
+  }
+}
+
+@media only screen and (max-width: 991px){
+  .faq__div--parent:not(.flex-column-reverse-max-tablet) > div:not(:only-child):first-child {
+    margin-bottom: 5rem;
+  }
+  .faq__div--parent.flex-column-reverse-max-tablet > div:not(:only-child):last-child {
+    margin-bottom: 5rem;
+  }
+}
+.faq__body {
+    display: none;
+}
+.faq__body.d-block{
+	 display: block;
+}
+.faq__list--item--heading {
+    border-bottom: 1px solid rgba(var(--color-foreground),.3);
+    padding-bottom: 2.4rem;
+    cursor: pointer;
+    position: relative;
+    padding-right: 35px;
+    width: 100%;
+    background: none;
+    border-top: none;
+    border-left: none;
+    text-align: left;
+    border-right: none;
+}
+.faq__list--item + .faq__list--item {
+    padding-top: 2.5rem;
+}
+p.faq__list--item--content {
+    padding-top: 2.5rem;
+}
+.faq__button--icon > svg {
+    width: 2rem;
+    transition: var(--transition);
+}
+span.faq__button--icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+.faq__button--icon svg.minus__icon {display: none;}
+
+.faq__list--item.active .faq__button--icon svg.minus__icon {
+    display: block;
+}
+.faq__list--item.active .faq__button--icon svg.plus__icon {
+    display: none;
+}
+.faq__list--item--content {
+    padding-top: 2.5rem;
+}

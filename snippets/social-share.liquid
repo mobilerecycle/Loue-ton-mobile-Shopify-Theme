@@ -1,0 +1,81 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+
+{{ 'share-button.css' | asset_url | stylesheet_tag }}
+{% if theme_rtl %}
+  {{ 'share-button-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+<!-- Share -->
+<div class="share-icons">
+  {% if template contains 'article' or template contains 'blog' %}
+    {% capture permalink_url %}{{ shop.url }}{{ article.url }}{% endcapture %}
+    {% capture share_title %}{{ article.title | url_param_escape }}{% endcapture %}
+
+  {% elsif template contains 'product' %}
+    {% capture permalink_url %}{{ shop.url }}{{ product.url }}{% endcapture %}
+    {% capture share_title %}{{ product.title | url_param_escape }}{% endcapture %}
+
+  {% elsif template == 'password' %}
+    {% capture permalink_url %}{{ shop.url }}{% endcapture %}
+    {% capture share_title %}{% unless shop.description == blank %}{{ shop.description | url_param_escape }}{% else %}{{ shop.name | url_param_escape }}{% endunless %}{% endcapture %}
+  {% endif %}
+
+  {% if featured_product %}
+    {% capture permalink_url %}{{ shop.url }}{{ product.url }}{% endcapture %}
+    {% capture share_title %}{{ product.title | url_param_escape }}{% endcapture %}
+  {% endif %}
+
+  <span class="social-links">
+    {%- if block.settings.facebook_share -%}
+      <a
+        class="facebook"
+        href="//www.facebook.com/sharer.php?u={{ permalink_url }}"
+        title="{{ 'general.share.facebook_follow' | t }}"
+        target="_blank"
+      >
+        {%- render 'icon-facebook' -%}
+        <span class="social__share--text"> {{ 'general.share.facebook' | t }} </span>
+      </a>
+    {%- endif -%}
+
+    {%- if block.settings.twitter_share -%}
+      <a
+        class="twitter"
+        href="//twitter.com/share?text={{ share_title }}&amp;url={{ permalink_url }};source=webclient"
+        title="{{ 'general.share.twitter_follow' | t }}"
+        target="_blank"
+      >
+        {%- render 'icon-twitter' -%}
+        <span class="social__share--text">{{ 'general.share.twitter' | t }}</span>
+      </a>
+    {%- endif -%}
+
+    {%- if block.settings.pinterest_share -%}
+      {% if product.featured_image or article.image %}
+        <a
+          class="pinterest"
+          href="//pinterest.com/pin/create/button/?url={{ permalink_url }}&amp;media=http:{% if template contains 'product' or featured_product %}{{ product | img_url: '1024x1024' }}{% else %}{{ article | img_url: '1024x1024' }}{% endif %}&amp;description={{ share_title }}"
+          title="{{ 'general.share.pinterest_follow' | t }}"
+          target="_blank"
+        >
+          {%- render 'icon-pinterest' -%}
+          <span class="social__share--text">{{ 'general.share.pinterest' | t }}</span>
+        </a>
+      {% endif %}
+    {% endif %}
+  </span>
+</div>

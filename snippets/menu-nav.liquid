@@ -1,0 +1,213 @@
+<ul class="header__menu_ul" role="list">
+  {%- for link in section.settings.menu.links -%}
+    {%- assign three_level = false -%}
+    {%- assign two_level = false -%}
+    {% assign has_children = false %}
+    {% assign has_children_class = '' %}
+    {% assign promo1 = false %}
+    {% assign promo2 = false %}
+
+    {% if link.links != blank %}
+      {% assign has_children = true %}
+      {% if link.levels == 2 %}
+        {%- assign three_level = true -%}
+      {% endif %}
+      {% if link.levels == 1 %}
+        {%- assign two_level = true -%}
+      {% endif %}
+    {% endif %}
+
+    {% assign title_handle = link.title | handleize %}
+    {%- assign has_mega_item = false -%}
+    {% for block in section.blocks %}
+      {% assign menu_title = block.settings.heading | handleize %}
+      {% if menu_title == blank or menu_title != title_handle %}
+        {% continue %}
+      {% endif %}
+      {% if menu_title == title_handle %}
+        {%- assign has_mega_item = true -%}
+
+        {%- if block.settings.image != blank -%}
+          {% assign promo1 = true %}
+          {% capture menu_promo1 %}
+            <div class="mega__menu--promo">
+                <a href="{{ block.settings.promo1_link }}" class="mega__menu--promo-link">
+                  <div class="media--{{ block.settings.height }} media {% if block.settings.image_round_corner %}rounded--2rem{% endif %}" {% if block.settings.height == 'adapt' and block.settings.image != blank %}
+                    style="padding-bottom: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%;"{% endif %}
+                    >
+                      <img
+                           srcset="{%- if block.settings.image.width >= 375 -%}{{ block.settings.image | img_url: '375x' }} 375w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | img_url: '550x' }} 550w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | img_url: '750x' }} 750w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | img_url: '1100x' }} 1100w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | img_url: '1500x' }} 1500w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 1780 -%}{{ block.settings.image | img_url: '1780x' }} 1780w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 2000 -%}{{ block.settings.image | img_url: '2000x' }} 2000w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 3000 -%}{{ block.settings.image | img_url: '3000x' }} 3000w,{%- endif -%}
+                                   {%- if block.settings.image.width >= 3840 -%}{{ block.settings.image | img_url: '3840x' }} 3840w,{%- endif -%}
+                                   {{ block.settings.image | img_url: 'master' }} {{ block.settings.image.width }}w"
+                           sizes="(min-width: 992px) 50rem"
+                           src="{{ block.settings.image | img_url: '1500x' }}"
+                           loading="lazy"
+                           alt="{{ block.settings.image.alt | escape }}"
+                           width="{{ block.settings.image.width }}"
+                           height="{{ block.settings.image.width | divided_by: block.settings.image.aspect_ratio }}"
+                           >
+                    </div>
+
+                    {% if block.settings.promo1_heading != blank or block.settings.promo1_text != blank %}
+                    <div class="mega__menu--promo-content text-center mt-15">
+                        {% if block.settings.promo1_heading != blank %}
+                        <div class="mega__menu--promo-heading">
+                          <span class="promo-heading--label h6 {{ font }} mb-0">{{ block.settings.promo1_heading }}</span>
+                        </div>
+                        {% endif %}
+                       {% if block.settings.promo1_text != blank %}
+                        <div class="mega__menu--promo--subheading">
+                          <span class="promo--subheading--label">{{ block.settings.promo1_text }}</span>
+                        </div>
+                        {% endif %}  
+                    </div>
+                    {% endif %}  
+                  </a>
+              </div>
+          {% endcapture %}
+        {% endif %}
+
+        {%- if block.settings.image_2 != blank -%}
+          {% assign promo2 = true %}
+          {% capture menu_promo2 %}
+            <div class="mega__menu--promo">
+           <a href="{{ block.settings.promo2_link }}" class="mega__menu--promo-link">
+                <div class="media--{{ block.settings.height_2 }} media {% if block.settings.image_round_corner_2 %}rounded--2rem{% endif %}" {% if block.settings.height_2 == 'adapt' and block.settings.image_2 != blank %}
+                  style="padding-bottom: {{ 1 | divided_by: block.settings.image_2.aspect_ratio | times: 100 }}%;"{% endif %}
+                  >
+                    <img
+                         srcset="{%- if block.settings.image_2.width >= 375 -%}{{ block.settings.image_2 | img_url: '375x' }} 375w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 550 -%}{{ block.settings.image_2 | img_url: '550x' }} 550w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 750 -%}{{ block.settings.image_2 | img_url: '750x' }} 750w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 1100 -%}{{ block.settings.image_2 | img_url: '1100x' }} 1100w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 1500 -%}{{ block.settings.image_2 | img_url: '1500x' }} 1500w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 1780 -%}{{ block.settings.image_2 | img_url: '1780x' }} 1780w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 2000 -%}{{ block.settings.image_2 | img_url: '2000x' }} 2000w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 3000 -%}{{ block.settings.image_2 | img_url: '3000x' }} 3000w,{%- endif -%}
+                                 {%- if block.settings.image_2.width >= 3840 -%}{{ block.settings.image_2 | img_url: '3840x' }} 3840w,{%- endif -%}
+                                 {{ block.settings.image_2 | img_url: 'master' }} {{ block.settings.image_2.width }}w"
+                         sizes="(min-width: 992px) 50rem"
+                         src="{{ block.settings.image_2 | img_url: '1500x' }}"
+                         loading="lazy"
+                         alt="{{ block.settings.image_2.alt | escape }}"
+                         width="{{ block.settings.image_2.width }}"
+                         height="{{ block.settings.image_2.width | divided_by: block.settings.image_2.aspect_ratio }}"
+                         >
+                  </div>
+                 {% if block.settings.promo2_heading != blank or block.settings.promo2_text != blank %}
+                   <div class="mega__menu--promo-content text-center mt-15">
+                        {% if block.settings.promo2_heading != blank %}
+                        <div class="mega__menu--promo-heading">
+                          <span class="promo-heading--label h6 {{ font }} mb-0">{{ block.settings.promo2_heading }}</span>
+                        </div>
+                        {% endif %}
+                       {% if block.settings.promo2_text != blank %}
+                        <div class="mega__menu--promo--subheading">
+                          <span class="promo--subheading--label">{{ block.settings.promo2_text }}</span>
+                        </div>
+                        {% endif %} 
+                    </div>
+                 {% endif %}
+              </a>
+              </div>
+          {% endcapture %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if has_children %}
+      {% if has_mega_item %}
+        {% assign has_children_class = 'menu__item_has_children header__menu_li_child_mega_menu' %}
+      {% else %}
+        {% assign has_children_class = 'menu__item_has_children header__menu_li_child_sub_menu' %}
+      {% endif %}
+    {% endif %}
+
+    <li class="header__menu_li {{ has_children_class }}  {% if link.current %} header__menu_li--active{% endif %}">
+      {%- if has_children -%}
+        <details-disclosure>
+          <details id="Details-HeaderMenu-{{ forloop.index }}">
+            <summary data-href="{{ link.url }}" class="header__menu_item h6 {{ font }}">
+              <span class="submenu__label"> {{ link.title | escape }}</span>
+              <span class="submenu__icon"> {% render 'icon-arrow-down' %} </span>
+            </summary>
+
+            {% if has_mega_item %}
+              <div class="header__mega_menu mega__menu--wrapper color-{{ section.settings.submenu_color_scheme }}">
+                <div class="container mega__menu--wrapper--column">
+                  <ul class="header__mega_menu--inner">
+                    {%- for childlink in link.links -%}
+                      {%- if childlink.links != blank -%}
+                        <li class="header__mega_menu_li">
+                          <a href="{{ childlink.url }}" class="header__mega_menu_item">
+                            {{- childlink.title | escape -}}
+                          </a>
+                          <ul class="header__mega_sub_menu">
+                            {%- for grandchildlink in childlink.links -%}
+                              <li class="header__mega_sub_menu_li">
+                                <a class="header__mega_sub_menu_item" href="{{ grandchildlink.url }}">
+                                  {{- grandchildlink.title | escape -}}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </li>
+                      {%- else -%}
+                        <li class="header__mega_menu_li ">
+                          <a href="{{ childlink.url }}" class="header__mega_menu_item ">
+                            {{- childlink.title | escape -}}
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    {% endfor %}
+                  </ul>
+                  {%- if promo1 -%}
+                    {{ menu_promo1 }}
+                  {% endif %}
+                  {%- if promo2 -%}
+                    {{ menu_promo2 }}
+                  {% endif %}
+                </div>
+              </div>
+            {% else %}
+              <ul class="header__sub_menu {% if link.levels == 2  %} header__sub--has-children-parent {% endif %} color-{{ section.settings.submenu_color_scheme }}">
+                {%- for childlink in link.links -%}
+                  {%- if childlink.links != blank -%}
+                    <li class="header__sub_menu_li header__sub--has-children">
+                      <a href="{{ childlink.url }}" class="header__sub_menu_item header__sub--menu-has-sub--item">
+                        <span class="header__sub_menu_item_text"> {{ childlink.title | escape }} </span>
+                        <span class="header__sub--has-children--icon"> {% render 'left-arrow-icon' %} </span>
+                      </a>
+                      <ul class="header__sub--children__menu color-{{ section.settings.submenu_color_scheme }}">
+                        {%- for grandchildlink in childlink.links -%}
+                          <li class="header__sub_menu_li">
+                            <a class="header__sub_menu_item" href="{{ grandchildlink.url }}">
+                              {{- grandchildlink.title | escape -}}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </li>
+                  {%- else -%}
+                    <li class="header__sub_menu_li">
+                      <a href="{{ childlink.url }}" class="header__sub_menu_item">{{ childlink.title | escape }}</a>
+                    </li>
+                  {%- endif -%}
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </details>
+        </details-disclosure>
+      {%- else -%}
+        <a class="header__menu_item h6 {{ font }}" href="{{ link.url }}"> {{ link.title | escape }}</a>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>

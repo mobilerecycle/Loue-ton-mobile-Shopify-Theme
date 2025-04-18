@@ -1,0 +1,59 @@
+{%- style -%}
+  {%- for block in section.blocks -%}
+  {%- case block.type -%}
+    {%- when 'color' -%}
+       {% if block.settings.color_name != blank %}
+      {%- assign color_item_name = block.settings.color_name | strip | downcase -%}
+      {%- assign colo_item_name_join = color_item_name | split: ' ' -%}
+     [data-color="{{- colo_item_name_join | join: '-' -}}"]{
+        {%- if block.settings.color_background != blank -%}--color-swatch-background: {{ block.settings.color_background }};{%- endif -%}
+        {%- if  block.settings.color_background_gradient != blank -%}--background-gradient: {{ block.settings.color_background_gradient }};{%- endif -%}
+        {%- if block.settings.color_image.presentation.focal_point != blank -%}--background-position: {{ block.settings.color_image.presentation.focal_point }};{%- endif -%}
+        {%- if block.settings.color_image != blank -%} --background-image: url('{{  block.settings.color_image | image_url }}'); {%- endif -%}
+      }
+     {% endif %}
+  {%- endcase -%}
+  {%- endfor -%}
+
+    .color-swatches-variant {
+      background-image: var(--background-image);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-origin: content-box;
+    }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Color swatches",
+  "blocks": [
+       {
+         "type": "color",
+         "name": "t:sections.color_swatches.blocks.name",
+         "settings": [
+           {
+            "type": "text",
+            "id": "color_name",
+            "label": "t:sections.color_swatches.blocks.color_name.label"
+            },
+            {
+              "type": "color",
+              "id": "color_background",
+              "label": "Background color"
+            },
+            {
+              "id": "color_background_gradient",
+              "type": "color_background",
+              "label": "Background gradient"
+            },
+           {
+             "type": "image_picker",
+             "id": "color_image",
+             "label": "Background image"
+           }
+         ]
+       }
+   ]
+}
+{% endschema %}

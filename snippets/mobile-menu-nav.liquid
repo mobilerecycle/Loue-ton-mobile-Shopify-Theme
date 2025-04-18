@@ -1,0 +1,54 @@
+<ul class="offcanvas__menu_ul">
+  
+  {%- for link in section.settings.menu.links -%}
+  <li class="offcanvas__menu_li">
+    
+    {%- if link.links != blank -%}
+    <a class="offcanvas__menu_item" href="{{ link.url }}"> {{ link.title | escape }} </a>
+    
+     <ul class="offcanvas__sub_menu">
+       {%- for childlink in link.links -%}
+       {%- if childlink.links != blank -%}
+       <li class="offcanvas__sub_menu_li">
+         <a href="{{ childlink.url }}" class="offcanvas__sub_menu_item">{{ childlink.title | escape }}</a>
+       	 <ul class="offcanvas__sub_menu">
+            {%- for grandchildlink in childlink.links -%}
+           	<li class="offcanvas__sub_menu_li">
+              <a class="offcanvas__sub_menu_item" href="{{ grandchildlink.url }}">{{ grandchildlink.title | escape }}</a>
+            </li>
+           	{%- endfor -%}
+         </ul>
+       </li>
+       {%- else -%}
+       <li class="offcanvas__sub_menu_li">
+         <a href="{{ childlink.url }}" class="offcanvas__sub_menu_item">{{ childlink.title | escape }}</a>
+       </li>
+       {%- endif -%}
+       {% endfor %}
+    </ul>
+    
+    {%- else -%}
+    <a class="offcanvas__menu_item" href="{{ link.url }}"> {{ link.title | escape }}</a>
+    {%- endif -%}
+  </li>
+  {%- endfor -%}
+  
+  {%- if shop.customer_accounts_enabled -%}
+  <li class="offcanvas__menu_li">
+    <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="offcanvas__menu_item user--menu__icon">
+      <svg viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.7941 8.67198C11.0535 9.37141 10.0485 9.76481 9 9.76481C7.9515 9.76481 6.94648 9.37141 6.2059 8.67198C5.46542 7.97264 5.05 7.02475 5.05 6.03704C5.05 5.04932 5.46542 4.10144 6.2059 3.4021C6.94648 2.70266 7.9515 2.30926 9 2.30926C10.0485 2.30926 11.0535 2.70266 11.7941 3.4021C12.5346 4.10144 12.95 5.04932 12.95 6.03704C12.95 7.02475 12.5346 7.97264 11.7941 8.67198ZM5.19443 9.63511C6.20419 10.5888 7.57314 11.1241 9 11.1241C10.4269 11.1241 11.7958 10.5888 12.8056 9.63511C13.8154 8.68136 14.3833 7.38716 14.3833 6.03704C14.3833 4.68692 13.8154 3.39272 12.8056 2.43896C11.7958 1.4853 10.4269 0.95 9 0.95C7.57314 0.95 6.20419 1.4853 5.19443 2.43896C4.18457 3.39272 3.61667 4.68692 3.61667 6.03704C3.61667 7.38716 4.18457 8.68136 5.19443 9.63511ZM15.6167 15.4815V17.3704C15.6167 17.5516 15.6929 17.7247 15.8276 17.8519C15.9622 17.9791 16.1442 18.05 16.3333 18.05C16.5225 18.05 16.7045 17.9791 16.8391 17.8519C16.9738 17.7247 17.05 17.5516 17.05 17.3704V15.4815C17.05 14.6323 16.6928 13.8186 16.058 13.2191C15.4233 12.6196 14.5631 12.2833 13.6667 12.2833H4.33333C3.43691 12.2833 2.57667 12.6196 1.94198 13.2191C1.30719 13.8186 0.95 14.6323 0.95 15.4815V17.3704C0.95 17.5516 1.02624 17.7247 1.16093 17.8519C1.29552 17.9791 1.47749 18.05 1.66667 18.05C1.85585 18.05 2.03781 17.9791 2.1724 17.8519C2.30709 17.7247 2.38333 17.5516 2.38333 17.3704V15.4815C2.38333 14.9947 2.58804 14.5273 2.95345 14.1822C3.31896 13.837 3.81527 13.6426 4.33333 13.6426H13.6667C14.1847 13.6426 14.681 13.837 15.0465 14.1822C15.412 14.5273 15.6167 14.9947 15.6167 15.4815Z" fill="currentColor" stroke="currentColor" stroke-width="0.1"/>
+      </svg>
+      <span class="offcanvas__menu_text__icon accounts__text--label"> 
+      {%- liquid
+                if customer
+                  echo 'customer.account_fallback' | t
+                else
+                  echo 'customer.log_in' | t
+                endif
+              -%} </span>
+    </a>
+  </li>
+  {%- endif -%}
+
+</ul>

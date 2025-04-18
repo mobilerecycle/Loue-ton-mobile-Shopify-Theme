@@ -1,0 +1,23 @@
+{% comment %}
+  Renders a product card placeholder
+
+  Usage:
+  {% render 'product-card-placeholder' %}
+{% endcomment %}
+
+<div
+  class="{{ product_item }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  {% if settings.animations_reveal_on_scroll %}
+    data-cascade
+    style="--animation-order: {{ forloop.index }};"
+  {% endif %}
+>
+  <div
+    class="mb-15 placeholder media {% if round_image %}rounded--image{% endif %} card--client-height"
+    style="padding-bottom: 100%"
+  >
+    {{ product_card_placeholder | placeholder_svg_tag: 'placeholder-svg-2' }}
+  </div>
+  <span class="placholder__product--title h4"> Product Title </span>
+  <span class="product-grid-item__price">$99.99</span>
+</div>

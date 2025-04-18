@@ -1,0 +1,31 @@
+<svg style="display: none">
+  <symbol id="icon-caret" viewBox="0 0 10 6">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
+  </symbol>
+</svg>
+
+<cart-notification class="{{ color_scheme }} gradient" id="offcanvas__mini_cart" tabindex="-1">
+  <div class="cart-notification-wrapper h-100">
+    <div class="cart_action_drawer_overlay"></div>
+
+    <button
+      type="button"
+      class="cart-notification__close modal__close-button link link--text focus-inset"
+      aria-label="{{ 'accessibility.close' | t }}"
+    >
+      <svg class="icon icon-close" aria-hidden="true" focusable="false">
+        <use href="#icon-close">
+      </svg>
+    </button>
+    <div
+      id="cart-notification"
+      class="cart-notification focus-inset h-100 d-flex flex-direction-column"
+      aria-modal="true"
+      aria-label="{{ 'general.cart.item_added' | t }}"
+      role="dialog"
+      tabindex="-1"
+    >
+      {% render 'cart-notification-children' %}
+    </div>
+  </div>
+</cart-notification>

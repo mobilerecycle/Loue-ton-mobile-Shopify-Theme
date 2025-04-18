@@ -1,0 +1,1214 @@
+{{ 'collage.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-modal-video.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{{ 'product-card-item.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+{{ 'countdown-timer.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-price.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'banner-list.css' | asset_url | stylesheet_tag }}
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+    --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+  .ratio:before {
+      content: "";
+      width: 0;
+      height: 0;
+      padding-bottom: var(--ratio-percent);
+    }
+    .ratio {
+      display: flex;
+      position: relative;
+      align-items: stretch;
+    }
+    .collage__item.collage__item--product {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+     }
+      .collage__item.collage__item--product:not(.collage__item--2){
+          padding-bottom: 3rem
+      }
+      .collage__product--heading {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        color: rgba(var(--color-foreground),1);
+        margin-bottom: 0;
+    }
+    .collage__item--product .product-grid-item__content {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-bottom: 2rem;
+  }
+    @media only screen and (min-width: 992px){
+      .collage__item--2 .extra--large {
+         font-size: 6rem;
+      }
+      .collage__item--3 .extra--large {
+         font-size: 5.2rem;
+      }
+    }
+{%- endstyle -%}
+
+{% liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient  section-{{ section.id }}-padding">
+  <div class="section-heading text-{{ section.settings.alignment }} mobile-text-{{ section.settings.mobile_alignment }} {% if section.settings.heading != blank or section.settings.subtitle != blank  %}mb-50 {% endif %}">
+    <h2 class="section-heading__title {{ section.settings.heading_size }} rte  mb-0">
+      {% if section.settings.heading != blank -%}
+        <span class="heading--text">{{ section.settings.heading }}</span>
+      {%- endif %}
+    </h2>
+    <span class="section-heading__sub_title">{{- section.settings.subtitle -}}</span>
+  </div>
+
+  <div class="{% if section.settings.full_width %}container-fluid px-0{% else %}container{% endif %} ">
+    <div
+      class="collage--wrapper collage--columns-{{ section.blocks.size }} {% if section.settings.mobile_layout == 'collage' %} collage--mobile{% endif %}"
+      style="--grid-desktop-horizontal-spacing: 10px; --grid-desktop-vertical-spacing: 10px;"
+    >
+      {%- for block in section.blocks -%}
+        <div
+          class="collage__item collage__item--{{ block.type }} collage__item--{{ forloop.index }} collage__item--{{ section.settings.desktop_layout }} color-{{ block.settings.color_scheme }} gradient {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {{ block.shopify_attributes }}
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
+        >
+          {%- assign placeholder_image_index = forloop.index0 | modulo: 4 | plus: 1 -%}
+          {%- case block.type -%}
+            {%- when 'image' -%}
+              {% liquid
+                case block.settings.button_type
+                  when 'primary'
+                    assign button_class = 'button'
+                  when 'secondary'
+                    assign button_class = 'button button--secondary'
+                  when 'icon'
+                    assign button_class = 'link with--icon'
+                  else
+                    assign button_class = 'link'
+                endcase
+
+                assign highest_ratio = 0
+                for block in section.blocks
+                  if block.settings.image.aspect_ratio > highest_ratio
+                    assign highest_ratio = block.settings.image.aspect_ratio
+                  endif
+                endfor
+
+                assign content_position_single = ''
+                if block.settings.content_position == 'middle'
+                  assign content_position_single = 'align-items-center'
+                elsif block.settings.content_position == 'bottom'
+                  assign content_position_single = 'align-items-end'
+                endif
+
+                assign content_alignment_single = ''
+                assign align_self_single = 'flex-start'
+                if block.settings.content_alignment == 'center'
+                  assign content_alignment_single = 'text-center'
+                  assign align_self_single = 'center'
+                elsif block.settings.content_alignment == 'right'
+                  assign content_alignment_single = 'text-right'
+                  assign align_self_single = 'flex-end'
+                endif
+              %}
+              {%- if block.settings.enble_entire_link and block.settings.link != blank -%}
+                <a class="d-block" href="{{ block.settings.link }}">
+              {% endif %}
+              <div
+                class="collage-card collage--banner-card"
+                style="--collage-banner-media-overlay-opacity: {{ block.settings.image_overlay_opacity | divided_by: 100.0 }};"
+              >
+                <div
+                  class="media media--transparent ratio"
+                  {% if block.settings.image != blank %}
+                    style="--ratio-percent: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%"
+                  {% else %}
+                    style="--ratio-percent: 100%"
+                  {% endif %}
+                >
+                  {%- if block.settings.image != blank -%}
+                    {%- liquid
+                      if section.settings.desktop_layout == 'left'
+                        assign large_block = forloop.first
+                      else
+                        assign large_block = forloop.last
+                      endif
+
+                      assign grid_space_desktop = '10px'
+                      assign grid_space_mobile = '10px'
+                    -%}
+                    {%- if large_block -%}
+                      {% if section.settings.full_width %}
+                        {%- capture sizes -%}
+                        {% if section.blocks.size == 1 -%}(min-width: {{ settings.container_lg_width }}px) 100vw{% else %}(min-width: {{ settings.container_lg_width }}px) calc((100vw - 30px) / 2{% endif %},
+                        {% if section.blocks.size == 1 -%}(min-width: 750px) calc(100vw - 30px){% else %}(min-width: 750px) calc((100vw - 30px) / 2{% endif %},
+                        {% if section.blocks.size == 2 and section.settings.mobile_layout == 'collage' -%}calc((100vw - 30px) / 2){% else %}calc(100vw - 30px){% endif %}
+                        {%- endcapture -%}
+                      {% else %}
+                        {%- capture sizes -%}
+                        {% if section.blocks.size == 1 -%}(min-width: {{ settings.container_lg_width }}px) calc({{ settings.container_lg_width }}px - 100px){% else %}(min-width: {{ settings.container_lg_width }}px) calc(({{ settings.container_lg_width }}px - 100px) * 2 / 3 - {{ grid_space_desktop }}){% endif %},
+                        {% if section.blocks.size == 1 -%}(min-width: 750px) calc(100vw - 100px){% else %}(min-width: 750px) calc((100vw - 100px) * 2 / 3 - {{ grid_space_desktop }}){% endif %},
+                        {% if section.blocks.size == 2 and section.settings.mobile_layout == 'collage' -%}calc((100vw - 30px) / 2){% else %}calc(100vw - 30px){% endif %}
+                        {%- endcapture -%}
+                      {% else %}
+
+                      {% endif %}
+                      {%- if forloop.first %}
+                        {{
+                          block.settings.image
+                          | image_url: width: 3200
+                          | image_tag:
+                            sizes: sizes,
+                            widths: '50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3200',
+                            fetchpriority: fetch_priority
+                        }}
+                      {% else %}
+                        {{
+                          block.settings.image
+                          | image_url: width: 3200
+                          | image_tag:
+                            loading: 'lazy',
+                            sizes: sizes,
+                            widths: '50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3200'
+                        }}
+                      {% endif %}
+
+                    {%- else -%}
+                      {%- capture sizes -%}
+                           (min-width: {{ settings.container_lg_width }}px) calc(({{ settings.container_lg_width }}px - 100px) * 1 / 3 - {{ grid_space_desktop }}),
+                           (min-width: 750px) calc((100vw - 100px) * 1 / 3 - {{ grid_space_desktop }}),
+                           {% if section.settings.mobile_layout == 'collage' %}calc((100vw - 30px) / 2 - {{ grid_space_mobile }}){% else %}calc(100vw - 30px){% endif %}
+                        {%- endcapture -%}
+                      {%- if forloop.first %}
+                        {{
+                          block.settings.image
+                          | image_url: width: 3200
+                          | image_tag:
+                            sizes: sizes,
+                            widths: '50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3200',
+                            fetchpriority: fetch_priority
+                        }}
+                      {% else %}
+                        {{
+                          block.settings.image
+                          | image_url: width: 3200
+                          | image_tag:
+                            loading: 'lazy',
+                            sizes: sizes,
+                            widths: '50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3200'
+                        }}
+                      {% endif %}
+                    {%- endif -%}
+                  {%- else -%}
+                    {{ 'detailed-apparel-1' | placeholder_svg_tag }}
+                  {%- endif -%}
+                </div>
+
+                <div
+                  class="banner__list--item-content banner__list--content-position--{{ block.settings.padding_inner }} d-flex {{ content_alignment_single }} {{ content_position_single }}"
+                  style="
+                    --content-align-self: {{ align_self_single }};
+                    --color-foreground: {{ block.settings.foreground.red }}, {{ block.settings.foreground.blue }}, {{ block.settings.foreground.blue }};
+                    --color-button: {{ block.settings.button_background.red }}, {{ block.settings.button_background.green }}, {{ block.settings.button_background.blue }};
+                    --color-button-text: {{ block.settings.button_foreground.red }}, {{ block.settings.button_foreground.green }}, {{ block.settings.button_foreground.blue }};
+                    --color-base-outline-button-labels: {{ block.settings.foreground.red }}, {{ block.settings.foreground.blue }}, {{ block.settings.foreground.blue }};
+                    --color-link: {{ block.settings.foreground.red }}, {{ block.settings.foreground.blue }}, {{ block.settings.foreground.blue }};
+                  "
+                >
+                  <div class="banner__list--item-content-inner collage--banner-content banner--content-padding--{{ block.settings.card_padding }}">
+                    {%- if block.settings.subheading != blank -%}
+                      <div
+                        class="collage__banner--subheading {% if block.settings.enable_background %}color-{{ block.settings.color_scheme }} gradient background__pading{% endif %} h6 {% unless block.settings.subheading_spacing == "none" %}collage__banner--subheading-spacing-{{ block.settings.subheading_spacing }}{% endunless %} {% if block.settings.subheading_spacing == "none" %}mb-0{% endif %}"
+                        {% if block.settings.custom_colors %}
+                          style="--color-foreground: {{ block.settings.subheading_foreground.red }}, {{ block.settings.subheading_foreground.green }}, {{ block.settings.subheading_foreground.blue }}; --color-background: {{ block.settings.subheading_background.red }}, {{ block.settings.subheading_background.green }}, {{ block.settings.subheading_background.blue }};"
+                        {% endif %}
+                      >
+                        {{ block.settings.subheading }}
+                      </div>
+                    {%- endif -%}
+
+                    {%- if block.settings.title != blank -%}
+                      <h3 class="{{ block.settings.heading_size }} {% if block.settings.text == blank %}banner__heading--space {% else %}mb-0 {% endif %}">
+                        {{ block.settings.title }}
+                      </h3>
+                    {%- endif -%}
+                    {%- if block.settings.text != blank -%}
+                      <div class="rte banner--list-text">{{ block.settings.text }}</div>
+                    {%- endif -%}
+                    {%- if block.settings.link_label != blank -%}
+                      {% unless block.settings.enble_entire_link %}
+                        <a
+                          class="{{ button_class }} {% unless block.settings.button_type == "icon" %} button--{{ block.settings.button_size }} {% endunless %}"
+                          {% if block.settings.link == blank %}
+                            role="link" aria-disabled="true"
+                          {% else %}
+                            href="{{ block.settings.link }}"
+                          {% endif %}
+                        >
+                      {% endunless %}
+                      {% if block.settings.enble_entire_link %}
+                        <button
+                          class="{{ button_class }} {% unless block.settings.button_type == "icon" %} button--{{ block.settings.button_size }} {% endunless %}"
+                        >
+                      {%- endif %}
+                      {{- block.settings.link_label | escape }}
+                      {% if block.settings.enble_entire_link %} </button> {% endif %}
+                      {% unless block.settings.enble_entire_link %}
+                        </a>
+                      {% endunless %}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+              {%- if block.settings.enble_entire_link and block.settings.link != blank -%}
+                </a>
+              {% endif %}
+            {%- when 'product' -%}
+              {%- assign placeholder_image = 'product-apparel-' | append: placeholder_image_index -%}
+              {% render 'collage-product-card',
+                product_card_product: block.settings.product,
+                media_size: block.settings.image_ratio,
+                show_secondary_image: block.settings.second_image,
+                placeholder_image: placeholder_image,
+                show_title: true,
+                show_price: true,
+                show_rating: block.settings.show_product_rating,
+                color_swatches: block.settings.color_swatches,
+                show_countdown: block.settings.show_countdown,
+                time_color_scheme: block.settings.timer_color_scheme,
+                corner_radius: block.settings.image_round_corner
+              %}
+            {%- when 'collection' -%}
+              {%- assign placeholder_image = 'collection-apparel-' | append: placeholder_image_index -%}
+              {% render 'collage-collection-card',
+                collection: block.settings.collection,
+                custom_image: block.settings.image,
+                title_design: block.settings.title_design,
+                button_size: block.settings.card_button_size,
+                button_type: block.settings.card_button_style,
+                title_size: block.settings.heading_size,
+                media_aspect_ratio: 'adapt',
+                placeholder_image: placeholder_image,
+                use_custom_color: block.settings.use_custom_color,
+                button_foreground_color: block.settings.button_foreground_color,
+                button_background_color: block.settings.button_background_color,
+                block: block
+              %}
+            {%- when 'video' -%}
+              <div class="collage-card">
+                <noscript>
+                  <a
+                    href="{{ block.settings.video_url }}"
+                    class="collage-card__link"
+                  >
+                    <div
+                      class="media media--transparent ratio"
+                      {% if block.settings.cover_image != blank %}
+                        style="--ratio-percent: {{ 1 | divided_by: block.settings.cover_image.aspect_ratio | times: 100 }}%"
+                      {% else %}
+                        style="--ratio-percent: 100%"
+                      {% endif %}
+                    >
+                      {%- if block.settings.cover_image != blank -%}
+                        {%- capture sizes -%}
+                          (min-width: {{ settings.container_lg_width }}px)
+                          {% if section.blocks.size == 1 -%}
+                            calc({{ settings.container_lg_width }}px - 100px)
+                          {%- else -%}
+                            {{- settings.container_lg_width | minus: 100 | times: 0.67 | round }}px
+                          {%- endif -%}
+                          , (min-width: 750px)
+                          {%- if section.blocks.size == 1 %} calc(100vw - 100px){% else %} 500px{% endif -%}
+                          , calc(100vw - 30px)
+                        {%- endcapture -%}
+                        {{
+                          block.settings.cover_image
+                          | image_url: width: 3000
+                          | image_tag: loading: 'lazy', sizes: sizes, widths: '550, 720, 990, 1100, 1500, 2200, 3000'
+                        }}
+                      {%- else -%}
+                        {{ 'hero-apparel-3' | placeholder_svg_tag }}
+                      {%- endif -%}
+                    </div>
+                  </a>
+                </noscript>
+                <modal-opener class="no-js-hidden" data-modal="#PopupModal-{{ block.id }}">
+                  <div class="deferred-media">
+                    <button
+                      class="deferred-media__poster full-unstyled-link"
+                      type="button"
+                      aria-label="{{ 'sections.video.load_video' | t: description: block.settings.description | escape }}"
+                      aria-haspopup="dialog"
+                      data-media-id="{{ block.settings.video_url.id }}"
+                    >
+                      <div
+                        class="media media--transparent ratio"
+                        {% if block.settings.cover_image != blank %}
+                          style="--ratio-percent: {{ 1 | divided_by: block.settings.cover_image.aspect_ratio | times: 100 }}%"
+                        {% else %}
+                          style="--ratio-percent: 100%"
+                        {% endif %}
+                      >
+                        <div class="collage__card--video-play-btn deferred--video-media__poster-button">
+                          <span class="collage__card--video-play-btn-inner collage__collection--padding-{{ block.settings.card_padding }}">
+                            {%- render 'icon-play' -%}
+                            <span class="video__play--icon-text">{{ block.settings.play_button_text }}</span>
+                          </span>
+                        </div>
+
+                        {%- if block.settings.cover_image != blank -%}
+                          {%- capture sizes -%}
+                            (min-width: {{ settings.container_lg_width }}px)
+                            {% if section.blocks.size == 1 -%}
+                              calc({{ settings.container_lg_width }}px - 100px)
+                            {%- else -%}
+                              {{- settings.container_lg_width | minus: 100 | times: 0.67 | round }}px
+                            {%- endif -%}
+                            , (min-width: 750px)
+                            {%- if section.blocks.size == 1 %} calc(100vw - 100px){% else %} 500px{% endif -%}
+                            , calc(100vw - 30px)
+                          {%- endcapture -%}
+                          {{
+                            block.settings.cover_image
+                            | image_url: width: 3000
+                            | image_tag: loading: 'lazy', sizes: sizes, widths: '550, 720, 990, 1100, 1500, 2200, 3000'
+                          }}
+                        {%- else -%}
+                          {{ 'hero-apparel-3' | placeholder_svg_tag }}
+                        {%- endif -%}
+                      </div>
+                    </button>
+                  </div>
+                </modal-opener>
+                <modal-dialog
+                  id="PopupModal-{{ block.id }}"
+                  class="modal-video media-modal color-{{ settings.color_schemes | first }}"
+                >
+                  <div
+                    class="modal-video__content"
+                    role="dialog"
+                    aria-label="{{ block.settings.description | escape }}"
+                    aria-modal="true"
+                    tabindex="-1"
+                  >
+                    <button
+                      id="ModalClose-{{ block.id }}"
+                      type="button"
+                      class="modal-video__toggle"
+                      aria-label="{{ 'accessibility.close' | t }}"
+                    >
+                      {% render 'icon-close' %}
+                    </button>
+                    <div class="modal-video__content-info">
+                      <deferred-media class="modal-video__video template-popup">
+                        <template>
+                          {%- if block.settings.video_url.type == 'youtube' -%}
+                            <iframe
+                              src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?enablejsapi=1"
+                              class="js-youtube"
+                              allow="autoplay; encrypted-media"
+                              allowfullscreen
+                              title="{{ block.settings.description | escape }}"
+                            ></iframe>
+                          {%- else -%}
+                            <iframe
+                              src="https://player.vimeo.com/video/{{ block.settings.video_url.id }}"
+                              class="js-vimeo"
+                              allow="autoplay; encrypted-media"
+                              allowfullscreen
+                              title="{{ block.settings.description | escape }}"
+                            ></iframe>
+                          {%- endif -%}
+                        </template>
+                      </deferred-media>
+                    </div>
+                  </div>
+                </modal-dialog>
+              </div>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.collage.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+        "type": "text",
+        "id": "heading",
+        "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+    "type": "select",
+    "id": "heading_size",
+    "options": [
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h2",
+          "label": "Small"
+        }
+     ],
+     "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Desktop heading alignment"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile heading alignment"
+    },
+     {
+        "type": "header",
+        "content": "Layout"
+      },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.collage.settings.desktop_layout.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.collage.settings.desktop_layout.options__2.label"
+        }
+      ],
+      "default": "left",
+      "label": "t:sections.collage.settings.desktop_layout.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.video.settings.full_width.label",
+      "default": true
+    },
+    {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "t:sections.collage.blocks.image.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.collage.blocks.image.settings.image.label"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "default": "Subheading",
+          "label": "Subheading"
+        },
+       {
+        "type": "select",
+        "id": "subheading_spacing",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "small",
+        "label": "Subheading spacing on desktop"
+      },
+        {
+        "type": "checkbox",
+          "id": "enable_background",
+          "label": "Enable background color",
+          "default": true
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.all.colors.label",
+          "default": "background-1"
+        },
+       {
+          "type": "textarea",
+          "id": "title",
+          "default": "Banner title",
+          "label": "t:sections.multicolumn.blocks.column.settings.title.label"
+        },
+        {
+         "type": "select",
+         "id": "heading_size",
+         "options": [
+           {
+             "value": "h4",
+             "label": "Small"
+           },
+           {
+             "value": "h3",
+             "label": "Medium"
+           },
+           {
+             "value": "h2",
+             "label": "Large"
+           }
+         ],
+         "default": "h3",
+         "label": "Heading size"
+       },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Pair text with an icon to focus on your store's features",
+          "label": "t:sections.multicolumn.blocks.column.settings.text.label"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "t:sections.multicolumn.blocks.column.settings.link_label.label",
+          "default": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.multicolumn.blocks.column.settings.link.label"
+        },
+		{
+          "type": "select",
+          "id": "button_type",
+          "label": "Button type",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary button"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary button"
+            },
+            {
+              "value": "icon",
+              "label": "Link button"
+            }
+          ]
+        },
+		{
+              "type": "select",
+              "id": "button_size",
+              "label": "Button size",
+              "default": "small",
+			  "info": "Works on the primary/secondary button",
+              "options": [
+                {
+                  "value": "large",
+                  "label": "Large"
+                },
+                {
+                  "value": "medium",
+                  "label": "Medium"
+                },
+				        {
+                  "value": "small",
+                  "label": "Small"
+                }
+              ]
+            },
+          {
+             "type": "range",
+             "id": "image_overlay_opacity",
+             "min": 0,
+             "max": 100,
+             "step": 10,
+             "unit": "%",
+             "label": "Image overlay opacity",
+             "default": 0
+           },
+         {
+        "type": "select",
+        "id": "content_position",
+        "options": [
+          {
+            "value": "top",
+            "label": "t:sections.image-with-text.settings.desktop_content_position.options__1.label"
+          },
+          {
+            "value": "middle",
+            "label": "t:sections.image-with-text.settings.desktop_content_position.options__2.label"
+          },
+          {
+            "value": "bottom",
+            "label": "t:sections.image-with-text.settings.desktop_content_position.options__3.label"
+          }
+        ],
+        "default": "top",
+        "label": "Content position"
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__1.label"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__2.label"
+          },
+          {
+            "value": "right",
+            "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__3.label"
+          }
+        ],
+        "default": "left",
+        "label": "Content alignment"
+      },
+      {
+        "type": "select",
+        "id": "card_padding",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "small",
+        "label": "Card padding"
+      },
+      {
+          "type": "header",
+          "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "foreground",
+        "default": "#fff",
+        "label": "Text color"
+      },
+      {
+        "type": "color",
+        "id": "button_background",
+        "default": "#fff",
+        "label": "Primary button background color"
+      },
+      {
+        "type": "color",
+        "id": "button_foreground",
+        "default": "#121212",
+        "label": "Primary button foreground color"
+      },
+       {
+          "type": "checkbox",
+          "id": "custom_colors",
+          "label": "Replace with your custom colors for subheading",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "subheading_foreground",
+          "default": "#121212",
+          "label": "Foreground color"
+        },
+        {
+          "type": "color",
+          "id": "subheading_background",
+          "default": "#fff",
+          "label": "Background color"
+        }
+    ]
+    },
+    {
+      "type": "product",
+      "name": "t:sections.collage.blocks.product.name",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.collage.blocks.product.settings.product.label"
+        },
+        {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+            {
+              "value": "adapt",
+              "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
+            },
+            {
+              "value": "portrait",
+              "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
+            },
+            {
+              "value": "landscape",
+              "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__4.label"
+            }
+          ],
+          "default": "adapt",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.all.colors.label",
+          "default": "background-2"
+        },
+        {
+          "type": "checkbox",
+          "id": "second_image",
+          "default": false,
+          "label": "t:sections.collage.blocks.product.settings.second_image.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "color_swatches",
+          "default": true,
+          "label": "Enable color swatches",
+          "info": "To display color swatches, you need to enable it. [Learn more](https:\/\/gloryio.com\/doc\/how-to-enable-color-swatches-on-product\/)."
+        },
+         {
+          "type": "checkbox",
+          "id": "show_product_rating",
+          "default": false,
+          "label": "Show product rating"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_countdown",
+          "default": true,
+          "label": "Show countdown",
+          "info": "Follow the instructions on how to add a countdown timer to a product. [click here](https:\/\/gloryio.com\/doc\/product-countdown\/)"
+        },
+        {
+          "type": "checkbox",
+          "id": "image_round_corner",
+          "default": true,
+          "label": "Round the corners of the box"
+        },
+        {
+          "type": "color_scheme",
+          "id": "timer_color_scheme",
+          "label": "Color scheme for countdown",
+          "default": "accent-2"
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": "t:sections.collage.blocks.collection.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "main_heading_size",
+          "options": [
+            {
+              "value": "h5",
+              "label": "Small"
+            },
+            {
+              "value": "h4",
+              "label": "Medium"
+            },
+            {
+              "value": "h3",
+              "label": "Large"
+            },
+            {
+              "value": "h2",
+              "label": "Extra large"
+            }
+          ],
+          "default": "h4",
+          "label": "t:sections.all.heading_size.label"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.collage.blocks.collection.settings.collection.label"
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Optional! Instead of the collection's image, the selected image will be displayed."
+         },
+        {
+        "type": "select",
+        "id": "title_design",
+        "options": [
+            {
+              "value": "text",
+              "label": "Text"
+            },
+            {
+              "value": "button",
+              "label": "Button"
+            }
+         ],
+         "default": "text",
+          "label": "Title design"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h6",
+              "label": "Extra small"
+            },
+            {
+              "value": "h5",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h4",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h3",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "h2",
+              "label": "Extra large"
+            }
+          ],
+          "default": "h5",
+          "label": "t:sections.all.heading_size.label",
+          "info": "It works if you select the \"Title design\" Text."
+        },
+        {
+        "type": "select",
+        "id": "card_button_style",
+        "label": "Button type",
+        "default": "primary",
+        "info": "It works if you select the \"Title design\" button.",
+        "options": [
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "primary",
+            "label": "Primary"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "card_button_size",
+        "label": "Button size",
+        "default": "small",
+        "info": "It works if you select the \"Title design\" button.",
+        "options": [
+          {
+            "value": "large",
+            "label": "Large"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+                  {
+            "value": "small",
+            "label": "Small"
+          }
+        ]
+      },
+     {
+        "type": "select",
+        "id": "card_padding",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "small",
+        "label": "Card padding"
+      },
+        {
+            "type": "header",
+            "content": "Button",
+            "info": "It works if you select the \"Title design\" button for section \"Collection card\" settings."
+          },
+          {
+            "type": "checkbox",
+            "id": "use_custom_color",
+            "label": "Replace with your custom colors",
+            "default": true
+          },
+          {
+            "type": "color",
+            "id": "button_foreground_color",
+            "default": "#121212",
+            "label": "Foreground color"
+          },
+          {
+            "type": "color",
+            "id": "button_background_color",
+            "default": "#fff",
+            "label": "Background color"
+          }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "t:sections.collage.blocks.video.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "t:sections.collage.blocks.video.settings.cover_image.label"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+          "label": "t:sections.collage.blocks.video.settings.video_url.label",
+          "placeholder": "t:sections.collage.blocks.video.settings.video_url.placeholder",
+          "info": "t:sections.collage.blocks.video.settings.video_url.info"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "default": "Describe the video",
+          "label": "t:sections.collage.blocks.video.settings.description.label",
+          "info": "t:sections.collage.blocks.video.settings.description.info"
+        },
+        {
+          "type": "text",
+          "id": "play_button_text",
+          "label": "Play button text",
+    	  "default": "Play now"
+        },
+         {
+          "type": "select",
+          "id": "card_padding",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            }
+          ],
+          "default": "small",
+          "label": "Card padding"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "t:sections.collage.presets.name",
+      "blocks":[
+          {
+               "type": "image"
+             },
+          {
+               "type": "product"
+             },
+            {
+               "type": "video"
+             },
+             {
+               "type": "collection"
+             }
+		]
+    }
+  ]
+}
+{% endschema %}

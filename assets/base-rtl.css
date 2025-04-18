@@ -1,0 +1,38 @@
+html[dir="rtl"] {
+  direction: rtl;
+}
+.text-left {
+  text-align: right;
+}
+.text-right {
+  text-align: left;
+}
+@media only screen and (max-width: 749px) {
+  .mobile-text-left {
+    text-align: right;
+  }
+  .mobile-text-center {
+    text-align: center;
+  }
+  .mobile-text-right {
+    text-align: left;
+  }
+}
+.select .icon-caret,
+.customer select + svg,
+.select__field_form select + svg {
+  right: auto;
+  left: 1.5rem;
+}
+.estimate__shipping--title svg {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+summary .icon-caret {
+  right: auto;
+  left: 1.5rem;
+}
+.field__input,
+.customer .field input {
+  text-align: right;
+}

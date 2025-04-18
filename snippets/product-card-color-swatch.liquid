@@ -1,0 +1,64 @@
+{% comment %}
+  https://community.shopify.com/c/shopify-design/only-show-color-swatches-if-more-than-two-colors/m-p/1711730
+{% endcomment %}
+
+{% liquid
+  assign color_variant_max_size = settings.max_swatches_show
+
+  assign product_content_align = 'justify-content-start'
+  if settings.product_content_alignment == 'center'
+    assign product_content_align = 'justify-content-center'
+  elsif settings.product_content_alignment == 'right'
+    assign product_content_align = 'justify-content-end'
+  endif
+%}
+
+{%- liquid
+  assign choose_option = settings.color_swatch_activation | downcase
+
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name == choose_option
+      assign color_swatch_option = 'option' | append: option.position
+    endif
+  endfor
+-%}
+<variant-swatch-buttons
+  class="no-js-hidden product--color-swatch-wrapper {{ product_content_align }}"
+  data-color-swatch="{{ color_swatch_option }}"
+  data-color-swatch-style="{{ settings.color_swatch_type }}"
+>
+  {%- for option in product.options_with_values -%}
+    {%- liquid
+      assign option_name = option.name | downcase
+    -%}
+    {% if option_name == choose_option %}
+      {% assign number = 0 %}
+      {%- for value in option.values -%}
+        {% assign number = number | plus: 1 %}
+        {%- assign color_item_name = value | escape | downcase -%}
+        {%- assign color_item_name_join = color_item_name | split: ' ' -%}
+
+        {% if number <= color_variant_max_size %}
+          <color-swatch-variant
+            class="product--color-swatch {% if settings.color_swatch_type == 'image' %} product--color-swatch-image{% endif %}"
+            data-product-handle="{{ product.handle }}"
+            title="{{ value | escape }}"
+            data-value="{{ value | escape }}"
+            data-color="{{- color_item_name_join | join: '-' -}}"
+          >
+            <span class="variant--swatch-custom variant--swatch-color">
+              <span class="swatch--variant-tooltip">{{- value -}}</span>
+            </span>
+          </color-swatch-variant>
+        {% endif %}
+      {%- endfor -%}
+      {% if number > color_variant_max_size %}
+        <a class="rest__of--color-variants" href="{{ product.url }}"> +{{ number | minus: color_variant_max_size }}</a>
+      {% endif %}
+    {% endif %}
+  {%- endfor -%}
+  <script type="application/json">
+    {{ product.variants | json }}
+  </script>
+</variant-swatch-buttons>

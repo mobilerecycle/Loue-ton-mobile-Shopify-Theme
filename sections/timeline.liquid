@@ -1,0 +1,539 @@
+{{ 'component-grid.css' | asset_url | stylesheet_tag }}
+{{ 'timeline.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+   .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+     --padding-top: {{ section.settings.mobile_padding_top }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --padding-top: {{ section.settings.padding_top }}px;
+    }
+  }
+  #MainContent > :first-child .section--top-space-{{ section.id }} {
+    padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+  }
+{%- endstyle -%}
+<div
+  class="timeline--wrapper section--top-space-{{ section.id }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient {% if settings.animations_reveal_on_scroll %}scroll-trigger animate--slide-in{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-section-type="timeline"
+  id="Slider-{{ section.id }}"
+  data-slider-autoplay="{{ section.settings.autorotate }}"
+  data-slider-delay="{{ section.settings.autorotate_speed }}000"
+  data-slider-loop="{%- if section.blocks.size > 1 -%}true {%- else -%} false {%- endif -%}"
+>
+  <div class="container">
+    <div class="section-heading text-{{ section.settings.alignment }} mobile-text-{{ section.settings.mobile_alignment }}   {% if section.settings.heading != blank or section.settings.subtitle != blank %} mb-50 {% endif %}">
+      <h2 class="section-heading__title {{ section.settings.heading_size }} rte gradient--title">
+        {{- section.settings.heading -}}
+      </h2>
+      <span class="section-heading__sub_title">{{- section.settings.subtitle -}}</span>
+    </div>
+
+    <div class="timeline__navigation">
+      {%- for block in section.blocks -%}
+        {% case block.type %}
+          {% when 'timeline' %}
+            <button
+              class="timeline__bullet {% if forloop.first == true %}active{% endif %}"
+              data-index="{{ forloop.index0 }}"
+            >
+              {% if block.settings.navigation_label != blank %}
+                <span class="timeline__bullet--solid--btn">{{ block.settings.navigation_label }}</span>
+              {% endif %}
+              {% if block.settings.navigation_label_2 != blank %}
+                <span class="timeline__bullet--text h6 mb-0">{{ block.settings.navigation_label_2 }}</span>
+              {% endif %}
+            </button>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+    <div class="timeline__container">
+      <div class="swiper timeline--slider">
+        <div class="swiper-wrapper">
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {% when 'timeline' %}
+                <div class="swiper-slide" tabindex="-1">
+                  {% liquid
+                    assign content_position = ''
+                    if block.settings.content_position == 'middle'
+                      assign content_position = 'align-items-center'
+                    elsif block.settings.content_position == 'bottom'
+                      assign content_position = 'align-items-end'
+                    endif
+
+                    assign content_alignment = ''
+                    if block.settings.content_alignment == 'center'
+                      assign content_alignment = 'text-center'
+                    elsif block.settings.content_alignment == 'right'
+                      assign content_alignment = 'text-right'
+                    endif
+
+                    case block.settings.button_type
+                      when 'primary'
+                        assign button_class = 'button button--primary'
+                      when 'secondary'
+                        assign button_class = 'button button--secondary'
+                      when 'icon'
+                        assign button_class = 'link'
+                      else
+                        assign button_class = 'link'
+                    endcase
+                  %}
+                  <div
+                    class="timeline__card {% if settings.animations_reveal_on_scroll %}scroll-trigger animate--slide-in{% endif %}"
+                    {% if settings.animations_reveal_on_scroll %}
+                      data-cascade
+                      style="--animation-order: {{ forloop.index }};"
+                    {% endif %}
+                  >
+                    <div class="timeline__card--inner grid grid--1-col grid--2-col-tablet">
+                      <div class="timeline__card--media-wrapper grid__item">
+                        <div
+                          class="timeline__card--media timeline__card--media--{{ section.settings.height }} {% if block.settings.image != blank %}media {% if block.settings.transparent_media %}transparent--media{% endif %}{% else %}placeholder{% endif %} {% if section.settings.round_corner %} rounded--image {% endif %}"
+                          {% if section.settings.height == 'adapt' and block.settings.image != blank %}
+                            style="padding-bottom: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%;"
+                          {% endif %}
+                        >
+                          {%- if block.settings.image != blank -%}
+                            {%- capture sizes -%}(min-width: {{ settings.container_lg_width }}px) {% if section.settings.full_width %}{{ settings.container_lg_width | minus: 30 }}px{% else %}{{ settings.container_lg_width | minus: 60 | divided_by: 2 }}px{% endif %},(min-width: 750px) {% if section.settings.full_width %} calc(100vw - 30px){% else %} calc((100vw - 130px) / 2) {% endif %}{%- endcapture -%}
+                            {{
+                              block.settings.image
+                              | image_url: width: 1500
+                              | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 360, 535, 750, 1070, 1500'
+                            }}
+                          {%- else -%}
+                            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                          {%- endif -%}
+                        </div>
+                      </div>
+
+                      <div class="timeline__card--text-wrapper grid__item {{ content_position }} d-flex">
+                        <div class="timeline__card--text-inner large--space {{ content_alignment }}">
+                          <h3 class="timeline__card--heading mb-0 {{ block.settings.heading_size }}">
+                            {{ block.settings.heading }}
+                          </h3>
+                          <div class="timeline__card--subheading">{{ block.settings.subheading }}</div>
+                          <div class="timeline__card--heading-two {{ block.settings.heading_two_size }}">
+                            {{ block.settings.heading_two }}
+                          </div>
+                          <div class="timeline__card--text">{{ block.settings.text | escape }}</div>
+                          <div class="timeline__card--button">
+                            {%- if block.settings.link_label != blank -%}
+                              <a
+                                class="{{ button_class }} {% unless block.settings.button_type == "icon" %} button--{{ block.settings.button_size }} {% endunless %}"
+                                {% if block.settings.link == blank %}
+                                  role="link" aria-disabled="true"
+                                {% else %}
+                                  href="{{ block.settings.link }}"
+                                {% endif %}
+                              >
+                                {{- block.settings.link_label | escape }}
+                              </a>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Timeline",
+   "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+     {
+      "type": "header",
+      "content": "Section header"
+    },
+     {
+       "type": "inline_richtext",
+       "id": "heading",
+       "default": "Timeline",
+       "label": "t:sections.featured-collection.settings.title.label",
+       "info": "Use bold style to highlight text."
+   },
+    {
+    "type": "select",
+    "id": "heading_size",
+    "options": [
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h2",
+          "label": "Small"
+        }
+     ],
+     "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "default": "Share information about your brand with your customers.",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Desktop heading alignment"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile heading alignment"
+    },
+    {
+      "type": "header",
+      "content": "Timeline card"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.image-with-text.settings.height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.image-with-text.settings.height.options__2.label"
+        },
+		{
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image-with-text.settings.height.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.image-with-text.settings.height.label"
+    },
+    {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "background-2",
+         "label": "t:sections.header.settings.color_scheme.label"
+       }
+  ],
+   "blocks": [
+    {
+      "type": "timeline",
+      "name": "Timeline",
+      "settings": [
+        {
+          "type": "text",
+          "id": "navigation_label_2",
+          "default": "Title",
+          "label": "Navigation heading"
+        },
+        {
+          "type": "text",
+          "id": "navigation_label",
+          "default": "label",
+          "label": "Navigation label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.multicolumn.blocks.column.settings.image.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "transparent_media",
+          "label": "Enable transparent image",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Title 1",
+          "label": "t:sections.multicolumn.blocks.column.settings.title.label"
+        },
+        {
+         "type": "select",
+         "id": "heading_size",
+         "options": [
+           {
+             "value": "h4",
+             "label": "Small"
+           },
+           {
+             "value": "h3",
+             "label": "Medium"
+           },
+           {
+             "value": "h2",
+             "label": "Large"
+           }
+         ],
+         "default": "h3",
+         "label": "Heading size"
+       },
+        {
+          "type": "text",
+          "id": "heading_two",
+          "default": "Title 2",
+          "label": "Heading two"
+        },
+        {
+         "type": "select",
+         "id": "heading_two_size",
+         "options": [
+           {
+             "value": "h4",
+             "label": "Small"
+           },
+           {
+             "value": "h3",
+             "label": "Medium"
+           },
+           {
+             "value": "h2",
+             "label": "Large"
+           }
+         ],
+         "default": "h3",
+         "label": "Heading two size"
+       },
+        {
+          "type": "text",
+          "id": "subheading",
+          "default": "Sub title",
+          "label": "Subheading"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.",
+          "label": "t:sections.multicolumn.blocks.column.settings.text.label"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "t:sections.multicolumn.blocks.column.settings.link_label.label",
+          "default": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.multicolumn.blocks.column.settings.link.label"
+        },
+		{
+          "type": "select",
+          "id": "button_type",
+          "label": "Button type",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary button"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary button"
+            },
+            {
+              "value": "icon",
+              "label": "Link button"
+            }
+          ]
+        },
+		{
+              "type": "select",
+              "id": "button_size",
+              "label": "Button size",
+              "default": "small",
+			  "info": "Works on the primary/secondary button",
+              "options": [
+                {
+                  "value": "large",
+                  "label": "Large"
+                },
+                {
+                  "value": "medium",
+                  "label": "Medium"
+                },
+				        {
+                  "value": "small",
+                  "label": "Small"
+                }
+              ]
+            },
+         {
+          "type": "select",
+          "id": "content_position",
+          "options": [
+            {
+              "value": "top",
+              "label": "t:sections.image-with-text.settings.desktop_content_position.options__1.label"
+            },
+            {
+              "value": "middle",
+              "label": "t:sections.image-with-text.settings.desktop_content_position.options__2.label"
+            },
+            {
+              "value": "bottom",
+              "label": "t:sections.image-with-text.settings.desktop_content_position.options__3.label"
+            }
+          ],
+          "default": "middle",
+          "label": "Content position"
+       },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__1.label"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__2.label"
+          },
+          {
+            "value": "right",
+            "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__3.label"
+          }
+        ],
+        "default": "left",
+        "label": "Content alignment"
+       }
+
+      ]
+    }
+  ],
+  "presets": [
+  {
+    "name": "Timeline",
+     "blocks":[
+    		{
+                 "type": "timeline"
+            },
+    		{
+               "type": "timeline"
+             },
+             {
+               "type": "timeline"
+             },
+             {
+               "type": "timeline"
+             }
+		]
+    }
+  ]
+}
+{% endschema %}

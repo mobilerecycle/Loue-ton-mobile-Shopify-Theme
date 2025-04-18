@@ -1,0 +1,575 @@
+{%- liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+
+  if section.settings.show_home_page
+    if template.name == 'index'
+      assign popup = true
+    else
+      assign popup = false
+    endif
+  else
+    assign popup = true
+  endif
+
+  if section.settings.show_visitors
+    if shop.customer_accounts_enabled and customer
+      assign customer_popup = false
+    else
+      assign customer_popup = true
+    endif
+  else
+    assign customer_popup = true
+  endif
+-%}
+
+{%- style -%}
+   .email__popup--media-position--full-width .email__popup--content {
+       background-color: rgba(0,0,0,{{ section.settings.image_overlay_opacity | divided_by: 100.0 }});
+   }
+   {% if section.settings.custom_colors %}
+   .email__popup---wrapper{
+   	--color-background: {{ section.settings.background_color.red }}, {{ section.settings.background_color.green }}, {{ section.settings.background_color.blue }};
+       --color-foreground: {{ section.settings.foreground_color.red }}, {{ section.settings.foreground_color.green }}, {{ section.settings.foreground_color.blue }};
+   	--color-button: {{ section.settings.button_background.red }}, {{ section.settings.button_background.green }}, {{ section.settings.button_background.blue }};
+       --color-button-text: {{ section.settings.button_foreground.red }}, {{ section.settings.button_foreground.green }}, {{ section.settings.button_foreground.blue }};
+
+      --color-base-accent-2: {{ section.settings.hover_button_background.red }}, {{ section.settings.hover_button_background.green }}, {{ section.settings.hover_button_background.blue }};
+      --color-base-solid-button-labels: {{ section.settings.hover_button_foreground.red }}, {{ section.settings.hover_button_foreground.green }}, {{ section.settings.hover_button_foreground.blue }};
+  }
+    {% endif %}
+{%- endstyle -%}
+
+{{ 'email-popup.css' | asset_url | stylesheet_tag }}
+{% if theme_rtl %}
+  {{ 'email-popup-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{%- unless section.settings.display == 'disable' -%}
+  {%- unless popup == false -%}
+    {%- unless customer_popup == false -%}
+      <email-popup
+        data-section-id="{{ section.id }}"
+        class="email__popup--mdoal"
+        data-mode="{{ section.settings.display }}"
+        data-delay="{{ section.settings.delay }}"
+        data-expire="{{ section.settings.expire }}"
+      >
+        <div
+          role="dialog"
+          aria-label=""
+          aria-modal="true"
+          class="email__popup--mdoal__content email__popup--position-{{ section.settings.popup_position }}"
+          tabindex="-1"
+          open
+        >
+          {%- if section.settings.popup_position == 'center' -%}
+            <div class="email-popup-overlay"></div>
+          {%- endif -%}
+
+          <div class="email__popup---wrapper {% unless section.settings.custom_colors %}color-{{ section.settings.color_scheme }} gradient{% endunless %}  email__popup--{{ section.settings.popup_width }} text-{{ section.settings.alignment }} {% if section.settings.image != blank %} {% if section.settings.full--bg-image %} email__popup--media-position--full-width {% else %} email__popup--media-position--{{ section.settings.image_position }} {% endif %} email__popup--meida-active {% endif %}">
+            <div class="email__popup--modal-header">
+              <button type="button" class="email__popup--toggle" aria-label="{{ 'accessibility.close' | t }}">
+                {% render 'icon-close' %}
+              </button>
+            </div>
+
+            <div class="email__popup--wrapper-inner">
+              {%- if section.settings.image != blank -%}
+                <div class="email__popup--image">
+                  <div class="email__popup--media  media">
+                    {%- capture sizes -%}(min-width: 990px) 50vw, 100vw{%- endcapture -%}
+                    {{
+                      section.settings.image
+                      | image_url: width: 1500
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: sizes,
+                        widths: '165, 360, 535, 750, 1070, 1500',
+                        height: section.settings.image.height
+                    }}
+                  </div>
+                </div>
+              {%- endif -%}
+
+              <div class="email__popup--content">
+                {%- for block in section.blocks -%}
+                  {%- case block.type -%}
+                    {%- when 'heading' -%}
+                      <h2 class="{{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+                        {{ block.settings.heading }}
+                      </h2>
+                    {%- when 'text' -%}
+                      <div class="rich-text__text rte" {{ block.shopify_attributes }}>
+                        {{ block.settings.richtext }}
+                      </div>
+                    {%- when 'email_form' -%}
+                      <div class="email__popup--form">
+                        {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
+                          <input type="hidden" name="contact[tags]" value="newsletter">
+                          <div class="email__popup__field-wrapper">
+                            <div class="input__field_form {% if block.settings.button_full %} email--button--full {% endif %}">
+                              {%- unless form.posted_successfully? -%}
+                                <input
+                                  id="NewsletterForm--{{ section.id }}"
+                                  type="email"
+                                  name="contact[email]"
+                                  class="input__field {% if block.settings.button_full %}mb-20{% endif %}"
+                                  value="{{ form.email }}"
+                                  aria-required="true"
+                                  autocorrect="off"
+                                  autocapitalize="off"
+                                  autocomplete="email"
+                                  {% if form.errors %}
+                                    autofocus
+                                    aria-invalid="true"
+                                    aria-describedby="ContactFooter-error"
+                                  {% elsif form.posted_successfully? %}
+                                    aria-describedby="ContactFooter-success"
+                                  {% endif %}
+                                  placeholder="{{ 'newsletter.label' | t }}"
+                                  required
+                                >
+                                <button
+                                  type="submit"
+                                  class="button button--small {% if block.settings.button_full %}w-100{% endif %}"
+                                  name="commit"
+                                  id="Subscribe"
+                                  aria-label="{{ 'newsletter.button_label' | t }}"
+                                >
+                                  {{ 'newsletter.button_label' | t }}
+                                </button>
+                              {%- endunless -%}
+                            </div>
+                            {%- if form.errors -%}
+                              <small class="newsletter-form__message form__message" id="ContactFooter-error">
+                                {%- render 'icon-error' -%}
+                                {{- form.errors.translated_fields.email | capitalize }}
+                                {{ form.errors.messages.email -}}
+                              </small>
+                            {%- endif -%}
+                          </div>
+                          {%- if form.posted_successfully? -%}
+                            <h3
+                              class="newsletter-form__message newsletter-form__message--success form__message"
+                              id="ContactFooter-success"
+                              tabindex="-1"
+                            >
+                              {% render 'icon-success' -%}
+                              {{- 'newsletter.success' | t }}
+                            </h3>
+                          {%- endif -%}
+                        {%- endform -%}
+                        {% if block.settings.richtext != blank %}
+                          <div class="email__form--text rte" {{ block.shopify_attributes }}>
+                            {{ block.settings.richtext }}
+                          </div>
+                        {%- endif -%}
+                        {%- if section.settings.dont_show -%}
+                          <button type="button" class="email__popup--hide" aria-label="{{ 'accessibility.close' | t }}">
+                            {{ section.settings.dont_show_label }}
+                          </button>
+                        {%- endif -%}
+                      </div>
+                    {%- when 'button' -%}
+                      {% liquid
+                        if block.settings.button_style == 'primary'
+                          assign button_class = ''
+                        else
+                          assign button_class = 'button--secondary'
+                        endif
+                      %}
+
+                      <a
+                        {% if block.settings.button_link == blank %}
+                          aria-disabled="true"
+                        {% else %}
+                          href="{{ block.settings.button_link }}"
+                        {% endif %}
+                        class="button button--{{ block.settings.button_size }} {{ button_class }}"
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.button_label | escape }}
+                      </a>
+                  {%- endcase -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </email-popup>
+    {%- endunless -%}
+  {%- endunless -%}
+{%- endunless -%}
+<script src="{{ 'email-popup.js' | asset_url }}" defer></script>
+
+{% schema %}
+ {
+   "name": "Popup",
+   "settings": [
+	{
+         "type": "select",
+         "id": "display",
+         "label": "Display mode",
+	  "info": "The 'Testing mode' popup appears regardless of the relevant settings or dismissal, allowing you to review it at any time. When you're satisfied with the appearance, click the 'Enable' button.",
+         "options": [
+           {
+             "label": "Disable",
+             "value": "disable"
+           },
+           {
+             "label": "Enable",
+             "value": "enable"
+           },
+		{
+             "label": "Testing",
+             "value": "test"
+           }
+         ],
+         "default": "disable"
+       },
+	{
+         "type": "checkbox",
+         "id": "show_home_page",
+         "default": true,
+         "label": "Show on home page only"
+       },
+	{
+         "type": "checkbox",
+         "id": "show_visitors",
+         "default": true,
+         "label": "Show only for visitors"
+       },
+	{
+         "type": "range",
+         "id": "delay",
+         "min": 2,
+         "max": 60,
+         "step": 1,
+         "default": 5,
+	  "unit": "sec",
+         "label": "Delay time showing popup"
+       },
+       {
+         "type": "checkbox",
+         "id": "dont_show",
+         "label": "\"Don't show again\" button",
+         "default": true,
+	  "info": "If click on the button, the popup will not be displayed again"
+       },
+     {
+       "type": "text",
+       "id": "dont_show_label",
+       "label": "Button label",
+       "default": "No thanks!"
+     },
+	{
+         "type": "range",
+         "id": "expire",
+         "min": 1,
+         "max": 30,
+         "step": 1,
+         "default": 7,
+	  "unit": "day",
+         "label": "Show again after (days)"
+       },
+	{
+         "type": "select",
+         "id": "popup_position",
+         "label": "Popup position",
+         "default": "center",
+         "options": [
+           {
+             "value": "center",
+             "label": "Center"
+           },
+           {
+             "value": "right",
+             "label": "Bottom right"
+           },
+		{
+             "value": "left",
+             "label": "Bottom left"
+           }
+         ]
+       },
+	{
+         "type": "select",
+         "id": "popup_width",
+         "label": "Popup width",
+         "default": "medium",
+         "options": [
+           {
+             "value": "small",
+             "label": "Small"
+           },
+           {
+             "value": "medium",
+             "label": "Medium"
+           },
+		{
+             "value": "large",
+             "label": "Large"
+           }
+         ]
+       },
+	{
+         "type": "select",
+         "id": "alignment",
+         "label": "Content alignment",
+         "default": "left",
+         "options": [
+           {
+             "value": "left",
+             "label": "Left"
+           },
+           {
+             "value": "right",
+             "label": "Right"
+           },
+		{
+             "value": "center",
+             "label": "Center"
+           }
+         ]
+       },
+	{
+         "type": "header",
+         "content": "Image settings"
+       },
+       {
+         "type": "image_picker",
+         "id": "image",
+         "label": "Desktop image"
+       },
+	{
+         "type": "select",
+         "id": "image_position",
+         "label": "Desktop image placement",
+         "default": "left",
+         "options": [
+           {
+             "value": "left",
+             "label": "Image left"
+           },
+           {
+             "value": "right",
+             "label": "Image right"
+           }
+         ]
+       },
+	{
+         "type": "checkbox",
+         "id": "full--bg-image",
+         "default": false,
+         "label": "Show as full-width image in background"
+       },
+	{
+         "type": "range",
+         "id": "image_overlay_opacity",
+         "min": 0,
+         "max": 100,
+         "step": 10,
+         "unit": "%",
+         "label": "Overlay opacity",
+         "default": 0,
+	  "info": "It works by selecting the show as a full-width image in the background"
+       },
+	{
+         "type": "header",
+         "content": "Colors"
+       },
+      {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.all.colors.label",
+          "default": "background-1"
+        },
+       {
+      "type": "checkbox",
+      "id": "custom_colors",
+      "label": "Replace with your custom colors",
+      "default": true
+    },
+	{
+         "type": "color",
+         "id": "background_color",
+         "default": "#fff",
+         "label": "Background"
+       },
+	{
+         "type": "color",
+         "id": "foreground_color",
+         "default": "#121212",
+         "label": "Text"
+       },
+	{
+         "type": "color",
+         "id": "button_background",
+         "default": "#121212",
+         "label": "Button background"
+       },
+	{
+         "type": "color",
+         "id": "button_foreground",
+         "default": "#fff",
+         "label": "Button text"
+       },
+	{
+         "type": "color",
+         "id": "hover_button_background",
+         "default": "#121212",
+         "label": "Button hover background"
+       },
+	{
+         "type": "color",
+         "id": "hover_button_foreground",
+         "default": "#fff",
+         "label": "Button hover text"
+       }
+],
+"blocks": [
+       {
+         "type": "heading",
+         "name": "Heading",
+         "settings": [
+		{
+             "type": "text",
+             "id": "heading",
+             "default": "Heading",
+             "label": "Heading"
+           },
+           {
+             "type": "select",
+             "id": "heading_size",
+             "options": [
+               {
+                 "value": "h4",
+                 "label": "Small"
+               },
+               {
+                 "value": "h3",
+                 "label": "Medium"
+               },
+               {
+                 "value": "h2",
+                 "label": "Large"
+               }
+             ],
+             "default": "h3",
+             "label": "Heading size"
+           }
+         ]
+       },
+	{
+         "type": "text",
+         "name": "Text",
+         "settings": [
+		{
+             "type": "richtext",
+             "id": "richtext",
+		  "default": "<p>Sign up for our newsletter to be the first to learn about new arrivals, special promotions, and online exclusives.</p>",
+             "label": "Heading"
+           }
+         ]
+       },
+	{
+         "type": "email_form",
+         "name": "Email form",
+	  "limit": 1,
+         "settings": [
+		{
+             "type": "richtext",
+             "id": "richtext",
+		  "default": "<p>*By submitting this form, you agree to receive our emails and may unsubscribe at any time.</p>",
+             "label": "Heading"
+           },
+		{
+             "type": "checkbox",
+             "id": "button_full",
+             "label": "Make button full width",
+             "default": false
+           }
+         ]
+       },
+	{
+     "type": "button",
+     "name": "t:sections.rich-text.blocks.button.name",
+     "limit": 1,
+     "settings": [
+       {
+         "type": "text",
+         "id": "button_label",
+         "default": "Button label",
+         "label": "t:sections.rich-text.blocks.button.settings.button_label.label"
+       },
+       {
+         "type": "url",
+         "id": "button_link",
+         "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
+       },
+	{
+         "type": "select",
+         "id": "button_style",
+         "label": "Button style",
+         "default": "primary",
+         "options": [
+           {
+             "value": "secondary",
+             "label": "Secondary"
+           },
+           {
+             "value": "primary",
+             "label": "Primary"
+           }
+         ]
+       },
+       {
+         "type": "select",
+         "id": "button_size",
+         "label": "Button size",
+         "default": "large",
+         "options": [
+         {
+           "value": "large",
+           "label": "Large"
+         },
+         {
+           "value": "medium",
+           "label": "Medium"
+         },
+         {
+           "value": "small",
+           "label": "Small"
+           }
+         ]
+       }
+     ]
+   }
+   ],
+ "default": {
+   "blocks": [
+     {
+       "type": "heading"
+     },
+     {
+       "type": "text"
+     },
+     {
+       "type": "email_form"
+     }
+   ]
+ }
+ }
+{% endschema %}

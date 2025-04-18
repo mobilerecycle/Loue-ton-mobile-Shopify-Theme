@@ -1,0 +1,26 @@
+.product-form__submit > svg {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+.product-popup-modal__button {
+  padding-right: 0;
+}
+button.product-popup-modal__button.link > svg {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+.accordion .icon-accordion {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+.product-popup-modal__content {
+  left: auto;
+  transform: translate(50%, -120%);
+  right: 50%;
+}
+.product-popup-modal[open] .product-popup-modal__content {
+  transform: translate(50%, -50%);
+}
+.product-popup-modal__toggle {
+  margin: auto 0 0 0;
+}

@@ -1,0 +1,127 @@
+.collection-list-title {
+  margin: 0;
+}
+.collection__card {
+  position: relative;
+  display: block;
+}
+span.link__hover_arrow_inner {
+  background: rgba(var(--color-background));
+  color: rgba(var(--color-foreground));
+  display: inline-flex;
+  padding: 10px 20px;
+  border-radius: 30px;
+}
+.collection__card_text.full--center {
+  top: 50%;
+  transform: translate(-50%);
+  left: 50%;
+}
+h5.collection__title {
+  padding-right: 10px;
+  text-align: center;
+}
+.collection__product_count {
+  flex-shrink: 0;
+}
+@media only screen and (max-width: 991px) {
+  .collection__title {
+    font-size: 1.6rem;
+  }
+}
+.column__five--design h5.collection__title {
+  font-size: 1.6rem;
+}
+.collection__card_text.placeholder__position {
+  bottom: 3rem;
+}
+.collection__card_text:not(.collection--content-absolute) {
+  margin-top: 2.5rem;
+}
+.collection__card_text {
+  text-align: center;
+}
+h3.collection__title {
+  font-weight: 400;
+}
+.collection--rounded-media {
+  border-radius: 45%;
+  background: transparent;
+}
+.collection--list-slider {
+  position: relative;
+}
+.collection--card-wrapper {
+  position: relative;
+}
+.collection--content-absolute:not(.collection--normal-on-mobile) {
+  position: absolute;
+  z-index: 9;
+  left: 1rem;
+  bottom: 3rem;
+  right: 1rem;
+}
+.collection__card_text > button {
+  box-shadow: 0 0 3rem -0.2rem rgba(var(--color-button-text), 0.05);
+}
+.collection__card_text > button:hover {
+  box-shadow: 0 0 3rem 0.2rem rgba(var(--color-button-text), 0.1);
+}
+@media only screen and (min-width: 750px) {
+  .collection--content-absolute.collection--normal-on-mobile {
+    position: absolute;
+    z-index: 9;
+    left: 1rem;
+    bottom: 3rem;
+    right: 1rem;
+  }
+}
+@media only screen and (max-width: 749px) {
+  .collection__card_text.collection--normal-on-mobile {
+    margin-top: 2rem;
+  }
+  .collection-list.productSlider {
+    padding-bottom: 2rem;
+  }
+}
+.collection--card-wrapper .media > img {
+  transition: all 0.7s ease 0s;
+}
+
+.collection--card-wrapper .media:hover > img {
+  transform: scale(1.05);
+}
+.collection-list.swiper
+  .collection__card_text:not(.collection--content-absolute)
+  button.button {
+  margin-bottom: 2.2rem;
+}
+.collection__title > svg {
+  margin-left: 1.5rem;
+  width: 2.2rem;
+}
+.collection--card-button > svg {
+  width: 2.2rem;
+}
+.collection__title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.collection--card-button.button {
+  flex-wrap: wrap;
+}
+@media only screen and (max-width: 749px) {
+  .collection--card-button.button {
+    padding: 0.5rem 1rem !important;
+  }
+  .collection--card-button.button {
+    gap: 0.5rem;
+  }
+}
+@media only screen and (min-width: 750px) {
+  .collection--card-button.button {
+    gap: 1.2rem;
+  }
+}

@@ -1,0 +1,234 @@
+{{ 'age-verifier-popup.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'age-verifier-popup.js' | asset_url }}" defer></script>
+
+<age-verifier-popup
+  class="age-verification"
+  data-expire="{{ section.settings.expire }}"
+  data-display="{{ section.settings.display }}"
+  style="--color-background: {{ section.settings.overlay_color.red }},{{ section.settings.overlay_color.green }},{{ section.settings.overlay_color.blue }};"
+>
+  <div class="age-verification-component">
+    <div
+      class="age-verification--inner text-center color-{{ section.settings.color_scheme }}"
+      id="age-verification-main-popup"
+    >
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+            <h2 class="age-verification--heading mb-0 {{ block.settings.heading_size }}">
+              {{ block.settings.heading }}
+            </h2>
+          {%- when 'text' -%}
+            <div class="age-verification--subheading">{{ block.settings.text }}</div>
+          {%- when 'buttons' -%}
+            <div class="age-verification--buttons">
+              {% if block.settings.accept_button_label != blank %}
+                <button
+                  class="button button--small button--pirmary confirm--age-button"
+                  data="{{ block.settings.accept_button_label }}"
+                >
+                  {{ block.settings.accept_button_label }}
+                </button>
+              {% endif %}
+              {% if block.settings.refuse_button_label != blank %}
+                <button
+                  class="button button--small button--secondary cancel--age-button"
+                  data-label="{{ block.settings.refuse_button_label }}"
+                >
+                  {{ block.settings.refuse_button_label }}
+                </button>
+              {% endif %}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    <div
+      class="age-verification--inner text-center hidden  color-{{ section.settings.color_scheme }}"
+      id="age-verification-failed-popup"
+    >
+      <h3 class="age-verification--heading h2 mb-0">{{ section.settings.heading }}</h3>
+      <div class="age-verification--subheading">{{ section.settings.text }}</div>
+      <div class="age-verification--buttons">
+        <button
+          class="button button--small button--pirmary go-back--age-button"
+          data-label="{{ section.settings.go_button_label }}"
+        >
+          {{ section.settings.go_button_label }}
+        </button>
+      </div>
+    </div>
+  </div>
+</age-verifier-popup>
+
+<style>
+  .age-verification-component {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: rgba(var(--color-background));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .age-verification{
+     display: none;
+  }
+  .age-verification.open--popup {
+    display: block;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Age verification",
+  "settings": [
+{
+        "type": "select",
+        "id": "display",
+        "label": "Display mode",
+     "info": "The 'Testing mode' popup appears regardless of the relevant settings or dismissal, allowing you to review it at any time. When you're satisfied with the appearance, click the 'Enable' button.",
+        "options": [
+          {
+            "label": "Enable",
+            "value": "enable"
+          },
+	{
+            "label": "Testing",
+            "value": "test"
+          }
+        ],
+        "default": "enable"
+      },
+ {
+        "type": "range",
+        "id": "expire",
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "default": 7,
+     "unit": "day",
+        "label": "Show again after (days)"
+      },
+      	{
+        "type": "header",
+        "content": "Refuse Content"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Sorry!",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "default": "<p>This content is for adults only. Please return when you’re older.</p>",
+        "label": "Text"
+      },
+      {
+        "type": "text",
+        "id": "go_button_label",
+        "default": "Go Back",
+        "label": "Back button label"
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+       "type": "color",
+       "id": "overlay_color",
+       "label": "Overlay color",
+       "default": "#000000"
+     },
+     {
+       "type": "color_scheme",
+       "id": "color_scheme",
+       "label": "t:sections.all.colors.label",
+       "default": "background-1"
+     }
+   ],
+   "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "settings": [
+	{
+            "type": "text",
+            "id": "heading",
+            "default": "Confirm your age",
+            "label": "Heading"
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "options": [
+              {
+                "value": "h4",
+                "label": "Small"
+              },
+              {
+                "value": "h3",
+                "label": "Medium"
+              },
+              {
+                "value": "h2",
+                "label": "Large"
+              }
+            ],
+            "default": "h3",
+            "label": "Heading size"
+          }
+        ]
+      },
+{
+        "type": "text",
+        "name": "Text",
+        "settings": [
+	{
+            "type": "richtext",
+            "id": "text",
+	    "default": "<p>Are you 18 years old or older?</p>",
+            "label": "Heading"
+          }
+        ]
+      },
+{
+    "type": "buttons",
+    "name": "Buttons",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "text",
+        "id": "accept_button_label",
+        "default": "Yes, I am",
+        "label": "Accept button label"
+      },
+      {
+        "type": "text",
+        "id": "refuse_button_label",
+        "default": "No, I'm not",
+        "label": "Refuse button label"
+      }
+    ]
+  }
+  ],
+"default": {
+     "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "buttons"
+    }
+  ]
+}
+}
+{% endschema %}

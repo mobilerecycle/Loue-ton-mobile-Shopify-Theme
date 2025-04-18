@@ -1,0 +1,841 @@
+{%- liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+-%}
+{{ 'component-grid.css' | asset_url | stylesheet_tag }}
+{{ 'component-mobile-scrolling.css' | asset_url | stylesheet_tag }}
+{{ 'gallery.css' | asset_url | stylesheet_tag }}
+{{ 'section-slider-button-controls.css' | asset_url | stylesheet_tag }}
+
+<style>
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.mobile_padding_top }}px;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+    }
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+    .gallery__hover--icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+    transition: var(--transition);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+    #MainContent > :first-child .section--top-space-{{ section.id }} {
+      padding-top: calc(var(--header-height) * var(--transparent-header-show) + var(--padding-top));
+    }
+
+    #section__{{ section.id }}.gallery--slider-navigate.slider--controls--button{
+       --slider-button-background: {{ section.settings.button_background }};
+       --slider-button-color: {{ section.settings.button_text_color }};
+    }
+    {% liquid
+     assign media_query = settings.container_lg_width | plus: 130
+   %}
+   @media only screen and (min-width: {{ media_query }}px){
+      {% if theme_rtl %}
+     #section__{{ section.id }}.slider--navgaition-button-absolute .swiper-button-prev.product__slider--button {
+         right: -6.5rem;
+     }
+     #section__{{ section.id }}.slider--navgaition-button-absolute .swiper-button-next.product__slider--button {
+         left: -6.5rem;
+     }
+      {% else %}
+      #section__{{ section.id }}.slider--navgaition-button-absolute .swiper-button-prev.product__slider--button {
+         left: -6.5rem;
+     }
+     #section__{{ section.id }}.slider--navgaition-button-absolute .swiper-button-next.product__slider--button {
+         right: -6.5rem;
+     }
+      {% endif %}
+   }
+
+     {%- if section.settings.custom_colors_navigation -%}
+   #section__{{ section.id }}.gallery--slider-navigate.slider--controls--button{
+      --color-foreground: {{ section.settings.nav_foreground.red }}, {{ section.settings.nav_foreground.green }}, {{ section.settings.nav_foreground.blue }};
+      --color-background: {{ section.settings.nav_background.red }}, {{ section.settings.nav_background.green }}, {{ section.settings.nav_background.blue }};
+   }
+   #section__{{ section.id }}.gallery--slider-navigate.slider--controls--button .product__slider--button{
+     background: rgba(var(--color-background));
+   }
+  #section__{{ section.id }}.gallery--slider-navigate.slider--controls--button .product__slider--button:hover, #section__{{ section.id }}.gallery--slider-navigate.slider--controls--button .product__slider--button:focus-visible {
+    background: var(--slider-button-background);
+  }
+  {%- endif -%}
+</style>
+
+{%- liquid
+  assign productShowXl = section.settings.products_show_on_xl
+  assign productShowSm = section.settings.products_show_on_sm
+
+  assign grid = 'grid'
+
+  assign slider_enable = false
+  if section.settings.layout == 'slider'
+    assign slider_enable = true
+  endif
+
+  if slider_enable
+    assign showPagination = section.settings.show_pagination
+    assign showNavigation = section.settings.show_navigation
+
+    assign productShowXl = section.settings.products_show_on_xl
+    assign productShowSm = section.settings.products_show_on_sm
+    assign slideAutoplay = section.settings.auto_rotate
+    assign autoplay_time = section.settings.change_slides_speed
+
+    assign max_proudct_show_first_view = 3
+  endif
+
+  assign grid_item = ''
+  if section.settings.layout == 'grid'
+    assign grid_item = 'grid__item'
+  elsif section.settings.layout == 'slider'
+    assign grid_item = 'swiper-slide'
+  endif
+-%}
+
+{%- capture container_class -%}
+{%- if slider_enable -%}
+gallery__slider productSlider swiper
+{%- else -%}
+{{ grid }} {% if section.settings.layout == "grid" %} grid--{{ productShowXl }}-col-desktop grid--{{ productShowSm }}-col-tablet-down {% endif %}
+{%- endif -%}
+{%- endcapture -%}
+
+<div
+  class="instagram__section section--top-space-{{ section.id }} section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="product-slider"
+  data-slider-enable="{{ slider_enable }}"
+  {% if slider_enable %}
+    data-show-mobile="{{ productShowSm }}"
+    data-show-tablet="3"
+    data-show-extra-large="{{ productShowXl }}"
+    data-autoplay="{{ slideAutoplay }}"
+    data-autoplay-time="{{ autoplay_time }}000"
+    data-slider-loop="{%- if section.blocks.size > max_proudct_show_first_view -%}true {%- else -%} false {%- endif -%}"
+  {% endif %}
+>
+  <div class="container">
+    {%- if slider_enable and section.settings.navigation_position == 'top' -%}
+      <div class="slider__heading--wrapper d-flex align-items-end mb-50">
+    {% endif %}
+
+    {% if section.settings.heading != blank or section.settings.subtitle != blank %}
+      <div class="section-heading text-{{ section.settings.alignment }} mobile-text-{{ section.settings.mobile_alignment }} {% if slider_enable and section.settings.navigation_position == "top" %} flex-grow-1 {% else %}  mb-50 {% endif %} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <h2 class="section-heading__title {{ section.settings.heading_size }}  gradient--title">
+          {{- section.settings.heading -}}
+        </h2>
+        <div class="section-heading__sub_title rte">
+          {{- section.settings.subtitle | replace: 'p>', 'span>' -}}
+        </div>
+      </div>
+    {% endif %}
+
+    {%- if slider_enable and section.settings.navigation_position == 'top' -%}
+      <div
+        class="gallery--slider-navigate slider--controls--button d-flex align-items-center"
+        id="section__{{ section.id }}"
+      >
+        {%- if showNavigation -%}
+          <div class="swiper-button-prev product__slider--button">{% render 'slider-left-arrow-icon' %}</div>
+        {%- endif -%}
+        {%- if showPagination -%}
+          <div class="swiper-pagination product__slider--pagination"></div>
+        {%- endif -%}
+        {%- if showNavigation -%}
+          <div class="swiper-button-next product__slider--button">{% render 'slider-right-arrow-icon' %}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if slider_enable and section.settings.navigation_position == 'top' -%}
+      </div>
+    {% endif %}
+
+    {% if section.settings.mobile_stack == false and section.settings.layout != 'slider' %}
+      <div class="mobile--scoller">
+        <div class="mobile--scoller-inner">
+    {% endif %}
+
+    {%- if slider_enable and section.settings.navigation_position == 'middle' -%}
+      <div class="gallery--list-slider">
+    {%- endif -%}
+    <div
+      class="{{ container_class }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+      {% endif %}
+    >
+      {%- if slider_enable -%}<div class="swiper-wrapper">{% endif %}
+      {%- for block in section.blocks -%}
+        {% case block.type %}
+          {% when 'item' %}
+            {% comment %} instagram item {% endcomment %}
+            {% liquid
+              assign highest_ratio = 0
+              for block in section.blocks
+                if block.settings.image.aspect_ratio > highest_ratio
+                  assign highest_ratio = block.settings.image.aspect_ratio
+                endif
+              endfor
+            %}
+            <div
+              class="instagram__list--item card--client-height {{ grid_item }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              {{ block.shopify_attributes }}
+              {% if settings.animations_reveal_on_scroll %}
+                data-cascade
+                style="--animation-order: {{ forloop.index }};"
+              {% endif %}
+            >
+              {%- if block.settings.link_label == blank and block.settings.link != blank -%}
+                <a class="d-block" href="{{ block.settings.link }}" target="_blank">
+              {% endif %}
+              <div
+                class="instagram__list--item-overlay"
+                style="
+                  --instagram--media-overlay-opacity: {{ section
+                  .settings.image_overlay_opacity | divided_by: 100.0 }};
+                "
+              >
+                <div class="instagram__list--media media--{{ section.settings.image_ratio }} {% if block.settings.image != blank or block.settings.video != blank %}media--transparent media{% else %} placeholder {% endif %} {% if section.settings.round_corner %} round--corner-media {% endif %}">
+                  {%- if block.settings.video -%}
+                    {{ block.settings.video | video_tag: autoplay: true, loop: true, controls: false, muted: true }}
+                  {%- elsif block.settings.image != blank -%}
+                    {%- capture sizes -%}(min-width: 992px) {% if section.blocks.size <= 2 %} {{ settings.container_lg_width }}px{% else %}{{ settings.container_lg_width | minus: 60 | divided_by: 3 }}px{% endif %}, (min-width: 750px) {% if section.blocks.size == 1 %}calc(100vw - 60px){% else %}550px{% endif %}, calc(100vw - 30px){%- endcapture -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 1420
+                      | image_tag: loading: 'lazy', sizes: sizes, widths: '275, 550, 710, 1420'
+                    }}
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                </div>
+                <span class="gallery__hover--icon">
+                  {% render 'icon-gallery', icon: block.settings.icon %}
+                </span>
+              </div>
+              {%- if block.settings.link_label == blank -%}
+                </a>
+              {% endif %}
+            </div>
+            {% comment %} Instagram Item .\ {% endcomment %}
+        {% endcase %}
+      {% endfor %}
+      {%- if slider_enable -%}</div>{% endif %}
+    </div>
+
+    {%- if slider_enable and section.settings.navigation_position == 'middle' -%}
+      <div
+        class="gallery--slider-navigate slider--controls--button slider--navgaition-button-absolute"
+        id="section__{{ section.id }}"
+      >
+        {%- if showNavigation -%}
+          <div class="swiper-button-prev product__slider--button">{% render 'slider-left-arrow-icon' %}</div>
+        {%- endif -%}
+        {%- if showPagination -%}
+          <div class="swiper-pagination product__slider--pagination"></div>
+        {%- endif -%}
+        {%- if showNavigation -%}
+          <div class="swiper-button-next product__slider--button">{% render 'slider-right-arrow-icon' %}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    {%- if slider_enable and section.settings.navigation_position == 'middle' -%}</div>{%- endif -%}
+    {% if section.settings.mobile_stack == false and section.settings.layout != 'slider' %}
+      </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+ {
+   "name": "Gallery",
+   "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+       "type": "inline_richtext",
+       "id": "heading",
+       "default": "Gallery",
+       "label": "t:sections.featured-collection.settings.title.label",
+       "info": "Use bold style to highlight text."
+   },
+    {
+    "type": "select",
+    "id": "heading_size",
+    "options": [
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h2",
+          "label": "Small"
+        }
+     ],
+     "default": "h1",
+      "label": "Heading size"
+    },
+    {
+        "type": "richtext",
+        "id": "subtitle",
+        "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Desktop heading alignment"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile heading alignment"
+    },
+     {
+        "type": "header",
+        "content": "Cards"
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "square",
+            "label": "t:sections.multicolumn.settings.image_ratio.options__3.label"
+          },
+          {
+            "value": "portrait",
+            "label": "t:sections.multicolumn.settings.image_ratio.options__2.label"
+          },
+          {
+            "value": "landscape",
+            "label": "Landscape"
+          },
+          {
+            "value": "circle",
+            "label": "t:sections.multicolumn.settings.image_ratio.options__4.label"
+          },
+          {
+            "value": "custom_0_5",
+            "label": "Custom - 0:5"
+          },
+          {
+            "value": "custom_0_7",
+            "label": "Custom - 0:7"
+          },
+          {
+            "value": "custom_1_5",
+            "label": "Custom - 1:5"
+          },
+          {
+            "value": "custom_1_7",
+            "label": "Custom - 1:7"
+          },
+          {
+            "value": "custom_1_9",
+            "label": "Custom - 1:9"
+          },
+          {
+            "value": "custom_2_1",
+            "label": "Custom - 2:1"
+          }
+        ],
+        "default": "square",
+        "label": "t:sections.multicolumn.settings.image_ratio.label"
+      },
+     {
+        "type": "checkbox",
+        "id": "round_corner",
+        "label": "Round corner",
+        "default": true
+      },
+     {
+         "type": "range",
+         "id": "image_overlay_opacity",
+         "min": 0,
+         "max": 100,
+         "step": 10,
+         "unit": "%",
+         "label": "Image overlay opacity",
+         "default": 20
+       },
+     {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "options": [
+          {
+            "value": "grid",
+            "label": "Grid"
+          },
+          {
+            "value": "slider",
+            "label": "Slider"
+          }
+        ],
+        "default": "slider",
+        "label": "Desktop layout"
+      },
+     {
+        "type": "select",
+        "id": "products_show_on_xl",
+        "label": "Number of columns on desktop",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          }
+        ],
+        "default": "5"
+      },
+     {
+        "type": "select",
+        "id": "products_show_on_sm",
+        "label": "Number of columns on mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          }
+        ],
+        "default": "2"
+      },
+       {
+           "type": "checkbox",
+           "id": "mobile_stack",
+           "label": "Stack on mobile",
+           "default": false,
+           "info": "This is only applicable to the Grid layout."
+       },
+     {
+      "type": "header",
+        "content": "Slider settings"
+      },
+  	{
+        "type": "checkbox",
+        "id": "auto_rotate",
+        "label": "Auto-rotate slides",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "change_slides_speed",
+        "min": 2,
+        "max": 9,
+        "step": 1,
+        "unit": "s",
+        "label": "Change slides every",
+        "default": 3
+      },
+       {
+        "type": "checkbox",
+        "id": "show_navigation",
+        "label": "Show navigation",
+        "default": true
+      },
+      {
+      "type": "select",
+      "id": "navigation_position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top of the section "
+        },
+        {
+          "value": "middle",
+          "label": "Middle of the section"
+        }
+      ],
+      "default": "top",
+      "label": "Navigation position"
+    },
+    {
+        "type": "color",
+        "id": "button_background",
+        "default": "#F6CB46",
+        "label": "Hover background color"
+      },
+      {
+        "type": "color",
+        "id": "button_text_color",
+        "default": "#FFFFFF",
+        "label": "Hover text color"
+    },
+     {
+      "type": "checkbox",
+      "id": "custom_colors_navigation",
+      "label": "Use custom colors for the navigation button",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "nav_foreground",
+      "default": "#121212",
+      "label": "Foreground color"
+    },
+    {
+      "type": "color",
+      "id": "nav_background",
+      "default": "#fff",
+      "label": "Background color"
+    },
+  {
+     "type": "header",
+     "content": "Section padding"
+   },
+   {
+         "type": "paragraph",
+         "content": "Desktop"
+       },
+       {
+         "type": "range",
+         "id": "padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       },
+	{
+         "type": "paragraph",
+         "content": "Mobile"
+       },
+	{
+         "type": "range",
+         "id": "mobile_padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "mobile_padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       }
+],
+"blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.multicolumn.blocks.column.settings.image.label"
+        },
+        {
+            "type": "select",
+            "id": "icon",
+            "options": [
+              {
+                "value": "none",
+                "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__1.label"
+              },
+               {
+                "value": "tiktok",
+                "label": "Tiktok"
+              },
+               {
+                "value": "instagram",
+                "label": "Instagram"
+              },
+               {
+                "value": "facebook",
+                "label": "Facebok"
+              },
+               {
+                "value": "twitter",
+                "label": "Twitter"
+              },
+               {
+                "value": "snapchat",
+                "label": "Snapchat"
+              },
+               {
+                "value": "youtube",
+                "label": "YouTube"
+              },
+               {
+                "value": "vimeo",
+                "label": "Vimeo"
+              },
+               {
+                "value": "linkedin",
+                "label": "Linkedin"
+              },
+               {
+                "value": "whatsapp",
+                "label": "Whatsapp"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+		{
+                "value": "award",
+                "label": "Award"
+              },
+		{
+                "value": "alarm",
+                "label": "Alarm"
+              },
+		{
+                "value": "camera",
+                "label": "Camera"
+              },
+		{
+                "value": "check",
+                "label": "Check"
+              },
+		{
+                "value": "clock",
+                "label": "Clock"
+              },
+		{
+                "value": "compass",
+                "label": "Compass"
+              },
+		{
+                "value": "card",
+                "label": "Credit card"
+              },
+		{
+                "value": "dollar",
+                "label": "Dollar icon"
+              },
+		{
+                "value": "gift",
+                "label": "Gift"
+              },
+		{
+                "value": "lock",
+                "label": "Lock"
+              },
+		{
+                "value": "map",
+                "label": "Map"
+              },
+		{
+                "value": "mic",
+                "label": "Mic"
+              },
+		{
+                "value": "monitor",
+                "label": "Monitor"
+              },
+		{
+                "value": "moon",
+                "label": "Moon"
+              },
+		{
+                "value": "music",
+                "label": "Music"
+              },
+		{
+                "value": "phone",
+                "label": "Phone"
+              },
+		{
+                "value": "printer",
+                "label": "Printer"
+              },
+		{
+                "value": "compare",
+                "label": "Compare"
+              },
+		{
+                "value": "search",
+                "label": "Search"
+              },
+		{
+                "value": "cart",
+                "label": "Cart"
+              },
+		{
+                "value": "bag",
+                "label": "Bag"
+              },
+		{
+                "value": "smart_phone",
+                "label": "Smart phone"
+              },
+		{
+                "value": "smile",
+                "label": "Smile"
+              },
+		{
+                "value": "sun",
+                "label": "Sun"
+              },
+		{
+                "value": "thumbs_up",
+                "label": "Thumbs up"
+              },
+		{
+                "value": "thumbs_down",
+                "label": "Thumbs down"
+              },
+		{
+                "value": "trash",
+                "label": "Trash"
+              },
+		{
+                "value": "umbrella",
+                "label": "Umbrella"
+              },
+		{
+                "value": "user",
+                "label": "User"
+              },
+		{
+                "value": "users",
+                "label": "Users"
+              },
+		{
+                "value": "watch",
+                "label": "Watch"
+              }
+            ],
+            "default": "instagram",
+            "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.label"
+          },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+"presets": [
+     {
+       "name": "Gallery",
+       "blocks": [
+          {
+            "type": "item"
+          },
+          {
+            "type": "item"
+          },
+          {
+            "type": "item"
+          },
+          {
+            "type": "item"
+          },
+          {
+            "type": "item"
+          }
+        ]
+     }
+   ],
+   "disabled_on": {
+    "groups": ["header"]
+  }
+ }
+{% endschema %}

@@ -1,0 +1,476 @@
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  if section.settings.collection_type == 'all'
+    case section.settings.sort
+      when 'products_high', 'products_low'
+        assign collections = collections | sort: 'all_products_count'
+      when 'date', 'date_reversed'
+        assign collections = collections | sort: 'published_at'
+    endcase
+
+    if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+      assign collections = collections | reverse
+    endif
+  endif
+-%}
+
+<style>
+    .section-{{ section.id }}-padding {
+     margin-top: {{ section.settings.mobile_padding_top }}px;
+     margin-bottom: {{ section.settings.mobile_padding_bottom }}px;
+   }
+   @media screen and (min-width: 750px) {
+     .section-{{ section.id }}-padding {
+       margin-top: {{ section.settings.padding_top }}px;
+       margin-bottom: {{ section.settings.padding_bottom }}px;
+     }
+   }
+  .collection__list--page .media--round {
+    border-radius: 3rem;
+    background: transparent;
+  }
+  .collection-list__item:hover .media > img {
+      transform: scale(1.03);
+  }
+  .collection-list__item .media > img {
+      transition: opacity .4s cubic-bezier(.25,.46,.45,.94), transform .55s cubic-bezier(0.26, 0.54, 0.32, 1);
+  }
+</style>
+<div class="page__wrapper collection__list--page section-{{ section.id }}-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="page__header text-center mb-50">
+          {%- if section.settings.heading_tag == 'h1' -%}
+            <h1 class="title title--primary">{{ section.settings.title | escape }}</h1>
+          {%- else -%}
+            <h2 class="title title--primary h1">{{ section.settings.title | escape }}</h2>
+          {%- endif -%}
+          <p class="mb-0">{{ section.settings.page_description }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="row  {% if section.settings.column == "5" %} row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 {% endif %}">
+      {%- liquid
+        if section.settings.layout == 'masonry'
+          assign columns = section.blocks.size
+          if columns > 3
+            assign columns = 3
+          endif
+        else
+          assign columns = section.settings.column
+        endif
+
+        if section.settings.layout == 'standard'
+          assign column_set = section.settings.column
+          case column_set
+            when '1'
+              assign column_class_standard = 'col-12'
+            when '2'
+              assign column_class_standard = 'col-md-6 col-sm-6 col-12'
+            when '3'
+              assign column_class_standard = 'col-md-4 col-sm-6 col-12'
+            when '4'
+              assign column_class_standard = 'col-md-3 col-sm-6 col-12'
+            else
+              assign column_class_standard = 'col'
+          endcase
+        endif
+      -%}
+
+      {%- if section.settings.collection_type == 'all' -%}
+        {%- for collection in collections -%}
+          {%- liquid
+            if section.settings.layout == 'masonry'
+              if forloop.index > 2
+                assign column_class = 'col-md-4 col-sm-6 col-12'
+              else
+                assign column_class = 'col-md-6 col-sm-6 col-12'
+              endif
+            endif
+          -%}
+          <div
+            class="collection-list__item {{ column_class }} {{ column_class_standard }} mb-30 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            {%- render 'collection-card',
+              collection: collection,
+              product_count: section.settings.product_count,
+              image_ratio: section.settings.image_ratio,
+              columns: columns,
+              radius: section.settings.image_round_corner,
+              content_position: section.settings.show_content_below_image,
+              title_design: section.settings.title_design,
+              button_size: section.settings.card_button_size,
+              button_type: section.settings.card_button_style,
+              show_content_below_image_mobile: section.settings.show_content_below_image_mobile
+            -%}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            if section.settings.layout == 'masonry'
+              if forloop.index > 2
+                assign column_class = 'col-md-4 col-sm-6 col-12'
+              else
+                assign column_class = 'col-md-6 col-sm-6 col-12'
+              endif
+            endif
+          -%}
+          {%- case block.type -%}
+            {%- when 'collection_item' -%}
+              {% assign collection = collections[block.settings.collection] %}
+              <div
+                class="collection-list__item {{ column_class }} {{ column_class_standard }} mb-30 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {%- render 'collection-card',
+                  collection: collection,
+                  custom_image: block.settings.image,
+                  product_count: section.settings.product_count,
+                  image_ratio: section.settings.image_ratio,
+                  columns: columns,
+                  radius: section.settings.image_round_corner,
+                  content_position: section.settings.show_content_below_image,
+                  title_design: section.settings.title_design,
+                  button_size: section.settings.card_button_size,
+                  button_type: section.settings.card_button_style,
+                  show_content_below_image_mobile: section.settings.show_content_below_image_mobile
+                -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-list-collections.name",
+  "class": "spaced-section",
+  "settings": [
+	{
+          "type": "radio",
+          "id": "collection_type",
+          "label": "Show collections",
+          "default": "all",
+          "options": [
+            {
+              "value": "all",
+              "label": "All"
+            },
+            {
+              "value": "selected",
+              "label": "Selected"
+            }
+          ]
+     },
+	{
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Grid"
+        },
+        {
+          "value": "masonry",
+          "label": "Collage"
+        }
+      ],
+      "default": "masonry",
+      "label": "Layout"
+    },
+	{
+        "type": "select",
+        "id": "column",
+        "label": "Number of columns on desktop",
+	  	"info": "Works on the grid layout",
+        "options": [
+		  {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+		  {
+            "value": "5",
+            "label": "5"
+          }
+        ],
+        "default": "3"
+    },
+     {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "background-1",
+      "label": "t:sections.main-list-collections.settings.color_scheme.label"
+       },
+    {
+      "type": "header",
+      "content": "Collection card"
+    },
+   {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__3.label"
+        },
+        {
+          "value": "circle",
+          "label": "circle"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.main-list-collections.settings.image_ratio.label",
+      "info": "t:sections.main-list-collections.settings.image_ratio.info"
+    },
+     {
+        "type": "checkbox",
+        "id": "image_round_corner",
+        "default": true,
+        "label": "Round the corners of the image"
+      },
+    {
+      "type": "checkbox",
+      "id": "product_count",
+      "default": false,
+      "label": "Show product count"
+    },
+     {
+     "type": "checkbox",
+     "id": "show_content_below_image",
+     "label": "Show content below the images",
+     "default": true
+     },
+    {
+    "type": "select",
+    "id": "title_design",
+    "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "button",
+          "label": "Button"
+        }
+     ],
+     "default": "text",
+      "label": "Title design"
+    },
+    {
+        "type": "select",
+        "id": "card_button_style",
+        "label": "Button type",
+        "default": "primary",
+        "info": "It works if you select the \"Title design\" button.",
+        "options": [
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "primary",
+            "label": "Primary"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "card_button_size",
+        "label": "Button size",
+        "default": "medium",
+        "info": "It works if you select the \"Title design\" button.",
+        "options": [
+          {
+            "value": "large",
+            "label": "Large"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+                  {
+            "value": "small",
+            "label": "Small"
+          }
+        ]
+      },
+    {
+     "type": "checkbox",
+     "id": "show_content_below_image_mobile",
+     "label": "Show content below the images on mobile",
+     "default": true
+     },
+	{
+      "type": "header",
+      "content": "Show all collections"
+    },
+	{
+      "type": "select",
+      "id": "sort",
+      "options": [
+        {
+          "value": "alphabetical",
+          "label": "t:sections.main-list-collections.settings.sort.options__1.label"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "t:sections.main-list-collections.settings.sort.options__2.label"
+        },
+        {
+          "value": "date_reversed",
+          "label": "t:sections.main-list-collections.settings.sort.options__3.label"
+        },
+        {
+          "value": "date",
+          "label": "t:sections.main-list-collections.settings.sort.options__4.label"
+        },
+        {
+          "value": "products_high",
+          "label": "t:sections.main-list-collections.settings.sort.options__5.label"
+        },
+        {
+          "value": "products_low",
+          "label": "t:sections.main-list-collections.settings.sort.options__6.label"
+        }
+      ],
+      "default": "alphabetical",
+      "label": "t:sections.main-list-collections.settings.sort.label"
+    },
+	{
+      "type": "header",
+      "content": "Page header"
+    },
+	{
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.main-list-collections.settings.title.label",
+      "default": "Collections"
+    },
+	 {
+      "type": "select",
+      "id": "heading_tag",
+      "options": [
+        {
+          "value": "h1",
+          "label": "h1"
+        },
+        {
+          "value": "h2",
+          "label": "h2"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading tag",
+      "info": "Used for accessibility and SEO"
+    },
+	{
+      "type": "richtext",
+      "id": "page_description",
+      "label": "Description",
+	  "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 0
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 0
+        }
+  ],
+  "blocks": [
+    {
+      "type": "collection_item",
+      "name": "Collection Item",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select collection"
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Optional! Instead of the collection's image, the selected image will be displayed."
+         }
+      ]
+    }
+  ]
+}
+{% endschema %}

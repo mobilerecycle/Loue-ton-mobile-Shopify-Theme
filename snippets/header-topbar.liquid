@@ -1,0 +1,97 @@
+<style>
+  button.dropdown__open_label {
+    background: none;
+    border: none;
+  }
+  button.dropdown__open_label  svg{
+    height: 10px;
+  }
+  a.dropdown__list__item {
+    padding: 5px 10px;
+    display: block;
+    border-radius: 5px;
+  }
+  .dropdown__open_list {
+    position: absolute;
+    top: 100%;
+    background: #fff;
+    left: 0;
+    width: 200px;
+    z-index: 99;
+    box-shadow: 0 20px 30px rgb(0 0 0 / 12%);
+    border-radius: 5px;
+    max-height: 290px;
+    overflow-y: scroll;
+}
+  .dropdown__list__item:hover, .dropdown__list__item.active {
+    background: #f5f5f5;
+  }
+  .header__topbar {
+    padding: 1rem 0;
+  }
+  .disclosure {
+    position: relative;
+  }
+</style>
+
+
+<div class="header__topbar color-{{ section.settings.topbar_color_scheme }}">
+  <div class="{{ container }}">
+    <div class="row align-items-center">
+      <div class="col d-flex">
+        {%- if localization.available_countries.size > 1 -%}
+        <localization-form >
+          {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+          <div class="no-js-hidden">
+            <div class="disclosure">
+              <button type="button" class="dropdown__open_label" aria-expanded="false" aria-controls="FooterCountryList" aria-describedby="FooterCountryLabel">
+                 {{ localization.country.name }} {{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }}
+                {% render 'icon-caret' %}
+              </button>
+              <ul id="FooterCountryList" role="list" class="dropdown__open_list list-unstyled" hidden>
+                {%- for country in localization.available_countries -%}
+                <li class="disclosure__item" tabindex="-1">
+                  <a class="dropdown__list__item {% if country.iso_code == localization.country.iso_code %}active{% endif %} " href="#"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %} data-value="{{ country.iso_code }}">
+                   {{ country.name }}  <span class="localization-form__currency">{{ country.currency.iso_code }} {{ country.currency.symbol }}</span>
+                  </a>
+                </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+            <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+          </div>
+          {%- endform -%}
+        </localization-form>
+        {%- endif -%}
+
+        {%- if localization.available_languages.size > 1 -%}
+        <localization-form>
+          {%- form 'localization', id: 'FooterLanguageForm' -%}
+          <div class="no-js-hidden">
+            <div class="disclosure">
+              <button type="button" class="dropdown__open_label" aria-expanded="false" aria-controls="FooterLanguageList" aria-describedby="FooterLanguageLabel">
+                {{ localization.language.endonym_name | capitalize }}
+                {% render 'icon-caret' %}
+              </button>
+              <ul id="FooterLanguageList" role="list" class="dropdown__open_list list-unstyled" hidden>
+                {%- for language in localization.available_languages -%}
+                <li class="disclosure__item" tabindex="-1">
+                  <a class="dropdown__list__item {% if language.iso_code == localization.language.iso_code %} active{% endif %} f" href="#" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %} data-value="{{ language.iso_code }}">
+                    {{ language.endonym_name | capitalize }}
+                  </a>
+                </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+            <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+          </div>
+          {%- endform -%}
+        </localization-form>
+        {%- endif -%}
+      </div>
+      {%- render 'social-media', className: "col footer__list-social text-right flex-grow-1" -%}
+
+    </div>
+  </div>
+</div>
+

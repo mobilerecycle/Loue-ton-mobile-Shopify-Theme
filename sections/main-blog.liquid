@@ -1,0 +1,270 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-blog.css' | asset_url | stylesheet_tag }}
+{{ 'breadcrumbs.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  @media only screen and (min-width: {{ settings.container_lg_width }}px){
+    .blog-articles__article.first--article .article-card__info {
+      padding-left: 100px;
+      padding-right: 140px;
+    }
+  }
+{%- endstyle -%}
+
+{% if theme_rtl %}
+  {{ 'section-featured-blog-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{%- paginate blog.articles by section.settings.article_to_show -%}
+  <div class="main-blog section-{{ section.id }}-padding">
+    <div class="container">
+      <h1 class="title--primary">{{ blog.title | escape }}</h1>
+      <div class="blog-articles row">
+        {%- for article in blog.articles -%}
+          {%- liquid
+            assign column = 'col-lg-4'
+            assign space_bottom = 'mb-30'
+            assign article_btn = false
+
+            if section.settings.layout == 'masonry'
+              assign space_bottom = 'mb-50'
+
+              if forloop.first == true
+                assign column = 'col-lg-12 first--article'
+                assign space_bottom = 'mb-100'
+                assign article_btn = section.settings.show_read_btn
+              endif
+
+              if forloop.index == 2 or forloop.index == 3
+                assign column = 'col-lg-6'
+              endif
+            endif
+          -%}
+
+          <div class="blog-articles__article article {{ column }} {{ space_bottom }}">
+            {% render 'article-card',
+              show_content: section.settings.show_content,
+              blog: section.settings.blog,
+              article: article,
+              show_image: section.settings.show_image,
+              show_date: section.settings.show_date,
+              show_author: section.settings.show_author,
+              show_comment: section.settings.show_comment,
+              hover_arrow: section.settings.hover_arrow,
+              article_btn: article_btn,
+              media_height: section.settings.image_ratio,
+              media_aspect_ratio: article.image.aspect_ratio,
+              round_image: section.settings.image_round_corner
+            %}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-blog.name",
+  "tag": "section",
+  "disabled_on": {
+      "groups": ["header"]
+    },
+  "class": "spaced-section",
+  "settings": [
+    {
+    "type": "header",
+    "content": "Layout"
+    },
+	{
+        "type": "select",
+        "id": "layout",
+        "options": [
+          {
+            "value": "standard",
+            "label": "Grid"
+          },
+          {
+            "value": "masonry",
+            "label": "Collage"
+          }
+        ],
+        "default": "masonry",
+        "label": "Blog layout"
+      },
+    {
+      "type": "header",
+      "content": "t:sections.main-blog.settings.header.content"
+    },
+	{
+      "type": "range",
+      "id": "article_to_show",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 6,
+      "label": "Posts per page"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "t:sections.featured-blog.settings.show_image.label",
+      "info": "t:sections.featured-blog.settings.show_image.info"
+    },
+	{
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "adapt",
+            "label": "Adap to image"
+          },
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "medium",
+        "label": "Image height"
+    },
+    {
+        "type": "checkbox",
+        "id": "image_round_corner",
+        "default": true,
+        "label": "Round the corners of the image"
+      },
+	{
+      "type": "checkbox",
+      "id": "show_content",
+      "default": false,
+      "label": "Show content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": false,
+      "label": "t:sections.featured-blog.settings.show_date.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "t:sections.featured-blog.settings.show_author.label"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_comment",
+      "default": false,
+      "label": "Show comment"
+    },
+	{
+      "type": "checkbox",
+      "id": "hover_arrow",
+      "default": false,
+      "label": "Show hover arrow"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_read_btn",
+      "default": false,
+      "label": "Show read button",
+	  "info": "Works with collage layout"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-blog.settings.paragraph.content"
+    },
+	 {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 0
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 0
+        }
+  ]
+}
+{% endschema %}

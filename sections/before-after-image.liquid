@@ -1,0 +1,343 @@
+{{ 'image-comparison.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<script src="{{ 'image-comparison.js' | asset_url }}" defer="defer"></script>
+<div class="image--comparison section-{{ section.id }}-padding ">
+  {% if section.settings.heading != blank or section.settings.subtitle != blank %}
+    <div class="container">
+      <div class="section-heading text-{{ section.settings.alignment }} mobile-text-{{ section.settings.mobile_alignment }}  {% if section.settings.heading != blank or section.settings.subtitle != blank  %}mb-50 {% endif %}">
+        <h2 class="section-heading__title {{ section.settings.heading_size }} rte gradient--title">
+          {{- section.settings.heading -}}
+        </h2>
+        <span class="section-heading__sub_title">{{- section.settings.subtitle -}}</span>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="container">
+    <image-comparison class="image--comparison-wrapper" data-layout="horizontal" style="--percent: 50%;">
+      <div class="image--comparison__before">
+        <div
+          class="image-comparison--media image-comparison--media--{{ section.settings.height }} media {% if section.settings.image == blank %}placeholder{% endif %}"
+          {% if section.settings.height == 'adapt' and section.settings.image != blank %}
+            style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+          {% endif %}
+        >
+          {%- if section.settings.image != blank -%}
+            {%- capture sizes -%}(min-width: {{ settings.container_lg_width }}px) {{ settings.container_lg_width | minus: 100 }}px, (min-width: 750px) calc(100vw - 10rem), 100vw{%- endcapture -%}
+            {% liquid
+              assign height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio | round
+
+              if section.settings.mobile_image != blank
+                assign slide_image_class = 'small-hide'
+              endif
+            %}
+            {{
+              section.settings.image
+              | image_url: width: 1500
+              | image_tag:
+                loading: 'lazy',
+                sizes: sizes,
+                widths: '165, 360, 535, 750, 1070, 1500, 1780, 2000, 3000',
+                height: height,
+                class: slide_image_class
+            }}
+          {%- else -%}
+            {% if section.settings.mobile_image != blank %}
+              {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg-addition small-hide' }}
+            {% else %}
+              {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg-addition' }}
+            {% endif %}
+          {%- endif -%}
+
+          {% if section.settings.mobile_image != blank %}
+            {% liquid
+              assign mobile_slide_height = section.settings.mobile_image.width | divided_by: section.settings.mobile_image.aspect_ratio | round
+            %}
+            {{
+              section.settings.mobile_image
+              | image_url: width: 1500
+              | image_tag:
+                loading: 'lazy',
+                height: mobile_slide_height,
+                sizes: '100vw',
+                widths: '375, 550, 750, 1100, 1500',
+                class: 'd-sm-only-visible'
+            }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="image--comparison__after">
+        <div class="media {% if section.settings.image_2 == blank %}placeholder{% endif %}">
+          {%- if section.settings.image_2 != blank -%}
+            {%- capture sizes -%}(min-width: {{ settings.container_lg_width }}px) {{ settings.container_lg_width | minus: 100 }}px, (min-width: 750px) calc(100vw - 10rem), 100vw{%- endcapture -%}
+            {% liquid
+              assign height = section.settings.image_2.width | divided_by: section.settings.image_2.aspect_ratio | round
+
+              if section.settings.mobile_image_2 != blank
+                assign slide_image_class = 'small-hide'
+              endif
+            %}
+            {{
+              section.settings.image_2
+              | image_url: width: 1500
+              | image_tag:
+                loading: 'lazy',
+                sizes: sizes,
+                widths: '165, 360, 535, 750, 1070, 1500, 1780, 2000, 3000',
+                height: height,
+                class: slide_image_class
+            }}
+          {%- else -%}
+            {% if section.settings.mobile_image_2 != blank %}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg-addition small-hide' }}
+            {% else %}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg-addition' }}
+            {% endif %}
+          {%- endif -%}
+
+          {% if section.settings.mobile_image_2 != blank %}
+            {% liquid
+              assign mobile_slide_height = section.settings.mobile_image_2.width | divided_by: section.settings.mobile_image_2.aspect_ratio | round
+            %}
+            {{
+              section.settings.mobile_image_2
+              | image_url: width: 1500
+              | image_tag:
+                loading: 'lazy',
+                height: mobile_slide_height,
+                sizes: '100vw',
+                widths: '375, 550, 750, 1100, 1500',
+                class: 'd-sm-only-visible'
+            }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="image-comparison__button"
+        aria-label="{{ 'sections.before-and-after-slider.navigator' | t }}"
+      >
+        <span>
+          <svg viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.33333 17.3332L0 8.99984L8.33333 0.666504L9.8125 2.14567L2.95833 8.99984L9.8125 15.854L8.33333 17.3332Z" fill="currentColor"/>
+          </svg>
+          <svg viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.66667 17.3332L10 8.99984L1.66667 0.666504L0.187502 2.14567L7.04167 8.99984L0.187502 15.854L1.66667 17.3332Z" fill="currentColor"/>
+          </svg>
+        </span>
+      </button>
+    </image-comparison>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Before/after image slider",
+  "settings": [
+     {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+        "type": "inline_richtext",
+        "id": "heading",
+        "default": "Before & after",
+        "label": "t:sections.featured-collection.settings.title.label",
+        "info": "Use bold style to highlight text."
+    },
+    {
+    "type": "select",
+    "id": "heading_size",
+    "options": [
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h2",
+          "label": "Small"
+        }
+     ],
+     "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "default": "Share information about your brand with your customers.",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Desktop heading alignment"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile heading alignment"
+    },
+    {
+      "type": "header",
+      "content": "Before image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "header",
+      "content": "After image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image_2",
+      "label": "Mobile image"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to first image"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.image-with-text.settings.height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image-with-text.settings.height.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.image-with-text.settings.height.label"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+          "type": "paragraph",
+          "content": "Desktop"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        },
+		{
+          "type": "paragraph",
+          "content": "Mobile"
+        },
+		{
+          "type": "range",
+          "id": "mobile_padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 50
+        }
+  ],
+  "presets": [
+    {
+      "name": "Before/after image slider"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header","footer"]
+  }
+}
+{% endschema %}

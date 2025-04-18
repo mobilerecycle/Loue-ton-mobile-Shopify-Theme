@@ -1,0 +1,46 @@
+@media only screen and (min-width: 992px) {
+  .lookboo--text__content .image-with-text__text {
+    padding-right: 0;
+    padding-left: 8rem;
+  }
+}
+@media only screen and (min-width: 750px) {
+  .image-with-text__grid.rounded--image:not(.desktop-row-reverse)
+    .image-with-text__media:not(.lookbook__media--fullwidth),
+  .image-with-text__grid.rounded--image:not(.desktop-row-reverse)
+    .image-with-text__media:not(.lookbook__media--fullwidth)
+    > img {
+    border-radius: 0 2.5rem 2.5rem 0;
+  }
+  .image-with-text__grid.rounded--image.desktop-row-reverse
+    .image-with-text__media:not(.lookbook__media--fullwidth),
+  .image-with-text__grid.rounded--image.desktop-row-reverse
+    .image-with-text__media:not(.lookbook__media--fullwidth)
+    > img {
+    border-radius: 2.5rem 0 0 2.5rem;
+  }
+}
+.image-with-text__grid.rounded--image
+  .image-with-text__media.lookbook__media--fullwidth:not(
+    .lookbook__media--fullwidth--reverse
+  ),
+.image-with-text__grid.rounded--image
+  .image-with-text__media.lookbook__media--fullwidth:not(
+    .lookbook__media--fullwidth--reverse
+  )
+  > img {
+  border-radius: 2.5rem 2.5rem 0 0;
+}
+.image-with-text__grid.rounded--image
+  .image-with-text__media.lookbook__media--fullwidth.lookbook__media--fullwidth--reverse,
+.image-with-text__grid.rounded--image
+  .image-with-text__media.lookbook__media--fullwidth.lookbook__media--fullwidth--reverse
+  > img {
+  border-radius: 0 0 2.5rem 2.5rem;
+}
+.complementary-slideshow--slider .swiper-button-prev.slideshow--nav-button {
+  transform: rotate(-180deg);
+}
+.complementary-slideshow--slider .swiper-button-next.slideshow--nav-button {
+  transform: rotate(-180deg);
+}

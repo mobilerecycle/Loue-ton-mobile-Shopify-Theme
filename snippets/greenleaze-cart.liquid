@@ -1,0 +1,196 @@
+{% comment %}
+Used on cart page
+  {% render 'greenleaze-abonnement-cart' %}
+
+Add the script in head of the page if needed
+{% endcomment %}
+
+
+<div class="btn btn--full btn--status button greenleaze-button greenleaze-button-cart">
+  Louer
+</div>      
+<script>
+
+if(!window.greenleazeScript){
+  window.greenleazeScript = true;
+  try {
+  var script = document.createElement('script');
+  script.src = "{{ 'greenleaze-script.js' | asset_url }}";    
+  document.head.appendChild(script);
+    } catch (e) {
+    console.error(e)
+    }
+}
+// Listen for events
+window.addEventListener("message", function (event) {
+if (event.data.type === "closeGreenleazeModal") {
+  document.querySelector("#modal-abonnement-cart--greenleaze").style.display =
+    "none";
+}
+if (event.data.type === "submitGreenleazeModal") {
+  sendCartAndRedirect(
+    event.data?.duration,
+    null,
+    event.data?.pdistinctId
+  ).then(() => {
+    document.querySelector("#modal-abonnement-cart--greenleaze").style.display =
+      "none";
+  });
+}
+if (event.data.type === "openGreenleazeModal") {
+  document.querySelector("#modal-abonnement-cart--greenleaze").style.display =
+    "block";
+}
+});
+// Get price array in format {[duration]: {month: 0, initial: 0}} stringify + url encoded
+
+if(typeof init !== "undefined" && init === true) { // In case the script already loaded
+addModalAndButtonPriceCart()
+} else { // Else we wait it finishes 
+window.addEventListener("greenleazePriceActualize", function (event) {
+  addModalAndButtonPriceCart()
+  
+})
+ 
+}
+// This depends on your implementation 
+window.addEventListener("change", function(event){
+setTimeout(() => addModalAndButtonPriceCart(), 1500)
+})
+
+
+async function getAllPricesForcart() {
+const cartContentsRes = await fetch(window.Shopify.routes.root + 'cart.js');
+
+const cartContents =( await cartContentsRes.json());
+const items = cartContents.items;
+if (items.length === 0) {
+  console.error('No product in cart');
+  return;
+}
+const products = items.reduce(
+(acc, item) => acc + (acc == '' ? '' : ',') + item.product_id,
+''
+);
+const metas = await (await getMetadatas(products)).json();
+
+
+const priceForCart = {} // Format : {[duration]: {[productName]: {monthly: 0, initial: 0}}} // Price are ttc
+monthValues.forEach((duration) => {
+  priceForCart[duration] = {}
+})
+items.forEach((item) => {
+  if (metas[item.product_id]?.value === 'true') {
+    monthValues.forEach((duration) => {
+      priceForCart[duration][item.title] = {
+          monthly: 0,
+          initial: (item.final_price / 100)
+      }
+    })
+  } else {
+    monthValues.forEach((duration) => {
+      const prices = getRuleByProductPriceAndDuration((item.final_price / 100)/1.2, duration)
+      priceForCart[duration][item.title] = {monthly: +prices.monthly * +item.quantity, initial: +prices.initial * +item.quantity, quantity: +item.quantity}
+    })
+  }
+})
+return priceForCart
+
+}
+async function getMetadatas(productsReduced) {
+
+const metas = await fetch(
+'/apps/greenleaze-proxy/metadata?products=' + productsReduced,
+{
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  },
+}
+);
+return metas;
+}
+async function addModalAndButtonPriceCart() {
+const pricesForcart = await getAllPricesForcart();
+const minMonthItems = pricesForcart[monthValues[monthValues.length - 1]]
+const minMonthlyPaiement = Object.values(minMonthItems).reduce(
+  (acc, curr) => acc + +curr.monthly,
+  0
+);
+  document.querySelectorAll(".greenleaze-button-cart").forEach((button) => {
+      button.innerText = `Louer à partir de ${minMonthlyPaiement}€ / mois`
+  })
+  const pricePerDurationEncoded = encodeURI(JSON.stringify(pricesForcart))
+  if(!trackingId) trackingId =
+        window.ShopifyAnalytics?.lib?.user()?.traits()?.uniqToken ||
+        self?.crypto?.randomUUID();
+const modalContent = `
+<iframe class="modal-abonnement-cart--greenleaze" src="/apps/greenleaze-proxy/modal-cart?durations=${pricePerDurationEncoded}&trackingId=${trackingId}">
+  </iframe>
+`;
+const existingModal = document.querySelector("#modal-abonnement-cart--greenleaze")
+if (existingModal) {  // Remove it so price  actualize
+  existingModal.remove()
+}
+  // Append it to the body or desired container
+  const modalContainer = document.createElement("div");
+  modalContainer.classList.add("modal-abonnement-cart--greenleaze");
+  modalContainer.id = "modal-abonnement-cart--greenleaze";
+  modalContainer.innerHTML = modalContent;
+  modalContainer.style.display = "none";
+  document.body.appendChild(modalContainer);
+
+document.querySelectorAll(".greenleaze-button-cart").forEach((button) => { 
+  // If multiple button on a page you may want to edit this
+  button.addEventListener("click", function () {
+    const modal = document.querySelector("#modal-abonnement-cart--greenleaze");
+    modal.style.display = "block";
+  });
+});
+}
+
+</script>
+
+
+<style>
+.greenleaze-button-cart {
+margin-top: 10px;
+background-color: #0D5537;
+border-color: #0D5537;
+margin-bottom: 0px;
+width: 100%;
+cursor: pointer;
+
+}
+.greenleaze-button-cart:hover {
+background-color: #0c402b;
+border-color: #0c402b;
+}
+.display-none {
+display: none;
+}
+.modal-abonnement-cart--greenleaze {
+height: 100vh;
+width: 100vw;
+padding-inline: 0;
+margin-inline: 0;
+border: none;
+padding: 0;
+position: fixed;
+top: 0;
+left: 0;
+z-index: 99999999;
+}
+.greenleaze-button-cart::after {
+content: none;
+position: absolute;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+z-index: 1;
+/* border-radius: var(--buttons-radius); */
+box-shadow: none;
+}
+</style>

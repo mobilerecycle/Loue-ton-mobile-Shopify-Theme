@@ -1,0 +1,187 @@
+.announcement-collapsible__inner {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+  position: relative;
+}
+.button--announcement > svg {
+  width: 1.2rem;
+  transition: var(--transition);
+}
+.button--announcement.show--dropdown > svg {
+  transform: rotate(180deg);
+}
+.button--announcement > span {
+  flex-shrink: 0;
+}
+.announcement__wrapper {
+  padding: 0.8rem 0 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  color: rgb(var(--color-foreground));
+}
+.announcement-collapsible-content {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+.announment--bar-social-media .list-social__link {
+  color: currentColor !important;
+}
+.announment--bar-social-media .list-social__link {
+  padding: 0.5rem;
+}
+.announment--bar-social-media .list-social__link + .list-social__link {
+  margin-left: 0.5rem;
+}
+.announcement-bar-innner {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding-bottom: 0.8rem;
+}
+.announment--bar-social-media {
+  align-items: center;
+  height: 100%;
+}
+@media only screen and (min-width: 1300px) {
+  .announcement-bar-innner {
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1299px) {
+  .announcement-bar-innner {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1080px) {
+  .announcement-bar-innner {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+/* Announment collapsible content css */
+.collapsible-content--template-inner {
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+}
+.announcement-collapsible-content-close {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  top: 0;
+  min-height: 7rem;
+}
+.announcement-collapsible-text {
+  font-size: 1.7rem;
+}
+.collapsible-content--template-grid {
+  display: grid;
+  gap: 5rem;
+}
+.collapsible__content--background-image .collapsible-content--template-inner {
+  padding: 2rem 1.5rem;
+}
+@media only screen and (min-width: 750px) {
+  .background-image--in-collapsible-content,
+  .no-image--in-collapsible-content {
+    max-width: calc(2 / 3 * 100%);
+  }
+  .collapsible-content--template-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .collapsible__content--background-image .collapsible-content--template-inner {
+    padding: 5rem 3rem;
+  }
+}
+.image-with-text__media--small {
+  height: 19.4rem;
+}
+
+.image-with-text__media--large {
+  height: 43.5rem;
+}
+
+.image-with-text__media--medium {
+  height: 30rem;
+}
+.collapsible--background__media--small {
+  min-height: 30rem;
+}
+.collapsible--background__media--medium {
+  min-height: 40rem;
+}
+.collapsible--background__media--large {
+  min-height: 50rem;
+}
+@media screen and (min-width: 750px) {
+  .image-with-text__media--small {
+    height: 31.4rem;
+  }
+  .image-with-text__media--medium {
+    height: 50rem;
+  }
+  .image-with-text__media--large {
+    height: 69.5rem;
+  }
+  .collapsible--background__media--small {
+    min-height: 38rem;
+  }
+  .collapsible--background__media--medium {
+    min-height: 50rem;
+  }
+  .collapsible--background__media--large {
+    min-height: 65rem;
+  }
+}
+.collapsible-content--template-content {
+  display: flex;
+  align-items: center;
+}
+.collapsible__content--background-image {
+  position: relative;
+}
+.collapsible__content--with-image.background--image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.collapsible__content--background-image .collapsible-content--template-content {
+  position: relative;
+  z-index: 10;
+}
+.collapsible__content--with-image.background--image > .media {
+  height: 100%;
+}
+.collapsible__content--background-image::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+.arrow__link--button > svg {
+  height: auto;
+  width: 2rem;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+.announcment--link-button {
+  display: inline-flex;
+  align-items: center;
+}
+.announcment--link-button .arrow__link--button {
+  line-height: 1;
+}
+@media only screen and (max-width: 991px) {
+  .button--announcement > svg {
+    width: 1.5rem;
+    margin-left: 0;
+  }
+  .button--announcement {
+    padding: 0.6rem;
+    width: 3rem;
+    height: 3rem;
+  }
+}

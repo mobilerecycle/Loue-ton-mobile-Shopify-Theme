@@ -1,0 +1,34 @@
+@media only screen and (min-width: 750px) {
+  .product-grid-item__actions.justify-content-end {
+    left: 15px;
+    right: auto;
+  }
+}
+.swiper-slide
+  .product--color-swatch-wrapper
+  .product--color-swatch:first-child
+  .swatch--variant-tooltip {
+  transform: translateY(-70%);
+  left: auto;
+  right: 0;
+}
+.swiper-slide
+  .product--color-swatch-wrapper
+  .product--color-swatch:first-child:hover
+  .swatch--variant-tooltip {
+  transform: translateY(-40%);
+}
+.swiper-slide
+  .product--color-swatch-wrapper
+  .product--color-swatch:first-child
+  .swatch--variant-tooltip:after {
+  left: auto;
+  right: 5px;
+  transform: translate(0);
+}
+@media only screen and (max-width: 749px) {
+  .product-grid-item__actions {
+    left: 15px;
+    right: auto;
+  }
+}

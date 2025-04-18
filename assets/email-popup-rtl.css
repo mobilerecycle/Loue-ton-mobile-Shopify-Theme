@@ -1,0 +1,31 @@
+button.email__popup--toggle {
+  right: auto;
+  left: 1rem;
+}
+@media only screen and (min-width: 750px) {
+  .email__popup__field-wrapper
+    .input__field_form:not(.email--button--full)
+    .button {
+    right: auto;
+    left: 3px;
+  }
+}
+@media only screen and (min-width: 750px) {
+  .email__popup--form
+    .input__field_form:not(.email--button--full)
+    .input__field {
+    padding-right: 1.5rem;
+    padding-left: 14.5rem;
+  }
+}
+.email__popup--media-position--left.email__popup--meida-active
+  .email__popup--content {
+  padding-inline-end: 33rem;
+  padding-inline-start: 3rem;
+}
+@media only screen and (max-width: 749px) {
+  .email__popup--media-position--left.email__popup--meida-active
+    .email__popup--content {
+    padding-inline-end: 3rem;
+  }
+}

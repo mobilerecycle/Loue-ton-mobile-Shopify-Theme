@@ -1,0 +1,187 @@
+/* Header Sub Menu */
+.header__sub_menu_item:hover {
+  color: rgba(var(--color-foreground), 0.75) !important;
+}
+/* Header Mega Menu */
+.header__mega_menu_item:hover {
+  color: rgba(var(--color-base-text-link-hover));
+}
+.header__mega_sub_menu_item:hover {
+  color: rgba(var(--color-base-text-link-hover));
+}
+.header__mega_menu {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+/* Submenu css */
+.header__sub_menu {
+  position: absolute;
+  z-index: 9;
+  top: 100%;
+  left: 0;
+  visibility: hidden;
+  width: 220px;
+  margin: 20px 0 0;
+  padding: 20px;
+  list-style: none;
+  transition: var(--transition);
+  opacity: 0;
+  box-shadow: 0 10px 20px rgba(var(--color-foreground), 0.1);
+  border-radius: 1rem;
+}
+.menu__item_has_children details-disclosure > details {
+  position: initial;
+}
+.header__sub_menu_li {
+  position: relative;
+  display: block;
+}
+.header__sub_menu_item {
+  line-height: 1;
+  display: inline-block;
+  padding: 12px 0;
+  color: rgba(var(--color-foreground));
+  position: relative;
+}
+.header__mega_menu {
+  position: absolute;
+  z-index: 98;
+  left: 0;
+  visibility: hidden;
+  margin: 2rem 0 0;
+  padding: 2.5rem;
+  list-style: none;
+  transition: var(--transition);
+  opacity: 0;
+  box-shadow: 0 2rem 1.5rem -1rem rgba(var(--color-foreground), 0.15);
+  right: 0;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
+}
+.header__mega_menu--inner:only-child {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  gap: 2rem;
+}
+.header__mega_menu--inner:not(:only-child) {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0;
+  gap: 2rem;
+}
+.header__mega_menu_li {
+  position: relative;
+  display: block;
+  flex: 1 0 auto;
+}
+.header__mega_menu_item {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  position: relative;
+  display: block;
+  padding: 12px 0;
+  color: rgba(var(--color-foreground));
+}
+
+/* Mega Menu Sub Menu */
+.header__mega_sub_menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header__mega_sub_menu_li {
+  display: block;
+}
+.header__mega_sub_menu_item {
+  line-height: 1.5;
+  display: inline-block;
+  padding: 12px 0;
+  position: relative;
+}
+.header__sub--menu-has-sub--item .header__sub_menu_item_text {
+  position: relative;
+}
+.header__mega_sub_menu_item::before,
+.header__sub_menu_item:not(.header__sub--menu-has-sub--item)::before,
+.header__sub--menu-has-sub--item .header__sub_menu_item_text::before {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0.1rem;
+  background: rgba(var(--color-foreground), 0.5);
+  bottom: 0.5rem;
+  transition: var(--transition);
+}
+.header__mega_sub_menu_item:hover::before,
+.header__sub_menu_item:not(.header__sub--menu-has-sub--item):hover::before,
+.header__sub--has-children:hover
+  .header__sub--menu-has-sub--item
+  .header__sub_menu_item_text:before {
+  width: 100%;
+}
+span.submenu__icon svg {
+  width: 1.2rem;
+  right: -1.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.header__sub--menu-has-sub--item .header__sub_menu_item_text:before {
+  bottom: 0;
+}
+/* Sub has children menu  */
+.header__sub_menu_li.header__sub--has-children {
+  position: relative;
+}
+ul.header__sub--children__menu {
+  position: absolute;
+  width: 22rem;
+  z-index: 9;
+  left: 100%;
+  top: 10%;
+  box-shadow: 0 10px 20px rgba(var(--color-foreground), 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+  padding: 1rem 2.5rem;
+  margin: 0;
+  border-radius: 1rem;
+}
+.header__sub--has-children .header__sub--menu-has-sub--item {
+  display: flex;
+  justify-content: space-between;
+}
+.header__sub--has-children:hover ul.header__sub--children__menu,
+.header__sub--has-children:focus-within ul.header__sub--children__menu {
+  opacity: 1;
+  visibility: visible;
+  top: 0;
+}
+span.header__sub--has-children--icon > svg {
+  width: 1.5rem;
+}
+a.header__sub_menu_item {
+  word-break: break-word;
+}
+/* Mega menu promo css  */
+.mega__menu--promo {
+  flex: 0 0 20rem;
+}
+.header__mega_menu:not(.mega__menu--wrapper),
+.header__mega_menu--inner {
+  flex: 1 1 100%;
+}
+.container.mega__menu--wrapper--column {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+@media only screen and (min-width: 1200px) {
+  .mega__menu--promo {
+    flex: 0 0 28rem;
+  }
+}
+details[open] > summary.header__menu_item::after {
+  width: 100%;
+}

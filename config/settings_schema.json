@@ -1,0 +1,841 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Mavon",
+    "theme_version": "9.0.0",
+    "theme_author": "Gloryio",
+    "theme_documentation_url": "https:\/\/gloryio.com\/docs\/",
+    "theme_support_url": "https:\/\/gloryio.com\/contact\/"
+  },
+  {
+    "name": "General settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.favicon.name"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:settings_schema.favicon.settings.favicon.label",
+        "info": "t:settings_schema.favicon.settings.favicon.info"
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.currency_format.name"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:settings_schema.currency_format.settings.paragraph"
+      },
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "t:settings_schema.currency_format.settings.currency_code_enabled.label",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Back to top"
+      },
+      {
+        "type": "checkbox",
+        "id": "back_top_enable",
+        "label": "Enable back to top",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Right-to-Left support"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_rtl",
+        "label": "Enable RTL",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "langauges_rtl",
+        "label": "Languages support RTL",
+        "default": "he,ar",
+        "info": "Enter the ISO language code, separate by comma. Leave blank to enable for all languages. [Check ISO language code](https:\/\/www.loc.gov\/standards\/iso639-2\/php\/code_list.php)",
+        "placeholder": "he,ar"
+      }
+    ]
+  },
+  {
+    "name": "Layout settings",
+    "settings": [
+      {
+        "type": "range",
+        "id": "container_lg_width",
+        "label": "Page width",
+        "default": 1400,
+        "min": 1000,
+        "max": 1800,
+        "step": 10,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.colors.name",
+    "settings": [
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "t:settings_schema.colors.settings.background.label",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "t:settings_schema.colors.settings.background_gradient.label",
+            "info": "t:settings_schema.colors.settings.background_gradient.info"
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "t:settings_schema.colors.settings.text.label",
+            "default": "#121212"
+          },
+          {
+            "type": "header",
+            "content": "Primary button"
+          },
+          {
+            "type": "color",
+            "id": "button",
+            "label": "Solid button background",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "button_label",
+            "label": "Solid button label",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "button_hover_bg",
+            "label": "Background color on hover",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "button_hover_text_color",
+            "label": "Label color on hover",
+            "default": "#121212"
+          },
+          {
+            "type": "header",
+            "content": "Secondary button"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_label",
+            "label": "Outline button",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_hover_background",
+            "label": "background color on hover",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_hover_label",
+            "label": "Label color on hover",
+            "default": "#fff"
+          },
+          {
+            "type": "header",
+            "content": "Product card"
+          },
+          {
+            "type": "color",
+            "id": "product_cart_button_background",
+            "label": "Cart button background",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "product_cart_button_foreground",
+            "label": "Cart button label",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "product_cart_button_background_on_hover",
+            "label": "Background color on hover",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "product_cart_button_foreground_on_hover",
+            "label": "Label color on hover",
+            "default": "#ffffff"
+          },
+          {
+            "type": "header",
+            "content": "Others"
+          },
+          {
+            "type": "color",
+            "id": "highligt_text",
+            "label": "Accent text",
+            "default": "#DDAE2A"
+          },
+          {
+            "type": "color_background",
+            "id": "highligt_text_gradient",
+            "label": "Accent text gradient",
+            "info": "\"Accent text gradient\" replaces \"Accent text\" where possible."
+          },
+          {
+            "type": "color",
+            "id": "link_button_color",
+            "label": "Link button color",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "text_link_on_hover",
+            "label": "Text link color on hover",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "shadow",
+            "label": "t:settings_schema.colors.settings.shadow.label",
+            "default": "#121212"
+          }
+        ],
+        "role": {
+          "text": "text",
+          "background": {
+            "solid": "background"
+          },
+          "links": "secondary_button_label",
+          "icons": "text",
+          "primary_button": "button",
+          "on_primary_button": "button_label",
+          "primary_button_border": "button",
+          "secondary_button": "background",
+          "on_secondary_button": "secondary_button_label",
+          "secondary_button_border": "secondary_button_label"
+        }
+      },
+      {
+        "type": "header",
+        "content": "Placeholder svg color"
+      },
+      {
+        "type": "color",
+        "id": "placeholder_background",
+        "default": "#f5f5f5",
+        "label": "Background color"
+      },
+      {
+        "type": "color",
+        "id": "placeholder_foreground",
+        "default": "#121212",
+        "label": "Foreground color"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.typography.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__2.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "lato_n4",
+        "label": "t:settings_schema.typography.settings.type_body_font.label",
+        "info": "t:settings_schema.typography.settings.type_body_font.info"
+      },
+      {
+        "type": "range",
+        "id": "body_font_size",
+        "min": 80,
+        "max": 180,
+        "step": 5,
+        "unit": "%",
+        "label": "Body font size",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "body_letter_spacing",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Letter spacing",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__1.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "montserrat_n6",
+        "label": "t:settings_schema.typography.settings.type_header_font.label",
+        "info": "t:settings_schema.typography.settings.type_header_font.info"
+      },
+      {
+        "type": "range",
+        "id": "heading_font_size",
+        "min": 80,
+        "max": 180,
+        "step": 5,
+        "unit": "%",
+        "label": "Heading font size",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "heading_letter_spacing",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Letter spacing",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "header_text_case",
+        "options": [
+          {
+            "value": "none",
+            "label": "Default"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          },
+          {
+            "value": "capitalize",
+            "label": "Capitalize"
+          }
+        ],
+        "default": "none",
+        "label": "Text transform"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.animations.name",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "animations_reveal_on_scroll",
+        "label": "t:settings_schema.animations.settings.animations_reveal_on_scroll.label",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Buttons",
+    "settings": [
+      {
+        "type": "range",
+        "id": "button_font_size",
+        "min": 80,
+        "max": 180,
+        "step": 5,
+        "unit": "%",
+        "label": "Font size",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "button_border_width",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Border width",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "button_border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Border radius",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "button_letter_spacing",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Letter spacing",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "button_text_case",
+        "options": [
+          {
+            "value": "none",
+            "label": "Default"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          },
+          {
+            "value": "capitalize",
+            "label": "Capitalize"
+          }
+        ],
+        "default": "none",
+        "label": "Text transform"
+      },
+      {
+        "type": "select",
+        "id": "button_font_weight",
+        "options": [
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "500",
+            "label": "Medium"
+          },
+          {
+            "value": "600",
+            "label": "Semibold"
+          },
+          {
+            "value": "bold",
+            "label": "Bold"
+          },
+          {
+            "value": "800",
+            "label": "Black"
+          }
+        ],
+        "default": "normal",
+        "label": "Font weight"
+      }
+    ]
+  },
+  {
+    "name": "Product card",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product content"
+      },
+      {
+        "type": "select",
+        "id": "product_title_size",
+        "options": [
+          {
+            "value": "h6",
+            "label": "Small"
+          },
+          {
+            "value": "h5",
+            "label": "Medium"
+          },
+          {
+            "value": "h4",
+            "label": "Large"
+          }
+        ],
+        "default": "h6",
+        "label": "Title size"
+      },
+      {
+        "type": "select",
+        "id": "product_content_alignment",
+        "label": "Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Badges",
+        "info": "[Learn more](https:\/\/gloryio.com\/doc\/how-to-add-remove-a-product-sale-badge\/)"
+      },
+      {
+        "type": "select",
+        "id": "badge_style",
+        "options": [
+          {
+            "value": "style1",
+            "label": "Link"
+          },
+          {
+            "value": "style2",
+            "label": "Solid button"
+          }
+        ],
+        "default": "style1",
+        "label": "Badge style"
+      },
+      {
+        "type": "checkbox",
+        "id": "sale_percentage_show",
+        "default": true,
+        "label": "Show sale percentage"
+      },
+      {
+        "type": "color_scheme",
+        "id": "sale_badge_color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-2"
+      },
+      {
+        "type": "color_scheme",
+        "id": "new_badge_color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-1"
+      },
+      {
+        "type": "color_scheme",
+        "id": "sold_out_badge_color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "inverse"
+      }
+    ]
+  },
+  {
+    "name": "Product quick view",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "quick_view_round_corner",
+        "label": "Enable rounded corner",
+         "info": "It will work on quick view popup",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Color swatches",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "color_swatches",
+        "default": true,
+        "label": "Enable color swatches",
+        "info": "Color selections are displayed in swatches on the product card, allowing you to swiftly select."
+      },
+      {
+        "type": "text",
+        "id": "color_swatch_activation",
+        "label": "Color swatch activation",
+        "info": "Define the color option name. Eg. Color,Colour,etc. [Learn more](https:\/\/gloryio.com\/doc\/how-to-enable-color-swatches-on-product\/)",
+        "default": "Color"
+      },
+      {
+        "type": "range",
+        "id": "max_swatches_show",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "Maximum number of swatches to show"
+      },
+      {
+        "type": "select",
+        "id": "color_swatch_type",
+        "options": [
+          {
+            "value": "image",
+            "label": "Variant image"
+          },
+          {
+            "value": "color",
+            "label": "Color swatch"
+          }
+        ],
+        "default": "color",
+        "label": "Swatch type"
+      },
+      {
+        "type": "header",
+        "content": "Recently viewed product"
+      },
+      {
+        "type": "checkbox",
+        "id": "color_swatches_recent_view_product",
+        "default": false,
+        "label": "Enable color swatches on recently viewed product"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.social-media.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.social-media.settings.header.content"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "t:settings_schema.social-media.settings.social_twitter_link.label",
+        "info": "t:settings_schema.social-media.settings.social_twitter_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_twitter_color",
+        "default": "#00AAEC",
+        "label": "Twitter color"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "t:settings_schema.social-media.settings.social_facebook_link.label",
+        "info": "t:settings_schema.social-media.settings.social_facebook_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_facebook_color",
+        "default": "#4460A0",
+        "label": "Facebook color"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "t:settings_schema.social-media.settings.social_pinterest_link.label",
+        "info": "t:settings_schema.social-media.settings.social_pinterest_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_pinterest_color",
+        "default": "#CC2127",
+        "label": "Pinterest color"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "t:settings_schema.social-media.settings.social_instagram_link.label",
+        "info": "t:settings_schema.social-media.settings.social_instagram_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_instagram_color",
+        "default": "#BB398B",
+        "label": "Instagram color"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "t:settings_schema.social-media.settings.social_tiktok_link.label",
+        "info": "t:settings_schema.social-media.settings.social_tiktok_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_tiktok_color",
+        "default": "#121212",
+        "label": "Tiktok color"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "t:settings_schema.social-media.settings.social_tumblr_link.label",
+        "info": "t:settings_schema.social-media.settings.social_tumblr_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_tumblr_color",
+        "default": "#121212",
+        "label": "Tumblr color"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "t:settings_schema.social-media.settings.social_snapchat_link.label",
+        "info": "t:settings_schema.social-media.settings.social_snapchat_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_snapchat_color",
+        "default": "#121212",
+        "label": "Snapchat color"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "t:settings_schema.social-media.settings.social_youtube_link.label",
+        "info": "t:settings_schema.social-media.settings.social_youtube_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_youtube_color",
+        "default": "#CE1312",
+        "label": "Youtube color"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "t:settings_schema.social-media.settings.social_vimeo_link.label",
+        "info": "t:settings_schema.social-media.settings.social_vimeo_link.info"
+      },
+      {
+        "type": "color",
+        "id": "social_vimeo_color",
+        "default": "#121212",
+        "label": "Vimeo color"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer",
+        "label": "Cart Type"
+      },
+      {
+        "type": "header",
+        "content": "Cart Drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor_cart_drawer",
+        "default": false,
+        "label": "Show vendor"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_note_enable",
+        "default": true,
+        "label": "Show cart note"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_tax_note",
+        "default": true,
+        "label": "Show tax note"
+      },
+      {
+        "type": "checkbox",
+        "id": "shipping_calc_enable",
+        "default": true,
+        "label": "Show shipping calculator"
+      },
+      {
+        "type": "checkbox",
+        "id": "checkout_btn_enable",
+        "default": true,
+        "label": "Show checkout button"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_btn_enable",
+        "default": true,
+        "label": "Show cart button"
+      },
+      {
+        "type": "checkbox",
+        "id": "continue_shopping_enable",
+        "default": true,
+        "label": "Show continue shopping button"
+      },
+      {
+        "type": "url",
+        "id": "continue_shopping_link",
+        "label": "Continue shopping button link",
+        "default": "\/collections\/all"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.search_input.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.search_input.settings.header.content"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "default": true,
+        "label": "t:settings_schema.search_input.settings.predictive_search_enabled.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_vendor",
+        "default": false,
+        "label": "t:settings_schema.search_input.settings.predictive_search_show_vendor.label",
+        "info": "t:settings_schema.search_input.settings.predictive_search_show_vendor.info"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_price",
+        "default": true,
+        "label": "t:settings_schema.search_input.settings.predictive_search_show_price.label",
+        "info": "t:settings_schema.search_input.settings.predictive_search_show_price.info"
+      },
+      {
+        "type": "range",
+        "id": "search_modal_input_border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Input border radius",
+        "default": 30
+      }
+    ]
+  }
+]

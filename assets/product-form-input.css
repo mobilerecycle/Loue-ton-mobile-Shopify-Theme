@@ -1,0 +1,220 @@
+.product-form__input {
+  padding: 0;
+  margin: 0;
+  max-width: 37rem;
+  min-width: fit-content;
+  border: none;
+}
+
+.product-form__input--dropdown {
+  margin-bottom: 1.6rem;
+}
+
+.product-form__input .form__label {
+  padding-left: 0;
+}
+
+fieldset.product-form__input .form__label {
+  margin-bottom: 0.2rem;
+}
+
+.product-form__input input[type="radio"] {
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  position: absolute;
+  height: 1px;
+  width: 1px;
+}
+.product-form__input input[type="radio"] + label {
+  border: 0.1rem solid rgba(var(--color-foreground), 0.55);
+  border-radius: 0.5rem;
+  background-color: var(
+    --color-swatch-background,
+    var(--swatch-background-color)
+  );
+  color: var(--color-foreground);
+  display: inline-flex;
+  margin: 0.7rem 0.5rem 0.2rem 0;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.6rem;
+  transition: border var(--duration-short) ease;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  background-image: var(--swatch-background-image);
+  background-size: cover;
+}
+.product-form__input input[type="radio"] + label:hover {
+  border: 0.1rem solid rgb(var(--color-foreground));
+}
+
+.product-form__input
+  input[type="radio"]:checked
+  + label:not(.variant--swatch-custom) {
+  background-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+.product-form__input input[type="radio"]:disabled + label,
+.product-form__input input[type="radio"].disabled + label {
+  border-color: rgba(var(--color-foreground), 0.1);
+  color: rgba(var(--color-foreground), 0.4);
+  text-decoration: line-through;
+}
+.product-form__input input[type="radio"].disabled:checked + label,
+.product-form__input input[type="radio"]:disabled:checked + label {
+  color: rgba(var(--color-background), 0.4);
+}
+.product-form__input input[type="radio"]:focus-visible + label {
+  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
+    0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
+}
+
+/* Variant swatch color & image */
+.product-form__input input[type="radio"] + label.variant--swatch-image {
+  padding: 5px;
+  line-height: 1;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+.product-form__input input[type="radio"] + label.variant--swatch-image img {
+  max-width: 100%;
+  height: auto;
+}
+.product-form__input input[type="radio"] + label.variant--swatch-custom {
+  position: relative;
+}
+.product-form__input
+  input[type="radio"]
+  + label.variant--swatch-custom
+  span.swatch--variant-tooltip {
+  position: absolute;
+  bottom: 100%;
+  background: rgba(var(--color-button), var(--alpha-button-background));
+  color: rgb(var(--color-button-text));
+  z-index: 9;
+  padding: 6px 12px;
+  border-radius: 2px;
+  left: 50%;
+  transform: translate(-50%, -70%);
+  transition-property: opacity, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  pointer-events: none;
+  line-height: 1;
+  opacity: 0;
+  font-size: 1.3rem;
+}
+.product-form__input
+  input[type="radio"]
+  + label.variant--swatch-custom
+  span.swatch--variant-tooltip:after {
+  content: "";
+  position: absolute;
+  bottom: -1.6rem;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 1rem;
+  border-color: transparent transparent transparent;
+  border-top-color: rgba(var(--color-button), var(--alpha-button-background));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.product-form__input
+  input[type="radio"]
+  + label.variant--swatch-custom:hover
+  span.swatch--variant-tooltip {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+.product-form__input.radio--swatch {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product-form__input input[type="radio"] + label.variant--swatch-color {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.product-form__input
+  input[type="radio"]
+  + label.variant--swatch-color:not(.swatch-button-circle) {
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+}
+.product-form__input input[type="radio"] + label.variant--swatch-custom {
+  border: none;
+  outline: 0.1rem solid rgba(var(--color-foreground), 0.55);
+  outline-offset: 3px;
+  margin: 0.7rem 1.3rem 0.7rem 0;
+}
+.product-form__input input[type="radio"] + label.variant--swatch-image {
+  margin: 0.7rem 1.3rem 0.7rem 0;
+}
+
+.product-form__input
+  input[type="radio"]:checked
+  + label.variant--swatch-custom {
+  outline: 0.2rem solid rgba(var(--color-foreground));
+}
+.product-form__input
+  input[type="radio"]
+  + label.variant--swatch-custom.swatch-button-circle {
+  border-radius: 100%;
+  padding: 0;
+}
+.product-form__input input[type="radio"] + label[data-color] {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+/* Fallback */
+.product-form__input input[type="radio"].focused + label,
+.no-js .shopify-payment-button__button [role="button"]:focus + label {
+  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
+    0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
+}
+/* No outline when focus-visible is available in the browser */
+.no-js
+  .product-form__input
+  input[type="radio"]:focus:not(:focus-visible)
+  + label {
+  box-shadow: none;
+}
+
+.product-form__input .select {
+  max-width: 25rem;
+}
+.product-form__input + .product-form__input {
+  margin-top: 1.5rem;
+}
+.product-form__input
+  input[type="radio"]:focus-visible
+  + label.variant--swatch-custom {
+  outline-offset: 8px;
+}
+.product-form__input
+  input[type="radio"].disabled
+  + label.variant--swatch-custom {
+  position: relative;
+}
+.product-form__input
+  input[type="radio"].disabled
+  + label.variant--swatch-custom::before {
+  position: absolute;
+  content: "X";
+  width: 2rem;
+  height: 2rem;
+  z-index: 1;
+  top: -8px;
+  left: -8px;
+  background: rgba(var(--color-foreground));
+  color: rgba(var(--color-background));
+  text-align: center;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}

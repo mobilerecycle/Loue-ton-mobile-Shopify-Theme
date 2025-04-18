@@ -1,0 +1,52 @@
+{%- liquid
+  assign low_stock_qty = low_stock_value
+-%}
+
+{%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
+  <div
+    class="product__inventory {{ custom_class }}"
+    style="
+      --in-stock: {{ in_stock_color.red }}, {{ in_stock_color.green }}, {{ in_stock_color.blue }};
+      --out-of-stock: {{ out_of_stock_color.red }}, {{ out_of_stock_color.green }}, {{ out_of_stock_color.blue }};
+      --low-stock: {{ low_stock_color.red }}, {{ low_stock_color.green }}, {{ low_stock_color.blue }};
+      --continue-selling: {{ continue_selling_color.red }}, {{ continue_selling_color.green }}, {{ continue_selling_color.blue }};
+    "
+  >
+    {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
+      {%- if product.selected_or_first_available_variant.inventory_quantity <= low_stock_qty -%}
+        {%- if show_inventory_quantity -%}
+          <span style="--color-foreground: var(--low-stock)">
+            {{-
+              'products.product.inventory_low_stock_show_count'
+              | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+            -}}
+          </span>
+        {%- else -%}
+          <span style="--color-foreground: var(--low-stock)">{{- 'products.product.inventory_low_stock' | t -}}</span>
+        {%- endif -%}
+      {%- else -%}
+        {%- if show_inventory_quantity -%}
+          <span style="--color-foreground: var(--in-stock);">
+            {{-
+              'products.product.inventory_in_stock_show_count'
+              | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+            -}}
+          </span>
+        {%- else -%}
+          <span style="--color-foreground: var(--in-stock);">{{- 'products.product.inventory_in_stock' | t -}}</span>
+        {%- endif -%}
+      {%- endif -%}
+
+    {%- else -%}
+      {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
+        <span style="--color-foreground: var(--continue-selling)">
+          {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
+        </span>
+      {%- else -%}
+        <span style="--color-foreground: var(--out-of-stock)">
+          {{- 'products.product.inventory_out_of_stock' | t -}}
+        </span>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

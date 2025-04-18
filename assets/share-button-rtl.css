@@ -1,0 +1,11 @@
+.social-links a {
+  margin: 0 0 10px 10px;
+}
+.social__share--text {
+  margin-left: 0;
+  margin-right: 5px;
+}
+.share-button__button .icon-share {
+  margin-right: 0;
+  margin-left: 1rem;
+}

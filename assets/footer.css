@@ -1,0 +1,202 @@
+/* Footer Widget */
+.footer__widget {
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+.column__max--width {
+  max-width: 20rem;
+}
+.footer__widget_title {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  padding-right: 2rem;
+  margin-top: 0;
+  font-weight: 600;
+}
+.footer__widget_title:before,
+.footer__widget_title:after {
+  position: absolute;
+  top: 1.4rem;
+  right: 0;
+  width: 1.4rem;
+  height: 0.2rem;
+  content: "";
+  transition: var(--transition);
+  opacity: 0;
+  background-color: rgba(var(--color-foreground));
+}
+.footer__widget_title::after {
+  transform: rotate(90deg);
+}
+.footer__widget_toggle {
+  position: absolute;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  width: 100%;
+  height: 100%;
+  content: "";
+  color: transparent;
+  border: 0;
+  background-color: transparent;
+}
+.footer__widget_inner p {
+  margin-bottom: 0;
+}
+.footer__widget_inner p a {
+  font-weight: 700;
+}
+.footer__widget_inner p a:hover {
+  text-decoration: underline;
+}
+.footer__widget_inner p:not(:last-child) {
+  margin-bottom: 2.4rem;
+}
+.footer__widget_inner ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer__widget_inner ul .footer__list--item + .footer__list--item {
+  margin-top: 1.5rem;
+}
+.footer__widget_inner ul li a {
+  display: block;
+  text-decoration: none;
+}
+.footer__widget_inner ul li a:hover {
+  text-decoration: underline;
+  padding-left: 0.5rem;
+  text-underline-offset: 0.3rem;
+}
+/* Footer Bottom */
+.footer__bottom {
+  padding: 1.5rem 0;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.15);
+}
+/* Copyright */
+.footer__copyright {
+  line-height: 1;
+  display: block;
+  text-align: center;
+}
+
+/* Payment Image */
+.footer__payment_image {
+  display: block;
+  margin: auto;
+}
+.footer__list-social a svg {
+  height: 2rem;
+}
+.list-social__link {
+  line-height: 1;
+}
+.contact__info_box address a {
+  color: rgba(var(--color-foreground));
+  font-weight: 700;
+  text-decoration: underline;
+}
+.footer-block-image img {
+  height: auto;
+}
+.newsletter-form__field-wrapper .input__field_form_button svg.icon {
+  height: 1.5rem;
+}
+.contact__info_box + div {
+  margin-top: 4rem;
+}
+@media only screen and (min-width: 992px) {
+  .footer--grid.footer__block--width > .col {
+    max-width: 20%;
+    flex-basis: 20%;
+    margin-bottom: 3rem;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .col.about__us--widget {
+    min-width: 35rem;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .col.about__us--widget {
+    min-width: 30rem;
+  }
+}
+.gap-20 {
+  gap: 2rem;
+}
+.footer__widget_inner .newsletter-form__field-wrapper input[type="email"] {
+  padding-right: 3.5rem;
+}
+@media only screen and (max-width: 991px) {
+  .footer__widget {
+    margin-bottom: -2.2rem;
+  }
+  .footer__widget.active {
+    padding-bottom: 2.2rem;
+  }
+  .footer__widget.active .footer__widget_title::after {
+    transform: rotate(0deg);
+  }
+  .footer--grid > .col {
+    width: 100%;
+    flex-basis: 100%;
+  }
+  .footer--grid {
+    gap: 2.5rem;
+  }
+  .footer__widget_inner {
+    display: none;
+  }
+  .footer__widget_toggle {
+    visibility: visible;
+  }
+  .footer__widget_title::before,
+  .footer__widget_title::after {
+    opacity: 1;
+  }
+  .footer__bottom .row {
+    flex-direction: column-reverse;
+    gap: 1.5rem;
+  }
+  .footer__bottom .list-payment {
+    justify-content: center;
+  }
+  .footer__bottom localization-form + localization-form .dropdown__open_list {
+    left: -30%;
+  }
+  .footer__bottom .localization__store.d-flex {
+    justify-content: center;
+  }
+  .footer__bottom .localization__store.d-flex {
+    gap: 1.5rem;
+    margin-bottom: 0.5em;
+  }
+  .footer__widget_title {
+    font-size: 1.8rem;
+  }
+}
+@media only screen and (min-width: 750px) {
+  .footer__widget_title {
+    margin-bottom: 4rem;
+  }
+}
+.footer__list-social {
+  margin-top: 1.5rem;
+}
+.shop__localziation--follow-button {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+@media only screen and (max-width: 991px) {
+  .shop__localziation--follow-button {
+    justify-content: center;
+  }
+}

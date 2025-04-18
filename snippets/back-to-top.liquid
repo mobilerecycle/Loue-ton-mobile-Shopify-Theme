@@ -1,0 +1,81 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+
+<style>
+    {% if theme_rtl %}
+    #scroll__top {
+      position: fixed;
+      bottom: 50px;
+      left: 25px;
+      z-index: 98;
+      outline: none;
+      background-color: rgba(var(--color-button),var(--alpha-button-background));
+      border: 1px solid rgba(var(--color-button),var(--alpha-button-background));
+      cursor: pointer;
+      color: rgb(var(--color-button-text));
+      border-radius: 4px;
+      transform: translateY(50px);
+      opacity: 0;
+      visibility: hidden;
+      transition: .3s;
+      line-height: 1;
+      padding: 10px;
+    }
+    {% else %}
+    #scroll__top {
+      position: fixed;
+      bottom: 50px;
+      right: 25px;
+      z-index: 98;
+      outline: none;
+      background-color: rgba(var(--color-button),var(--alpha-button-background));
+      border: 1px solid rgba(var(--color-button),var(--alpha-button-background));
+      cursor: pointer;
+      color: rgb(var(--color-button-text));
+      border-radius: 4px;
+      transform: translateY(50px);
+      opacity: 0;
+      visibility: hidden;
+      transition: .3s;
+      line-height: 1;
+      padding: 10px;
+    }
+    {% endif %}
+    #scroll__top.active{
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #scroll__top svg {
+      width: 25px;
+      line-height: 1;
+    }
+    .sticky__cart #scroll__top {
+      bottom: 110px;
+    }
+    #scroll__top:hover {
+     background-color: rgba(var(--primary-button-hover-background));
+    color: rgba(var(--primary-button-hover-text));
+  }
+</style>
+
+<button id="scroll__top">
+  <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+    <title>Arrow Up</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292"/>
+  </svg>
+</button>
+
+<script src="{{ 'back-to-top.js' | asset_url }}" defer></script>

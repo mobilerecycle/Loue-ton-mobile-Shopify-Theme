@@ -1,0 +1,9 @@
+.complementary--product__cart--btn {
+  text-align: left;
+}
+.complementary-slideshow--slider .slideshow--nav-button > svg {
+  transform: rotate(-180deg);
+}
+.complementary--product-card-content {
+  text-align: right;
+}

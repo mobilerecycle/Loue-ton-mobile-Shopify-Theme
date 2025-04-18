@@ -1,0 +1,179 @@
+{% liquid
+  assign theme_rtl = false
+  if settings.enable_rtl and settings.langauges_rtl == blank
+    assign theme_rtl = true
+  endif
+
+  if settings.enable_rtl and settings.langauges_rtl != blank
+    assign rtl_languages = settings.langauges_rtl | split: ','
+    for language in rtl_languages
+      if language == request.locale.iso_code
+        assign theme_rtl = true
+      endif
+    endfor
+  endif
+%}
+
+{{ 'breadcrumbs.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.mobile_padding_top }}px;
+    padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign product_columns = section.settings.text_center
+  assign textAlignClass = ''
+
+  case product_columns
+    when 'left'
+      assign textAlignClass = 'text-left'
+    when 'right'
+      assign textAlignClass = 'text-right'
+    else
+      assign textAlignClass = 'text-center'
+  endcase
+-%}
+{% if theme_rtl %}
+  {{ 'breadcrumbs-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{%- assign t = template | split: '.' | first -%}
+{%- if section.settings.show_page_title or section.settings.show_breadcrumb_navigation -%}
+  <div class="breadcrumbs color-{{ section.settings.color_scheme }}  section-{{ section.id }}-padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 {{ textAlignClass }}">
+          {%- if section.settings.show_page_title -%}
+            <div class="page_header__title">
+              {%- case t -%}
+                {%- when 'page' -%}
+                  <h1 class="page_header__title_label">{{ page.title }}</h1>
+                {%- when 'product' -%}
+                  <h1 class="page_header__title_label">{{ product.title }}</h1>
+                {%- when 'collection' -%}
+                  <h1 class="page_header__title_label">{{ collection.title }}</h1>
+                {%- when 'blog' -%}
+                  <h1 class="page_header__title_label">{{ blog.title }}</h1>
+                {%- when 'article' -%}
+                  <h1 class="page_header__title_label">{{ article.title }}</h1>
+                {%- else -%}
+                  <h1 class="page_header__title_label">{{ page_title }}</h1>
+              {%- endcase -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_breadcrumb_navigation -%}
+            {%- render 'breadcrumb-nav', t: t' -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+ {
+   "name": "Page title banner",
+   "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "background-3",
+        "label": "t:sections.header.settings.color_scheme.label"
+       },
+	{
+         "type": "checkbox",
+         "id": "show_page_title",
+         "default": true,
+         "label": "Show page heading"
+       },
+	{
+         "type": "checkbox",
+         "id": "show_breadcrumb_navigation",
+         "default": true,
+         "label": "Show breadcrumb navigation"
+       },
+
+	{
+         "type": "select",
+         "id": "text_center",
+         "label": "Text Align",
+         "options": [
+           {
+             "label": "Left",
+             "value": "left"
+           },
+           {
+             "label": "Right",
+             "value": "right"
+           },
+		{
+             "label": "Center",
+             "value": "center"
+           }
+         ],
+         "default": "center"
+       },
+	 {
+     "type": "header",
+     "content": "Section padding"
+   },
+{
+         "type": "paragraph",
+         "content": "Desktop"
+       },
+       {
+         "type": "range",
+         "id": "padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       },
+	{
+         "type": "paragraph",
+         "content": "Mobile"
+       },
+	{
+         "type": "range",
+         "id": "mobile_padding_top",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding top",
+         "default": 50
+       },
+       {
+         "type": "range",
+         "id": "mobile_padding_bottom",
+         "min": 0,
+         "max": 150,
+         "step": 5,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 50
+       }
+]
+ }
+{% endschema %}
