@@ -261,7 +261,7 @@
         "image_round_corner": false,
         "show_secondary_image": true,
         "show_title": true,
-        "show_price": true,
+        "show_price": false,
         "show_vendor": false,
         "show_product_rating": false,
         "show_badges": true,
