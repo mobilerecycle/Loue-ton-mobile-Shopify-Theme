@@ -15,6 +15,14 @@
 %}
 
 <style>
+    /* Suppression du <br> et du margin-top pour le composant greenleaze */
+    .product__sticky .d-sm-none br {
+        display: none;
+    }
+
+    .product__sticky .d-sm-none .greenleaze-button-product {
+        margin-top: 0 !important;
+    }
     .product-form__buttons.sticky__form_button {
         margin: 0 !important;
         align-items: center;
