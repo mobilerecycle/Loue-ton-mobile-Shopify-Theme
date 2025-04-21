@@ -161,11 +161,11 @@
                     <span> {{ 'products.product.sold_out' | t }}</span>
                   {%- endif -%}
                 </button>
-
-                {% if current_variant.available %}
-                  {% render 'greenleaze-product' %}
-                {% endif %}
               </div>
+              {% if current_variant.available %}
+                {% render 'greenleaze-product' %}
+              {%- else -%}
+              {%- endif -%}
             </div>
             {% comment %} Quantity input and Add Cart Button End {% endcomment %}
 
