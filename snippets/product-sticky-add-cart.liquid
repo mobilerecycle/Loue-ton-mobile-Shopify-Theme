@@ -229,11 +229,11 @@
               {%- endif -%}
             </button>
           </div>
-            {%- if current_variant.available == false and product.has_only_default_variant -%}
-            {%- else -%}
+            {%- if current_variant.available -%}
                 <div class="d-sm-none">
                     {% render 'greenleaze-product' %}
                 </div>
+            {%- else -%}
             {%- endif -%}
         </div>
       {%- endform -%}
