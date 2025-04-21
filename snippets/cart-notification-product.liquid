@@ -49,50 +49,6 @@
             </span>
           {%- endfor -%}
         {%- endunless -%}
-        <div class="cart__item_price">
-          {%- if item.original_line_price != item.final_line_price -%}
-            <div class="cart-item__discounted-prices">
-              <span class="visually-hidden">
-                {{ 'products.product.price.regular_price' | t }}
-              </span>
-              <s class="cart-item__old-price price">
-                {{ item.original_line_price | money }}
-              </s>
-              <span class="visually-hidden">
-                {{ 'products.product.price.sale_price' | t }}
-              </span>
-              <span class="price">
-                {{ item.final_line_price | money }}
-              </span>
-            </div>
-          {%- else -%}
-            <span class="price ">
-              {{ item.original_line_price | money }}
-            </span>
-          {%- endif -%}
-
-          {%- if item.variant.available and item.unit_price_measurement -%}
-            <div class="unit-price caption">
-              <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
-              {{ item.variant.unit_price | money }}
-              <span aria-hidden="true">/</span>
-              <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
-              {%- if item.variant.unit_price_measurement.reference_value != 1 -%}
-                {{- item.variant.unit_price_measurement.reference_value -}}
-              {%- endif -%}
-              {{ item.variant.unit_price_measurement.reference_unit }}
-            </div>
-          {%- endif -%}
-
-          <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-            {%- for discount in item.line_level_discount_allocations -%}
-              <li class="discounts__discount">
-                {%- render 'icon-discount' -%}
-                {{ discount.discount_application.title }}
-              </li>
-            {%- endfor -%}
-          </ul>
-        </div>
 
         <div class="cart-notification__quantity-wrapper">
           <quantity-input class="quantity mt-10 cart-notification--product">
