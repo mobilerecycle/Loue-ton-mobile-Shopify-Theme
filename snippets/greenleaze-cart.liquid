@@ -53,10 +53,15 @@ window.addEventListener("greenleazePriceActualize", function (event) {
 })
  
 }
-// This depends on your implementation 
-window.addEventListener("change", function(event){
-setTimeout(() => addModalAndButtonPriceCart(), 1500)
-})
+
+// S'abonner à l'événement cartUpdate pour mettre à jour les prix
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof subscribe === 'function') {
+    subscribe(PUB_SUB_EVENTS.cartUpdate, function(event) {
+      addModalAndButtonPriceCart();
+    });
+  }
+});
 
 
 async function getAllPricesForcart() {
