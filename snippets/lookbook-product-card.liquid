@@ -221,9 +221,11 @@
     {%- if show_title and product_card_product != blank -%}
       <h3 class="product-grid-item__title {{ settings.product_title_size }}">
         <a href="{{ product_card_product.url | default: '#' }}">{{ product_card_product.title }}</a>
+          {% render 'greenleaze-product-preview' with product_card_product as product %}
       </h3>
     {% else %}
       <h3 class="product-grid-item__title h5">Example product title {{ index }}</h3>
+        {% render 'greenleaze-product-preview' with product_card_product as product %}
     {%- endif -%}
 
     {%- if show_price -%}

@@ -1,0 +1,66 @@
+
+<script>
+    if(!window.greenleazeScript){
+        window.greenleazeScript = true;
+        try {
+            var script = document.createElement('script');
+            script.src = "{{ 'greenleaze-script.js' | asset_url }}";
+            document.head.appendChild(script);
+        } catch (e) {
+            console.error("product preview", e)
+        }
+    }
+</script>
+
+{% comment %}
+Used in : snippets/product-collection
+
+
+{% endcomment %}
+
+{% if product.metafields.greenleaze.disabled != true %}
+    <div class="previewPricePerMonth" data-price="{{product.price}}" data-duration="36" data-value="3" data-type="cart" id="id-{{ product.id }}">
+    </div>
+
+{% endif %}
+
+<script type="text/javascript">
+
+    if(typeof init !== "undefined" && init === true) { // In case the script already loaded
+        console.log(typeof init)
+        setGreenleazePriceForPreview{{ product.id }}()
+    } else { // Else we wait it finishes
+        window.addEventListener("greenleazePriceActualize", function (event) {
+            setGreenleazePriceForPreview{{ product.id }}()
+        })
+
+    }
+    function setGreenleazePriceForPreview{{ product.id }}() {
+
+        if(!window.greenleazeScript) return
+        const prixHT = {{product.price}} / 100 * 5/6
+        const id = {{ product.id }}
+        const container = document.querySelector(`.previewPricePerMonth#id-${id}`);
+        if(container) {
+            const tva = 120 / 100
+            const calculatePayment = getRuleByProductPriceAndDuration(prixHT, monthValues[monthValues.length - 1])
+            const paiementMensuel = calculatePayment.monthly;
+            container.innerHTML = `<span style="color: #13c1df; font-size: 18px;">À partir de ${paiementMensuel}€ / mois</span>`
+        }
+
+    }
+
+    setGreenleazePriceForPreview{{ product.id }}()
+</script>
+<style>
+    .greenleaze-button-product {
+        margin-top: 10px;
+        background-color: #0D5537;
+        border-color: #0D5537;
+        margin-bottom: 0px;
+    }
+    .greenleaze-button-product:hover {
+        background-color: #0c402b;
+        border-color: #0c402b;
+    }
+</style>
