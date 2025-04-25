@@ -1,1 +1,134 @@
-{"sections":{"breadcrumbs":{"type":"breadcrumbs","settings":{"color_scheme":"background-3","show_page_title":true,"show_breadcrumb_navigation":false,"text_center":"center","padding_top":50,"padding_bottom":50,"mobile_padding_top":50,"mobile_padding_bottom":50}},"main":{"type":"main-page","disabled":true,"settings":{"heading":true,"color_scheme":"background-1","padding_top":40,"padding_bottom":35,"mobile_padding_top":0,"mobile_padding_bottom":0}}},"order":["breadcrumbs","main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "color_scheme": "background-3",
+        "show_page_title": true,
+        "show_breadcrumb_navigation": false,
+        "text_center": "center",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "heading": true,
+        "color_scheme": "background-1",
+        "padding_top": 40,
+        "padding_bottom": 35,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0
+      }
+    },
+    "collage_xmW7JH": {
+      "type": "collage",
+      "blocks": {
+        "image_HUMPmK": {
+          "type": "image",
+          "settings": {
+            "subheading": "Subheading",
+            "subheading_spacing": "small",
+            "enable_background": true,
+            "color_scheme": "",
+            "title": "Banner title",
+            "heading_size": "h3",
+            "text": "Pair text with an icon to focus on your store's features",
+            "link_label": "Button label",
+            "link": "",
+            "button_type": "primary",
+            "button_size": "small",
+            "image_overlay_opacity": 0,
+            "content_position": "top",
+            "content_alignment": "left",
+            "card_padding": "small",
+            "foreground": "#fff",
+            "button_background": "#fff",
+            "button_foreground": "#121212",
+            "custom_colors": false,
+            "subheading_foreground": "#121212",
+            "subheading_background": "#fff"
+          }
+        },
+        "product_Yjxyb3": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "image_ratio": "adapt",
+            "color_scheme": "",
+            "second_image": false,
+            "color_swatches": true,
+            "show_product_rating": false,
+            "show_countdown": true,
+            "image_round_corner": true,
+            "timer_color_scheme": ""
+          }
+        },
+        "video_w9ywJJ": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "description": "Describe the video",
+            "play_button_text": "Play now",
+            "card_padding": "small"
+          }
+        },
+        "collection_9tr9f3": {
+          "type": "collection",
+          "settings": {
+            "heading": "",
+            "main_heading_size": "h4",
+            "collection": "",
+            "title_design": "text",
+            "heading_size": "h5",
+            "card_button_style": "primary",
+            "card_button_size": "small",
+            "card_padding": "small",
+            "use_custom_color": true,
+            "button_foreground_color": "#121212",
+            "button_background_color": "#fff"
+          }
+        }
+      },
+      "block_order": [
+        "image_HUMPmK",
+        "product_Yjxyb3",
+        "video_w9ywJJ",
+        "collection_9tr9f3"
+      ],
+      "name": "t:sections.collage.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "subtitle": "",
+        "alignment": "left",
+        "mobile_alignment": "center",
+        "desktop_layout": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main",
+    "collage_xmW7JH"
+  ]
+}
