@@ -1,1 +1,243 @@
-{"type":"footer","name":"Footer","sections":{"newsletter_FQJWgy":{"type":"newsletter","blocks":{"heading_YnmrWD":{"type":"heading","settings":{"heading":"<p>Abonnez-vous<\/p>","heading_size":"h1"}},"paragraph_JVV6MD":{"type":"paragraph","settings":{"text":"<p>Soyez le premier informé des nouvelles collections et des offres exclusives.<\/p>"}},"email_form_GKh6Me":{"type":"email_form","settings":{"border_radius":30}}},"block_order":["heading_YnmrWD","paragraph_JVV6MD","email_form_GKh6Me"],"settings":{"color_scheme":"","box_color_scheme":"","image":"shopify:\/\/shop_images\/des_5_mois.png","height":"small","image_overlay_opacity":0,"form_position":"right","image_round_corner":true,"content_alignment":"center","padding_top":70,"padding_bottom":70,"mobile_padding_top":50,"mobile_padding_bottom":50}},"footer":{"type":"footer","blocks":{"1eb0bda7-098f-44ea-84e3-b98cbac02e3f":{"type":"about_us","settings":{"heading":"A Propos","about_information":"<p><strong>Loue ton mobile <\/strong>est une offre proposée par <strong>Mobile Recycle<\/strong>, une entreprise toulousaine spécialisée dans le reconditionnement de téléphone. <\/p>","social_media":true}},"f011bece-9191-4dd0-958c-e6ec737ddd0d":{"type":"link_list","settings":{"heading":"Notre société","menu":"footer"}},"2afea511-cc39-4c26-b91f-84ad16da4248":{"type":"contact_info","settings":{"heading":"Informations :","contact_address":"<p>Loue ton mobile<br\/>55 avenue Louis Breguet<br\/>Bâtiment 7 Bureau 17<br\/>31400 Toulouse<br\/>France<br\/>Appelez-nous : +33 5 61 36 59 85‬<br\/>Écrivez-nous : <a href=\"mailto:contact@louetonmobile.fr\" title=\"mailto:contact@louetonmobile.fr\">contact@louetonmobile.fr<\/a><\/p>"}}},"block_order":["1eb0bda7-098f-44ea-84e3-b98cbac02e3f","f011bece-9191-4dd0-958c-e6ec737ddd0d","2afea511-cc39-4c26-b91f-84ad16da4248"],"settings":{"color_scheme":"accent-2","enable_follow_on_shop":true,"enable_country_selector":true,"enable_language_selector":true,"payment_enable":true,"content_alignment":"left","show_divider":true,"show_divider_home":false,"margin_top":0,"mobile_margin_top":0,"padding_top":80,"padding_bottom":80,"mobile_padding_top":65,"mobile_padding_bottom":50}},"email-popup":{"type":"email-popup","blocks":{"0fb5cf40-4cd3-41e2-bd71-ba1aa4b7c931":{"type":"heading","settings":{"heading":"Louez le téléphone de vos rêves à prix réduit !","heading_size":"h3"}},"dc66302c-c380-4bee-8c46-0a1d95ad1a21":{"type":"text","settings":{"richtext":"<p>Abonnez-vous à notre newsletter pour accéder à des offres exclusives et profitez de -10€ pour votre 1ère location 😎.<\/p>"}},"d135b4c9-eaee-418e-9d8a-30d738cf2457":{"type":"email_form","settings":{"richtext":"<p>*<em>En soumettant ce formulaire, vous acceptez de recevoir nos e-mails et pouvez vous désinscrire à tout moment.<\/em><\/p>","button_full":false}}},"block_order":["0fb5cf40-4cd3-41e2-bd71-ba1aa4b7c931","dc66302c-c380-4bee-8c46-0a1d95ad1a21","d135b4c9-eaee-418e-9d8a-30d738cf2457"],"settings":{"display":"enable","show_home_page":true,"show_visitors":true,"delay":5,"dont_show":true,"dont_show_label":"","expire":7,"popup_position":"center","popup_width":"medium","alignment":"left","image":"shopify:\/\/shop_images\/Capture_d_ecran_2025-03-17_a_15.22.39.png","image_position":"right","full--bg-image":false,"image_overlay_opacity":0,"color_scheme":"background-1","custom_colors":true,"background_color":"#ffffff","foreground_color":"#190e66","button_background":"#13c1df","button_foreground":"#ffffff","hover_button_background":"#13c1df","hover_button_foreground":"#13c1df"}},"age-verifier-popup":{"type":"age-verifier-popup","blocks":{"heading_3qHnLy":{"type":"heading","settings":{"heading":"Confirm your age","heading_size":"h3"}},"text_QnQyiw":{"type":"text","settings":{"text":"<p>Are you 18 years old or older?<\/p>"}},"buttons_ppMLm4":{"type":"buttons","settings":{"accept_button_label":"Yes, I am","refuse_button_label":"No, I'm not"}}},"block_order":["heading_3qHnLy","text_QnQyiw","buttons_ppMLm4"],"disabled":true,"settings":{"display":"enable","expire":7,"heading":"Sorry!","text":"<p>This content is for adults only. Please return when you’re older.<\/p>","go_button_label":"Go Back","overlay_color":"#191b21","color_scheme":""}}},"order":["newsletter_FQJWgy","footer","email-popup","age-verifier-popup"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "rich_text_nfYf8N": {
+      "type": "rich-text",
+      "blocks": {
+        "text_DKAkk3": {
+          "type": "text",
+          "settings": {
+            "text": "<p>1. <strong>Informations légales</strong><br/>Le présent site est édité par la société Mobile Recycle, opérant sous le nom commercial Mobile Recycle / Loue<br/>Ton Mobile, immatriculée au RCS de Toulouse sous le numéro 824 056 287 00025, dont le siège social est situé<br/>à 55 avenue Louis Breguet, Bâtiment 7, 31400 Toulouse.<br/>Directeur de la publication : Beuil Thomas<br/>Email de contact : contact@louetonmobile.fr<br/>Hébergeur du site : Shopify Inc., 151 O’Connor Street, Ottawa, ON K2P 2L8, Canada<br/>2. <strong>Objet du site</strong><br/>Le site www.louetonmobile.fr a pour objectif de présenter des offres de location de smartphones<br/>reconditionnés.<br/>Les offres affichées sont proposées en collaboration avec notre partenaire financier Green Leaze, société<br/>spécialisée dans le leasing de biens électroniques.<br/>3. <strong>Rôle de Mobile Recycle</strong><br/>Mobile Recycle agit en tant que facilitateur de la location, en assurant les prestations suivantes :<br/>- Validation des commandes<br/>- Expédition des appareils<br/>- Service après-vente (SAV)<br/>- Gestion des réclamations clients<br/>En revanche, Mobile Recycle ne gère pas la collecte des loyers, y compris le premier paiement : cette partie<br/>est exclusivement assurée par Green Leaze, qui devient le bailleur officiel une fois le contrat de location<br/>validé.<br/>4. <strong>Rôle de Green Leaze<br/></strong>Green Leaze est le bailleur et gestionnaire financier. Il prend en charge :<br/>- La signature du contrat de location<br/>- La validation finale du dossier client<br/>- La collecte des loyers (y compris le premier loyer)<br/>- Les relances et éventuelles procédures en cas d’impayés<br/>Le contrat de location est établi entre vous (le locataire) et Green Leaze, à qui vous devez adresser tout ce<br/>qui concerne :<br/>- Vos informations bancaires<br/>- Le calendrier de prélèvement<br/>- Les questions relatives au contrat de location<br/>5. <strong>Absence de relation contractuelle directe avec Mobile Recycle pour les paiements</strong><br/>En utilisant ce site pour faire une demande de location :<br/>- Vous reconnaissez que les paiements sont gérés exclusivement par Green Leaze.<br/>- Mobile Recycle n’est pas responsable des opérations de prélèvement, facturation ou refus de financement.<br/>6.<strong> Responsabilités</strong><br/>Mobile Recycle s’efforce d’assurer un service de qualité dans ses missions :<br/>- Livraison rapide des appareils<br/>- Gestion du service client et du SAV<br/>- Accompagnement tout au long de la durée de la location<br/>Toutefois, la responsabilité de Mobile Recycle ne saurait être engagée en cas de :<br/>- Refus de financement par Green Leaze<br/>- Problème de prélèvement ou de paiement<br/>- Litige contractuel entre le locataire et Green Leaze<br/>7. <strong>Propriété intellectuelle</strong><br/>Tous les contenus présents sur le site (textes, visuels, logos, etc.) sont la propriété exclusive de Mobile<br/>Recycle ou font l’objet d’un droit d’usage.<br/>Toute reproduction ou utilisation non autorisée est strictement interdite.<br/>8. <strong>Données personnelles</strong><br/>Le site peut collecter certaines données personnelles à des fins de traitement de commande, suivi client, ou<br/>statistiques.<br/>Mobile Recycle s’engage à respecter la réglementation en vigueur (RGPD).<br/>Vous pouvez exercer vos droits d’accès, de rectification ou de suppression à l’adresse suivante :<br/>contact@louetonmobile.fr<br/>9. <strong>Modification des CGU</strong><br/>Mobile Recycle se réserve le droit de modifier les présentes CGU à tout moment.<br/>Les utilisateurs seront informés via une mention sur le site ou par email, le cas échéant.<br/>10. <strong>Loi applicable</strong><br/>Les présentes CGU sont soumises au droit français.<br/>Tout litige relatif à l'utilisation du site sera soumis à la compétence exclusive des tribunaux français.</p>",
+            "text_size": "small",
+            "text_color": "body"
+          }
+        },
+        "button_md44Bi": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style": "primary",
+            "button_size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "text_DKAkk3",
+        "button_md44Bi"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "alignment": "left",
+        "mobile_alignment": "left",
+        "color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
+    "newsletter_FQJWgy": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_YnmrWD": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Abonnez-vous</p>",
+            "heading_size": "h1"
+          }
+        },
+        "paragraph_JVV6MD": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Soyez le premier informé des nouvelles collections et des offres exclusives.</p>"
+          }
+        },
+        "email_form_GKh6Me": {
+          "type": "email_form",
+          "settings": {
+            "border_radius": 30
+          }
+        }
+      },
+      "block_order": [
+        "heading_YnmrWD",
+        "paragraph_JVV6MD",
+        "email_form_GKh6Me"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "box_color_scheme": "",
+        "image": "shopify://shop_images/des_5_mois.png",
+        "height": "small",
+        "image_overlay_opacity": 0,
+        "form_position": "right",
+        "image_round_corner": true,
+        "content_alignment": "center",
+        "padding_top": 70,
+        "padding_bottom": 70,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "1eb0bda7-098f-44ea-84e3-b98cbac02e3f": {
+          "type": "about_us",
+          "settings": {
+            "heading": "A Propos",
+            "about_information": "<p><strong>Loue ton mobile </strong>est une offre proposée par <strong>Mobile Recycle</strong>, une entreprise toulousaine spécialisée dans le reconditionnement de téléphone. </p>",
+            "social_media": true
+          }
+        },
+        "f011bece-9191-4dd0-958c-e6ec737ddd0d": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Notre société",
+            "menu": "footer"
+          }
+        },
+        "2afea511-cc39-4c26-b91f-84ad16da4248": {
+          "type": "contact_info",
+          "settings": {
+            "heading": "Informations :",
+            "contact_address": "<p>Loue ton mobile<br/>55 avenue Louis Breguet<br/>Bâtiment 7 Bureau 17<br/>31400 Toulouse<br/>France<br/>Appelez-nous : +33 5 61 36 59 85‬<br/>Écrivez-nous : <a href=\"mailto:contact@louetonmobile.fr\" title=\"mailto:contact@louetonmobile.fr\">contact@louetonmobile.fr</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "1eb0bda7-098f-44ea-84e3-b98cbac02e3f",
+        "f011bece-9191-4dd0-958c-e6ec737ddd0d",
+        "2afea511-cc39-4c26-b91f-84ad16da4248"
+      ],
+      "settings": {
+        "color_scheme": "accent-2",
+        "enable_follow_on_shop": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "content_alignment": "left",
+        "show_divider": true,
+        "show_divider_home": false,
+        "margin_top": 0,
+        "mobile_margin_top": 0,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "mobile_padding_top": 65,
+        "mobile_padding_bottom": 50
+      }
+    },
+    "email-popup": {
+      "type": "email-popup",
+      "blocks": {
+        "0fb5cf40-4cd3-41e2-bd71-ba1aa4b7c931": {
+          "type": "heading",
+          "settings": {
+            "heading": "Louez le téléphone de vos rêves à prix réduit !",
+            "heading_size": "h3"
+          }
+        },
+        "dc66302c-c380-4bee-8c46-0a1d95ad1a21": {
+          "type": "text",
+          "settings": {
+            "richtext": "<p>Abonnez-vous à notre newsletter pour accéder à des offres exclusives et profitez de -10€ pour votre 1ère location 😎.</p>"
+          }
+        },
+        "d135b4c9-eaee-418e-9d8a-30d738cf2457": {
+          "type": "email_form",
+          "settings": {
+            "richtext": "<p>*<em>En soumettant ce formulaire, vous acceptez de recevoir nos e-mails et pouvez vous désinscrire à tout moment.</em></p>",
+            "button_full": false
+          }
+        }
+      },
+      "block_order": [
+        "0fb5cf40-4cd3-41e2-bd71-ba1aa4b7c931",
+        "dc66302c-c380-4bee-8c46-0a1d95ad1a21",
+        "d135b4c9-eaee-418e-9d8a-30d738cf2457"
+      ],
+      "settings": {
+        "display": "enable",
+        "show_home_page": true,
+        "show_visitors": true,
+        "delay": 5,
+        "dont_show": true,
+        "dont_show_label": "",
+        "expire": 7,
+        "popup_position": "center",
+        "popup_width": "medium",
+        "alignment": "left",
+        "image": "shopify://shop_images/Capture_d_ecran_2025-03-17_a_15.22.39.png",
+        "image_position": "right",
+        "full--bg-image": false,
+        "image_overlay_opacity": 0,
+        "color_scheme": "background-1",
+        "custom_colors": true,
+        "background_color": "#ffffff",
+        "foreground_color": "#190e66",
+        "button_background": "#13c1df",
+        "button_foreground": "#ffffff",
+        "hover_button_background": "#13c1df",
+        "hover_button_foreground": "#13c1df"
+      }
+    },
+    "age-verifier-popup": {
+      "type": "age-verifier-popup",
+      "blocks": {
+        "heading_3qHnLy": {
+          "type": "heading",
+          "settings": {
+            "heading": "Confirm your age",
+            "heading_size": "h3"
+          }
+        },
+        "text_QnQyiw": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Are you 18 years old or older?</p>"
+          }
+        },
+        "buttons_ppMLm4": {
+          "type": "buttons",
+          "settings": {
+            "accept_button_label": "Yes, I am",
+            "refuse_button_label": "No, I'm not"
+          }
+        }
+      },
+      "block_order": [
+        "heading_3qHnLy",
+        "text_QnQyiw",
+        "buttons_ppMLm4"
+      ],
+      "disabled": true,
+      "settings": {
+        "display": "enable",
+        "expire": 7,
+        "heading": "Sorry!",
+        "text": "<p>This content is for adults only. Please return when you’re older.</p>",
+        "go_button_label": "Go Back",
+        "overlay_color": "#191b21",
+        "color_scheme": ""
+      }
+    }
+  },
+  "order": [
+    "rich_text_nfYf8N",
+    "newsletter_FQJWgy",
+    "footer",
+    "email-popup",
+    "age-verifier-popup"
+  ]
+}
