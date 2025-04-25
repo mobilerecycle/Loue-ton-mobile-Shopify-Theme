@@ -14,8 +14,8 @@
       "settings": {
         "heading": true,
         "color_scheme": "background-1",
-        "padding_top": 40,
-        "padding_bottom": 35,
+        "padding_top": 30,
+        "padding_bottom": 5,
         "mobile_padding_top": 0,
         "mobile_padding_bottom": 0
       }
@@ -54,7 +54,7 @@
         "alignment": "left",
         "mobile_alignment": "left",
         "color_scheme": "",
-        "padding_top": 50,
+        "padding_top": 0,
         "padding_bottom": 50,
         "mobile_padding_top": 50,
         "mobile_padding_bottom": 50
