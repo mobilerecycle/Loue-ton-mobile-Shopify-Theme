@@ -1,1 +1,69 @@
-{"sections":{"breadcrumbs":{"type":"breadcrumbs","settings":{"color_scheme":"background-3","show_page_title":true,"show_breadcrumb_navigation":false,"text_center":"center","padding_top":50,"padding_bottom":50,"mobile_padding_top":50,"mobile_padding_bottom":50}},"main":{"type":"main-page","disabled":true,"settings":{"heading":true,"color_scheme":"background-1","padding_top":40,"padding_bottom":35,"mobile_padding_top":0,"mobile_padding_bottom":0}}},"order":["breadcrumbs","main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "heading": true,
+        "color_scheme": "background-1",
+        "padding_top": 40,
+        "padding_bottom": 35,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0
+      }
+    },
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "background-3",
+        "show_page_title": true,
+        "show_breadcrumb_navigation": false,
+        "text_center": "center",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
+    "rich_text_PKLRDj": {
+      "type": "rich-text",
+      "blocks": {
+        "text_4zkmLd": {
+          "type": "text",
+          "settings": {
+            "text": "<p>1. Informations légales<br/>Le présent site est édité par la société Mobile Recycle, opérant sous le nom commercial Mobile Recycle / Loue<br/>Ton Mobile, immatriculée au RCS de Toulouse sous le numéro 824 056 287 00025, dont le siège social est situé<br/>à 55 avenue Louis Breguet, Bâtiment 7, 31400 Toulouse.<br/>Directeur de la publication : Beuil Thomas<br/>Email de contact : contact@louetonmobile.fr<br/>Hébergeur du site : Shopify Inc., 151 O’Connor Street, Ottawa, ON K2P 2L8, Canada<br/>2. Objet du site<br/>Le site www.louetonmobile.fr a pour objectif de présenter des offres de location de smartphones<br/>reconditionnés.<br/>Les offres affichées sont proposées en collaboration avec notre partenaire financier Green Leaze, société<br/>spécialisée dans le leasing de biens électroniques.<br/>3. Rôle de Mobile Recycle<br/>Mobile Recycle agit en tant que facilitateur de la location, en assurant les prestations suivantes :<br/>- Validation des commandes<br/>- Expédition des appareils<br/>- Service après-vente (SAV)<br/>- Gestion des réclamations clients<br/>En revanche, Mobile Recycle ne gère pas la collecte des loyers, y compris le premier paiement : cette partie<br/>est exclusivement assurée par Green Leaze, qui devient le bailleur officiel une fois le contrat de location<br/>validé.<br/>4. Rôle de Green Leaze<br/>Green Leaze est le bailleur et gestionnaire financier. Il prend en charge :<br/>- La signature du contrat de location<br/>- La validation finale du dossier client<br/>- La collecte des loyers (y compris le premier loyer)<br/>- Les relances et éventuelles procédures en cas d’impayés<br/>Le contrat de location est établi entre vous (le locataire) et Green Leaze, à qui vous devez adresser tout ce<br/>qui concerne :<br/>- Vos informations bancaires<br/>- Le calendrier de prélèvement<br/>- Les questions relatives au contrat de location<br/>5. Absence de relation contractuelle directe avec Mobile Recycle pour les paiements<br/>En utilisant ce site pour faire une demande de location :<br/>- Vous reconnaissez que les paiements sont gérés exclusivement par Green Leaze.<br/>- Mobile Recycle n’est pas responsable des opérations de prélèvement, facturation ou refus de financement.<br/>6. Responsabilités<br/>Mobile Recycle s’efforce d’assurer un service de qualité dans ses missions :<br/>- Livraison rapide des appareils<br/>- Gestion du service client et du SAV<br/>- Accompagnement tout au long de la durée de la location<br/>Toutefois, la responsabilité de Mobile Recycle ne saurait être engagée en cas de :<br/>- Refus de financement par Green Leaze<br/>- Problème de prélèvement ou de paiement<br/>- Litige contractuel entre le locataire et Green Leaze<br/>7. Propriété intellectuelle<br/>Tous les contenus présents sur le site (textes, visuels, logos, etc.) sont la propriété exclusive de Mobile<br/>Recycle ou font l’objet d’un droit d’usage.<br/>Toute reproduction ou utilisation non autorisée est strictement interdite.<br/>8. Données personnelles<br/>Le site peut collecter certaines données personnelles à des fins de traitement de commande, suivi client, ou<br/>statistiques.<br/>Mobile Recycle s’engage à respecter la réglementation en vigueur (RGPD).<br/>Vous pouvez exercer vos droits d’accès, de rectification ou de suppression à l’adresse suivante :<br/>contact@louetonmobile.fr<br/>9. Modification des CGU<br/>Mobile Recycle se réserve le droit de modifier les présentes CGU à tout moment.<br/>Les utilisateurs seront informés via une mention sur le site ou par email, le cas échéant.<br/>10. Loi applicable<br/>Les présentes CGU sont soumises au droit français.<br/>Tout litige relatif à l'utilisation du site sera soumis à la compétence exclusive des tribunaux français.</p>",
+            "text_size": "small",
+            "text_color": "body"
+          }
+        }
+      },
+      "block_order": [
+        "text_4zkmLd"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "alignment": "center",
+        "mobile_alignment": "center",
+        "color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "main",
+    "breadcrumbs",
+    "rich_text_PKLRDj"
+  ]
+}
