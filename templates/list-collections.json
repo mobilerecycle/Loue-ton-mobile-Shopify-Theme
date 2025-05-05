@@ -1,1 +1,314 @@
-{"sections":{"breadcrumbs":{"type":"breadcrumbs","disabled":true,"settings":{"color_scheme":"background-3","show_page_title":false,"show_breadcrumb_navigation":true,"text_center":"center","padding_top":50,"padding_bottom":50,"mobile_padding_top":50,"mobile_padding_bottom":50}},"slideshow_wfYgMc":{"type":"slideshow","blocks":{"slide_XNXJbC":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/Capture_d_ecran_2025-03-25_a_14.36.43.png","heading":"","heading_size":"h3","heading_line_height":"normal","subheading":"","button_label":"","link":"shopify:\/\/products\/iphone-15-pro","enble_entire_link":true,"button_type":"secondary","button_size":"small","image_overlay_opacity":0,"content_box_alignment":"bottom-left","alignment_desktop":"left","color_scheme":"","custom_colors":true,"text_color":"#121212","alignment_mobile":"center","enable_color_on_mobile":false,"color_scheme_mobile":""}},"slide_3Mrfad":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/Capture_d_ecran_2025-03-25_a_14.29.50.png","heading":"","heading_size":"h1","heading_line_height":"normal","subheading":"","button_label":"","link":"shopify:\/\/collections\/vos-produits-preferes","enble_entire_link":true,"button_type":"secondary","button_size":"large","image_overlay_opacity":0,"content_box_alignment":"middle-left","alignment_desktop":"left","color_scheme":"background-1","custom_colors":true,"text_color":"#121212","alignment_mobile":"center","enable_color_on_mobile":false,"color_scheme_mobile":"background-1"}}},"block_order":["slide_XNXJbC","slide_3Mrfad"],"settings":{"slide_height":"adapt_image","autorotate":false,"autorotate_speed":5,"navigation_position":"left","show_content_below_image":true,"padding_top":0,"padding_bottom":0,"mobile_padding_top":0,"mobile_padding_bottom":50,"custom_colors":false,"nav_foreground_color_desktop":"#333333","nav_foreground_color_mobile":"#333333"}},"main":{"type":"main-list-collections","disabled":true,"settings":{"collection_type":"all","layout":"standard","column":"3","color_scheme":"background-1","image_ratio":"portrait","image_round_corner":false,"product_count":false,"show_content_below_image":true,"title_design":"text","card_button_style":"primary","card_button_size":"medium","show_content_below_image_mobile":true,"sort":"alphabetical_reversed","title":"Collections","heading_tag":"h1","page_description":"<p>At our store you will find a wide selection of products to suit your every need.<\/p>","padding_top":85,"padding_bottom":65,"mobile_padding_top":50,"mobile_padding_bottom":40}},"banner_list_eMijYq":{"type":"banner-list","blocks":{"banner_4Vjyhd":{"type":"banner","settings":{"image":"shopify:\/\/shop_images\/Captured_ecran2025-03-12a14.41.58.png","banner_mobile_image":"shopify:\/\/shop_images\/Captured_ecran2025-03-12a14.41.58.png","title":"","heading_size":"h3","text":"","link_label":"Samsung","link":"shopify:\/\/collections\/samsung","enble_entire_link":false,"button_type":"icon","button_size":"small","link_button_size":"small","image_overlay_opacity":10,"padding_inner":"small","override_general":false,"content_position":"bottom","content_alignment":"left","color_scheme":"","custom_colors":true,"foreground":"#4460a0","button_background":"#ffffff","button_foreground":"#121212"}},"banner_HcmTUq":{"type":"banner","settings":{"image":"shopify:\/\/shop_images\/71ZOtNdaZCL.jpg","banner_mobile_image":"shopify:\/\/shop_images\/71ZOtNdaZCL.jpg","title":"","heading_size":"h3","text":"","link_label":"iPhone","link":"shopify:\/\/collections\/iphone","enble_entire_link":false,"button_type":"icon","button_size":"small","link_button_size":"small","image_overlay_opacity":10,"padding_inner":"small","override_general":false,"content_position":"bottom","content_alignment":"left","color_scheme":"","custom_colors":true,"foreground":"#4460a0","button_background":"#ffffff","button_foreground":"#121212"}}},"block_order":["banner_4Vjyhd","banner_HcmTUq"],"settings":{"heading":"","heading_size":"h2","subtitle":"","alignment":"left","mobile_alignment":"center","layout":"grid","products_show_on_xl":"2","products_show_on_sm":"2","mobile_stack":false,"image_ratio":"adapt","mosaic_image_ratio":"auto","content_position":"bottom","content_alignment":"left","round_corner":true,"show_content_below_image":false,"show_view_all":false,"button_label":"Shop now","button_link":"","button_style":"primary","button_size":"large","auto_rotate":false,"autoplay_time":3,"show_navigation":true,"button_background":"#f6cb46","button_text_color":"#ffffff","padding_top":50,"padding_bottom":50,"mobile_padding_top":50,"mobile_padding_bottom":50,"color_scheme":""}},"slideshow_LGDmUE":{"type":"slideshow","blocks":{"slide_YxiRC6":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/Capture_d_ecran_2025-03-28_a_16.19.58.png","heading":"","heading_size":"h1","heading_line_height":"normal","subheading":"","button_label":"","link":"","enble_entire_link":false,"button_type":"secondary","button_size":"large","image_overlay_opacity":0,"content_box_alignment":"middle-left","alignment_desktop":"left","color_scheme":"","custom_colors":true,"text_color":"#121212","alignment_mobile":"center","enable_color_on_mobile":false,"color_scheme_mobile":""}}},"block_order":["slide_YxiRC6"],"settings":{"slide_height":"adapt_image","autorotate":false,"autorotate_speed":5,"navigation_position":"left","show_content_below_image":true,"padding_top":0,"padding_bottom":0,"mobile_padding_top":0,"mobile_padding_bottom":50,"custom_colors":false,"nav_foreground_color_desktop":"#333333","nav_foreground_color_mobile":"#333333"}},"rich_text_RpKYUq":{"type":"rich-text","blocks":{"heading_FX3qmG":{"type":"heading","settings":{"heading":"<p>Vous avez des questions ?<\/p>","heading_size":"h1"}},"text_zHk4Vr":{"type":"text","settings":{"text":"<p>On y répond avec notre FAQ<\/p>","text_size":"small","text_color":"body"}},"button_KhXMcz":{"type":"button","settings":{"button_label":"Oui, j'ai une question 😊","button_link":"shopify:\/\/blogs\/infos","button_style":"secondary","button_size":"small"}}},"block_order":["heading_FX3qmG","text_zHk4Vr","button_KhXMcz"],"settings":{"alignment":"center","mobile_alignment":"center","color_scheme":"","padding_top":50,"padding_bottom":50,"mobile_padding_top":50,"mobile_padding_bottom":50}}},"order":["breadcrumbs","slideshow_wfYgMc","main","banner_list_eMijYq","slideshow_LGDmUE","rich_text_RpKYUq"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "background-3",
+        "show_page_title": false,
+        "show_breadcrumb_navigation": true,
+        "text_center": "center",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
+    "slideshow_wfYgMc": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_XNXJbC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Capture_d_ecran_2025-05-05_a_11.22.48.png",
+            "heading": "",
+            "heading_size": "h3",
+            "heading_line_height": "normal",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://products/iphone-15-pro",
+            "enble_entire_link": true,
+            "button_type": "secondary",
+            "button_size": "small",
+            "image_overlay_opacity": 0,
+            "content_box_alignment": "bottom-left",
+            "alignment_desktop": "left",
+            "color_scheme": "",
+            "custom_colors": true,
+            "text_color": "#121212",
+            "alignment_mobile": "center",
+            "enable_color_on_mobile": false,
+            "color_scheme_mobile": ""
+          }
+        },
+        "slide_3Mrfad": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Capture_d_ecran_2025-03-25_a_14.29.50.png",
+            "heading": "",
+            "heading_size": "h1",
+            "heading_line_height": "normal",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections/vos-produits-preferes",
+            "enble_entire_link": true,
+            "button_type": "secondary",
+            "button_size": "large",
+            "image_overlay_opacity": 0,
+            "content_box_alignment": "middle-left",
+            "alignment_desktop": "left",
+            "color_scheme": "background-1",
+            "custom_colors": true,
+            "text_color": "#121212",
+            "alignment_mobile": "center",
+            "enable_color_on_mobile": false,
+            "color_scheme_mobile": "background-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_XNXJbC",
+        "slide_3Mrfad"
+      ],
+      "settings": {
+        "slide_height": "adapt_image",
+        "autorotate": false,
+        "autorotate_speed": 5,
+        "navigation_position": "left",
+        "show_content_below_image": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 50,
+        "custom_colors": false,
+        "nav_foreground_color_desktop": "#333333",
+        "nav_foreground_color_mobile": "#333333"
+      }
+    },
+    "main": {
+      "type": "main-list-collections",
+      "disabled": true,
+      "settings": {
+        "collection_type": "all",
+        "layout": "standard",
+        "column": "3",
+        "color_scheme": "background-1",
+        "image_ratio": "portrait",
+        "image_round_corner": false,
+        "product_count": false,
+        "show_content_below_image": true,
+        "title_design": "text",
+        "card_button_style": "primary",
+        "card_button_size": "medium",
+        "show_content_below_image_mobile": true,
+        "sort": "alphabetical_reversed",
+        "title": "Collections",
+        "heading_tag": "h1",
+        "page_description": "<p>At our store you will find a wide selection of products to suit your every need.</p>",
+        "padding_top": 85,
+        "padding_bottom": 65,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 40
+      }
+    },
+    "banner_list_eMijYq": {
+      "type": "banner-list",
+      "blocks": {
+        "banner_4Vjyhd": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/Captured_ecran2025-03-12a14.41.58.png",
+            "banner_mobile_image": "shopify://shop_images/Captured_ecran2025-03-12a14.41.58.png",
+            "title": "",
+            "heading_size": "h3",
+            "text": "",
+            "link_label": "Samsung",
+            "link": "shopify://collections/samsung",
+            "enble_entire_link": false,
+            "button_type": "icon",
+            "button_size": "small",
+            "link_button_size": "small",
+            "image_overlay_opacity": 10,
+            "padding_inner": "small",
+            "override_general": false,
+            "content_position": "bottom",
+            "content_alignment": "left",
+            "color_scheme": "",
+            "custom_colors": true,
+            "foreground": "#4460a0",
+            "button_background": "#ffffff",
+            "button_foreground": "#121212"
+          }
+        },
+        "banner_HcmTUq": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/71ZOtNdaZCL.jpg",
+            "banner_mobile_image": "shopify://shop_images/71ZOtNdaZCL.jpg",
+            "title": "",
+            "heading_size": "h3",
+            "text": "",
+            "link_label": "iPhone",
+            "link": "shopify://collections/iphone",
+            "enble_entire_link": false,
+            "button_type": "icon",
+            "button_size": "small",
+            "link_button_size": "small",
+            "image_overlay_opacity": 10,
+            "padding_inner": "small",
+            "override_general": false,
+            "content_position": "bottom",
+            "content_alignment": "left",
+            "color_scheme": "",
+            "custom_colors": true,
+            "foreground": "#4460a0",
+            "button_background": "#ffffff",
+            "button_foreground": "#121212"
+          }
+        }
+      },
+      "block_order": [
+        "banner_4Vjyhd",
+        "banner_HcmTUq"
+      ],
+      "settings": {
+        "heading": "",
+        "heading_size": "h2",
+        "subtitle": "",
+        "alignment": "left",
+        "mobile_alignment": "center",
+        "layout": "grid",
+        "products_show_on_xl": "2",
+        "products_show_on_sm": "2",
+        "mobile_stack": false,
+        "image_ratio": "adapt",
+        "mosaic_image_ratio": "auto",
+        "content_position": "bottom",
+        "content_alignment": "left",
+        "round_corner": true,
+        "show_content_below_image": false,
+        "show_view_all": false,
+        "button_label": "Shop now",
+        "button_link": "",
+        "button_style": "primary",
+        "button_size": "large",
+        "auto_rotate": false,
+        "autoplay_time": 3,
+        "show_navigation": true,
+        "button_background": "#f6cb46",
+        "button_text_color": "#ffffff",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50,
+        "color_scheme": ""
+      }
+    },
+    "slideshow_LGDmUE": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_YxiRC6": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Capture_d_ecran_2025-03-28_a_16.19.58.png",
+            "heading": "",
+            "heading_size": "h1",
+            "heading_line_height": "normal",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "enble_entire_link": false,
+            "button_type": "secondary",
+            "button_size": "large",
+            "image_overlay_opacity": 0,
+            "content_box_alignment": "middle-left",
+            "alignment_desktop": "left",
+            "color_scheme": "",
+            "custom_colors": true,
+            "text_color": "#121212",
+            "alignment_mobile": "center",
+            "enable_color_on_mobile": false,
+            "color_scheme_mobile": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_YxiRC6"
+      ],
+      "settings": {
+        "slide_height": "adapt_image",
+        "autorotate": false,
+        "autorotate_speed": 5,
+        "navigation_position": "left",
+        "show_content_below_image": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 50,
+        "custom_colors": false,
+        "nav_foreground_color_desktop": "#333333",
+        "nav_foreground_color_mobile": "#333333"
+      }
+    },
+    "rich_text_RpKYUq": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_FX3qmG": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Vous avez des questions ?</p>",
+            "heading_size": "h1"
+          }
+        },
+        "text_zHk4Vr": {
+          "type": "text",
+          "settings": {
+            "text": "<p>On y répond avec notre FAQ</p>",
+            "text_size": "small",
+            "text_color": "body"
+          }
+        },
+        "button_KhXMcz": {
+          "type": "button",
+          "settings": {
+            "button_label": "Oui, j'ai une question 😊",
+            "button_link": "shopify://blogs/infos",
+            "button_style": "secondary",
+            "button_size": "small"
+          }
+        }
+      },
+      "block_order": [
+        "heading_FX3qmG",
+        "text_zHk4Vr",
+        "button_KhXMcz"
+      ],
+      "settings": {
+        "alignment": "center",
+        "mobile_alignment": "center",
+        "color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "slideshow_wfYgMc",
+    "main",
+    "banner_list_eMijYq",
+    "slideshow_LGDmUE",
+    "rich_text_RpKYUq"
+  ]
+}
