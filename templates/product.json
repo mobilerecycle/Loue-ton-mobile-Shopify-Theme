@@ -149,7 +149,7 @@
           "type": "collapsible_tab",
           "settings": {
             "heading": "État",
-            "content": "",
+            "content": "<p><strong>Fonctionnalités</strong> :<br/>Le téléphone est parfaitement opérationnelles (écran tactile, caméra, boutons, Face ID, etc.), avec un minimum de <strong>capacité</strong> de batterie de <strong>85 %</strong> garantie.</p><p><strong>État esthétique :</strong><br/>Peut présenter quelques traces d'usure légères sur l’écran ou le châssis.</p>",
             "page": "",
             "icon": "star"
           }
