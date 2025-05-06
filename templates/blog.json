@@ -1,1 +1,100 @@
-{"sections":{"breadcrumbs":{"type":"breadcrumbs","settings":{"color_scheme":"background-3","show_page_title":false,"show_breadcrumb_navigation":false,"text_center":"center","padding_top":30,"padding_bottom":30,"mobile_padding_top":30,"mobile_padding_bottom":30}},"main":{"type":"main-blog","settings":{"layout":"masonry","article_to_show":6,"show_image":true,"image_ratio":"adapt","image_round_corner":false,"show_content":true,"show_date":true,"show_author":false,"show_comment":true,"hover_arrow":false,"show_read_btn":true,"padding_top":60,"padding_bottom":50,"mobile_padding_top":60,"mobile_padding_bottom":30}}},"order":["breadcrumbs","main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "color_scheme": "background-3",
+        "show_page_title": false,
+        "show_breadcrumb_navigation": false,
+        "text_center": "center",
+        "padding_top": 30,
+        "padding_bottom": 30,
+        "mobile_padding_top": 30,
+        "mobile_padding_bottom": 30
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "layout": "masonry",
+        "article_to_show": 6,
+        "show_image": true,
+        "image_ratio": "adapt",
+        "image_round_corner": false,
+        "show_content": true,
+        "show_date": true,
+        "show_author": false,
+        "show_comment": true,
+        "hover_arrow": false,
+        "show_read_btn": true,
+        "padding_top": 60,
+        "padding_bottom": 50,
+        "mobile_padding_top": 60,
+        "mobile_padding_bottom": 30
+      }
+    },
+    "image_with_text_iqEbNf": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_acJTxD": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Pourquoi votre iPhone affiche un message d’erreur après un changement de batterie ? </p>",
+            "heading_size": "h1"
+          }
+        },
+        "text_aemPjg": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+          }
+        },
+        "button_P9hY9V": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style": "primary",
+            "button_size": "small"
+          }
+        }
+      },
+      "block_order": [
+        "heading_acJTxD",
+        "text_aemPjg",
+        "button_P9hY9V"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/IMG_0526.jpg",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "round_corner": true,
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "full_width": false,
+        "color_scheme": "",
+        "mobile_content_alignment": "left",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "mobile_padding_top": 0,
+        "mobile_padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main",
+    "image_with_text_iqEbNf"
+  ]
+}
