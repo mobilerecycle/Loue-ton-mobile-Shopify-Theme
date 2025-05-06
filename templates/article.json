@@ -57,7 +57,7 @@
         "text_h4eycc": {
           "type": "text",
           "settings": {
-            "text": "<h1>Étape 1 :</h1><p><strong>Allez sur iCloud.com</strong>, <strong>connectez-vous</strong> au compte iCloud présent sur l’appareil que vous souhaitez déconnecter dans la rubrique <strong>\"Localiser\"</strong>. Si vous ne disposez plus du mot de passe consultez l’article : \"Oubli du mot de passe de mon identifiant Apple\" .</p><h1>Étape 2 :</h1><p>Si l’authentification à deux facteurs est activée, vous allez recevoir un code de validation sur un de vos appareils de confiance. </p><p>Dans le cas contraire, placez votre carte SIM dans un autre appareil et cliquez sur « Code non reçu » pour recevoir un sms.</p><h1>Étape 3 :</h1><p>Cliquez sur tous mes appareils en haut de la fenêtre.</p>"
+            "text": "<h1>Comment déconnecter son compte iCloud à distance ?</h1><h1>Étape 1 :</h1><p><strong>Allez sur iCloud.com</strong>, <strong>connectez-vous</strong> au compte iCloud présent sur l’appareil que vous souhaitez déconnecter dans la rubrique <strong>\"Localiser\"</strong>. Si vous ne disposez plus du mot de passe consultez l’article : \"Oubli du mot de passe de mon identifiant Apple\" .</p><h1>Étape 2 :</h1><p>Si l’authentification à deux facteurs est activée, vous allez recevoir un code de validation sur un de vos appareils de confiance. </p><p>Dans le cas contraire, placez votre carte SIM dans un autre appareil et cliquez sur « Code non reçu » pour recevoir un sms.</p><h1>Étape 3 :</h1><p>Cliquez sur tous mes appareils en haut de la fenêtre.</p>"
           }
         }
       },
