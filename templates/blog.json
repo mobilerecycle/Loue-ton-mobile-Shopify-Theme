@@ -41,60 +41,10 @@
         "mobile_padding_top": 60,
         "mobile_padding_bottom": 30
       }
-    },
-    "image_with_text_iqEbNf": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_acJTxD": {
-          "type": "heading",
-          "settings": {
-            "heading": "<p>Pourquoi votre iPhone affiche un message d’erreur après un changement de batterie ? </p>",
-            "heading_size": "h1"
-          }
-        },
-        "text_aemPjg": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
-          }
-        },
-        "button_P9hY9V": {
-          "type": "button",
-          "settings": {
-            "button_label": "Button label",
-            "button_link": "",
-            "button_style": "primary",
-            "button_size": "small"
-          }
-        }
-      },
-      "block_order": [
-        "heading_acJTxD",
-        "text_aemPjg",
-        "button_P9hY9V"
-      ],
-      "name": "t:sections.image-with-text.presets.name",
-      "settings": {
-        "image": "shopify://shop_images/IMG_0526.jpg",
-        "height": "adapt",
-        "desktop_image_width": "small",
-        "round_corner": true,
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "full_width": false,
-        "color_scheme": "",
-        "mobile_content_alignment": "left",
-        "padding_top": 0,
-        "padding_bottom": 0,
-        "mobile_padding_top": 0,
-        "mobile_padding_bottom": 0
-      }
     }
   },
   "order": [
     "breadcrumbs",
-    "main",
-    "image_with_text_iqEbNf"
+    "main"
   ]
 }
