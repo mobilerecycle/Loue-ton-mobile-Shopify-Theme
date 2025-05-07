@@ -81,7 +81,7 @@
         "show_price": false,
         "show_vendor": false,
         "show_product_rating": true,
-        "show_badges": true,
+        "show_badges": false,
         "badge_position": "top-left",
         "show_cart_button": true,
         "cart_button_style": "style2",
