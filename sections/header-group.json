@@ -42,6 +42,7 @@
       "block_order": [
         "526552a7-b318-483a-8d8c-3491b876b6ef"
       ],
+      "disabled": true,
       "settings": {
         "announcement_enable": true,
         "full_width": false,
