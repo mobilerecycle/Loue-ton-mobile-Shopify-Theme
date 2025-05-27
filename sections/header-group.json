@@ -1,1 +1,91 @@
-{"type":"header","name":"Header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"526552a7-b318-483a-8d8c-3491b876b6ef":{"type":"announcement","settings":{"index":false,"no_index":false,"text":"HURRY UP! BUY NOW","link":"","collapsible_content":true,"toggle_button":"More","subheading":"","heading":"Announcement title","heading_size":"h1","description":"<p>Pair text with an image to focus on your chosen product, collection, or blog post. Include information about availability, style, or even a review.<\/p>","button_label":"SHOP NOW","button_link":"shopify:\/\/collections\/all","button_style":"primary","button_size":"large","alignment":"center","height":"adapt","background_image":false,"image_overlay_opacity":0,"section_height":"medium"}}},"block_order":["526552a7-b318-483a-8d8c-3491b876b6ef"],"disabled":true,"settings":{"announcement_enable":false,"full_width":false,"social_media":true,"country_selector":true,"language_selector":true,"color_scheme":"accent-1"}},"header":{"type":"header","settings":{"logo":"shopify:\/\/shop_images\/Capture_d_ecran_2025-03-11_a_13.56.36.png","logo_width":180,"logo_position":"middle_left","menu":"main-menu","menu_position":"center","menu_font":"default","show_cart":true,"user_icon":true,"color_scheme":"background-1","full_width":true,"show_search":true,"search_style":"search_popup","search_background":"#f8f8f8","search_foreground":"#190e66","header_sticky":false,"sticky_color_background":"#ffffff","sticky_text_color":"#190e66","transparent_header":true,"transparent_color_foreground":"#190e66","transparent_color_background":"#ffffff","transparent_text_color":"#190e66","submenu_color_scheme":"background-1","logo_2":"shopify:\/\/shop_images\/Capture_d_ecran_2025-03-11_a_13.56.36.png","social_media":true,"enable_currency":false,"enable_language":false}}},"order":["announcement-bar","header"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "526552a7-b318-483a-8d8c-3491b876b6ef": {
+          "type": "announcement",
+          "settings": {
+            "index": true,
+            "no_index": false,
+            "text": "HURRY UP! BUY NOW",
+            "link": "",
+            "collapsible_content": true,
+            "toggle_button": "More",
+            "subheading": "",
+            "heading": "Announcement title",
+            "heading_size": "h1",
+            "description": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Include information about availability, style, or even a review.</p>",
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections/all",
+            "button_style": "primary",
+            "button_size": "large",
+            "alignment": "center",
+            "height": "adapt",
+            "background_image": false,
+            "image_overlay_opacity": 0,
+            "section_height": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "526552a7-b318-483a-8d8c-3491b876b6ef"
+      ],
+      "disabled": true,
+      "settings": {
+        "announcement_enable": true,
+        "full_width": false,
+        "social_media": true,
+        "country_selector": true,
+        "language_selector": true,
+        "color_scheme": "accent-1"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/Capture_d_ecran_2025-03-11_a_13.56.36.png",
+        "logo_width": 180,
+        "logo_position": "middle_left",
+        "menu": "main-menu",
+        "menu_position": "center",
+        "menu_font": "default",
+        "show_cart": true,
+        "user_icon": true,
+        "color_scheme": "background-1",
+        "full_width": true,
+        "show_search": true,
+        "search_style": "search_popup",
+        "search_background": "#f8f8f8",
+        "search_foreground": "#190e66",
+        "header_sticky": false,
+        "sticky_color_background": "#ffffff",
+        "sticky_text_color": "#190e66",
+        "transparent_header": true,
+        "transparent_color_foreground": "#190e66",
+        "transparent_color_background": "#ffffff",
+        "transparent_text_color": "#190e66",
+        "submenu_color_scheme": "background-1",
+        "logo_2": "shopify://shop_images/Capture_d_ecran_2025-03-11_a_13.56.36.png",
+        "social_media": true,
+        "enable_currency": false,
+        "enable_language": false
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}
