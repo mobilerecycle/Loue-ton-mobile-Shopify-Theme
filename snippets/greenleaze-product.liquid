@@ -1,4 +1,3 @@
-
 {% comment %}
 Used on product page
   {% render 'greenleaze-abonnement-product' %}
@@ -21,13 +20,25 @@ Add the script in head of the page if needed
           }
     </script>
 
+    {%- liquid
+      assign current_variant = product.selected_or_first_available_variant
+    -%}
 
-    <div class="btn w-full btn--status greenleaze-button greenleaze-button-product button btn--primary" data-price="{{product.price}}" data-variant-id={{ product.selected_or_first_available_variant.id }}>
+    <div id="greenleaze-button-container" class="btn w-full btn--status greenleaze-button greenleaze-button-product button btn--primary"
+         data-price="{{current_variant.price}}"
+         data-variant-id="{{ current_variant.id }}"
+         data-product-handle="{{ product.handle }}"
+         {% if current_variant.available == false or quantity_rule_soldout %}
+           style="display: none;"
+         {% endif %}>
         Louer cet article
-    </div>   
-    
-    
+    </div>
+
+
     <script>
+    // Variable globale pour stocker l'ID de la variante actuelle
+    let currentVariantId = "{{ current_variant.id }}";
+
     // Listen for events
     window.addEventListener("message", function (event) {
       console.log(event);
@@ -39,7 +50,7 @@ Add the script in head of the page if needed
         const variantId = event.data?.variantId ?? null
         sendCartAndRedirect(
           event.data?.duration,
-          {{ product.selected_or_first_available_variant.id }} || null,
+          currentVariantId,
           event.data?.pdistinctId
         ).then(() => {
           document.querySelector("#modal-abonnement-product--greenleaze").style.display =
@@ -52,61 +63,227 @@ Add the script in head of the page if needed
       }
     });
     // Get price array in format {[duration]: {month: 0, initial: 0}} stringify + url encoded
-  
+
     if(typeof init !== "undefined" && init === true) { // In case the script already loaded
       console.log(typeof init)
       addModalAndButtonPrice(undefined)
-    } else { // Else we wait it finishes 
+    } else { // Else we wait it finishes
       window.addEventListener("greenleazePriceActualize", function (event) {
         console.log("Adding modal from event")
         addModalAndButtonPrice(undefined)
       })
     }
     function addModalAndButtonPrice(priceTTC) {
-        const productPrice = priceTTC ?? {{product.price}}
+        const productPrice = priceTTC ?? {{current_variant.price}}
         console.log("product price", (productPrice/1.2)/100)
         const pricesForProduct = getAllPricesForProduct((productPrice/1.2)/100)
-        
+
         console.log("🛠️ Prix calculés :", pricesForProduct);
         console.log("📅 monthValues :", monthValues);
         console.log("🔢 Dernier mois dans monthValues :", monthValues[monthValues.length - 1]);
-      
+
         const minPrice = pricesForProduct[monthValues[monthValues.length - 1]].monthly
-      console.log("min", minPrice)
-      document.querySelectorAll(".greenleaze-button-product").forEach((button) => {
-          button.innerText = `Louer en un clic à partir de ${minPrice}€ / mois`
-      })
+        console.log("min", minPrice)
+        document.querySelectorAll(".greenleaze-button-product").forEach((button) => {
+            button.innerText = `Louer en un clic à partir de ${minPrice}€ / mois`
+        })
         const pricePerDurationEncoded = encodeURI(JSON.stringify(pricesForProduct))
         if(!trackingId) trackingId =
         window.ShopifyAnalytics?.lib?.user()?.traits()?.uniqToken ||
         self?.crypto?.randomUUID();
-      const modalContent = `
-      <iframe class="modal-abonnement-product--greenleaze" src="/apps/greenleaze-proxy/modal-product?durations=${pricePerDurationEncoded}&trackingId=${trackingId}">
-        </iframe>
-      `;
-      const existingModal = document.querySelector("#modal-abonnement-product--greenleaze")
+        const modalContent = `
+        <iframe class="modal-abonnement-product--greenleaze" src="/apps/greenleaze-proxy/modal-product?durations=${pricePerDurationEncoded}&trackingId=${trackingId}">
+          </iframe>
+        `;
+        const existingModal = document.querySelector("#modal-abonnement-product--greenleaze")
 
-      // No more than one modal per page - If multiple buttons you may change this
-      if(existingModal) {
-        existingModal.remove()
-      }
+        // No more than one modal per page - If multiple buttons you may change this
+        if(existingModal) {
+          existingModal.remove()
+        }
         // Append it to the body or desired container
-       const modalContainer = document.createElement("div");
+        const modalContainer = document.createElement("div");
         modalContainer.classList.add("modal-abonnement-product--greenleaze");
         modalContainer.id = "modal-abonnement-product--greenleaze";
         modalContainer.innerHTML = modalContent;
         modalContainer.style.display = "none";
         document.body.appendChild(modalContainer);
-    
-      document.querySelectorAll(".greenleaze-button-product").forEach((button) => { 
-        // If multiple button on a page you may want to edit this
-        button.addEventListener("click", function () {
-          const modal = document.querySelector("#modal-abonnement-product--greenleaze");
-          modal.style.display = "block";
+
+        document.querySelectorAll(".greenleaze-button-product").forEach((button) => {
+          // If multiple button on a page you may want to edit this
+          button.addEventListener("click", function () {
+            const modal = document.querySelector("#modal-abonnement-product--greenleaze");
+            modal.style.display = "block";
+          });
         });
-      });
     }
 
+    // Méthode 1: S'intégrer au système de publication/abonnement
+    function setupVariantChangeListener() {
+      if (window.PUB_SUB_EVENTS && typeof window.subscribe === 'function') {
+        console.log("Setting up Greenleaze variant change listener using PUB_SUB_EVENTS");
+        window.subscribe(window.PUB_SUB_EVENTS.variantChange, function(event) {
+          if (!event || !event.data || !event.data.variant) return;
+
+          const variant = event.data.variant;
+          console.log("Variant change detected:", variant.id, "Available:", variant.available);
+
+          // Mise à jour de la variable globale avec le nouvel ID de variante
+          currentVariantId = variant.id;
+
+          const greenleazeButton = document.querySelector('#greenleaze-button-container');
+          if (greenleazeButton) {
+            // Mettre à jour les attributs du bouton
+            greenleazeButton.dataset.variantId = variant.id;
+            greenleazeButton.dataset.price = variant.price;
+
+            console.log("Variant updated for Greenleaze button:", variant.id);
+
+            // Mettre à jour la visibilité selon la disponibilité
+            if (variant.available) {
+              console.log("Affichage du bouton Greenleaze - variante disponible");
+              greenleazeButton.style.display = '';
+              // Actualiser le prix affiché
+              addModalAndButtonPrice(variant.price);
+            } else {
+              console.log("Masquage du bouton Greenleaze - variante indisponible");
+              greenleazeButton.style.display = 'none';
+            }
+          }
+        });
+      }
+    }
+
+    // Méthode 2: Observer les changements sur l'input caché de la variante
+    function setupVariantInputObserver() {
+      const variantInputs = document.querySelectorAll('input[name="id"].product-variant-id');
+      if (variantInputs.length > 0) {
+        console.log("Setting up Greenleaze variant input observer");
+
+        variantInputs.forEach(input => {
+          // Observer les changements de la valeur de l'input
+          const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+                const variantId = input.value;
+                const isDisabled = input.hasAttribute('disabled');
+
+                // Mise à jour de la variable globale avec le nouvel ID de variante
+                if (variantId) {
+                  currentVariantId = variantId;
+                  console.log("Variant ID updated from input:", currentVariantId);
+                }
+
+                console.log("Variant input changed:", variantId, "Disabled:", isDisabled);
+
+                const greenleazeButton = document.querySelector('#greenleaze-button-container');
+                if (greenleazeButton) {
+                  greenleazeButton.dataset.variantId = variantId;
+
+                  if (isDisabled) {
+                    console.log("Masquage du bouton Greenleaze - input désactivé");
+                    greenleazeButton.style.display = 'none';
+                  } else {
+                    console.log("Affichage du bouton Greenleaze - input activé");
+                    greenleazeButton.style.display = '';
+
+                    // Récupérer le prix de la variante pour mise à jour
+                    const variantPrice = document.querySelector('.price__regular .price-item')?.dataset?.price;
+                    if (variantPrice) {
+                      addModalAndButtonPrice(variantPrice);
+                    }
+                  }
+                }
+              }
+            });
+          });
+
+          observer.observe(input, { attributes: true });
+
+          // Vérifier aussi les changements de valeur directement
+          input.addEventListener('change', function() {
+            const newVariantId = this.value;
+            if (newVariantId) {
+              currentVariantId = newVariantId;
+              console.log("Variant ID updated from input change event:", currentVariantId);
+
+              const greenleazeButton = document.querySelector('#greenleaze-button-container');
+              if (greenleazeButton) {
+                greenleazeButton.dataset.variantId = newVariantId;
+              }
+            }
+          });
+        });
+      }
+    }
+
+    // Méthode 3: Observer les changements sur le bouton d'ajout au panier
+    function setupCartButtonObserver() {
+      const addToCartButton = document.querySelector('button[name="add"]');
+      if (addToCartButton) {
+        console.log("Setting up Greenleaze cart button observer");
+
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+              const isDisabled = addToCartButton.hasAttribute('disabled');
+
+              console.log("Cart button state changed, disabled:", isDisabled);
+
+              const greenleazeButton = document.querySelector('#greenleaze-button-container');
+              if (greenleazeButton) {
+                if (isDisabled) {
+                  console.log("Masquage du bouton Greenleaze - bouton panier désactivé");
+                  greenleazeButton.style.display = 'none';
+                } else {
+                  console.log("Affichage du bouton Greenleaze - bouton panier activé");
+                  greenleazeButton.style.display = '';
+                }
+              }
+            }
+          });
+        });
+
+        observer.observe(addToCartButton, { attributes: true });
+      }
+    }
+
+    // Initialiser toutes les méthodes quand le DOM est chargé
+    function initAllGreenleazeMethods() {
+      console.log("Initializing all Greenleaze integration methods");
+      setupVariantChangeListener();
+      setupVariantInputObserver();
+      setupCartButtonObserver();
+
+      // Synchronisation initiale avec l'état du bouton d'ajout au panier
+      const addToCartButton = document.querySelector('button[name="add"]');
+      const greenleazeButton = document.querySelector('#greenleaze-button-container');
+
+      if (addToCartButton && greenleazeButton) {
+        const isDisabled = addToCartButton.hasAttribute('disabled');
+        console.log("Initial cart button state, disabled:", isDisabled);
+
+        if (isDisabled) {
+          greenleazeButton.style.display = 'none';
+        } else {
+          greenleazeButton.style.display = '';
+        }
+      }
+
+      // Récupérer la valeur initiale de l'ID de variante
+      const variantInput = document.querySelector('input[name="id"].product-variant-id');
+      if (variantInput && variantInput.value) {
+        currentVariantId = variantInput.value;
+        console.log("Initial variant ID set:", currentVariantId);
+      }
+    }
+
+    // S'assurer que l'initialisation se fait au bon moment
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      setTimeout(initAllGreenleazeMethods, 1);
+    } else {
+      document.addEventListener("DOMContentLoaded", initAllGreenleazeMethods);
+    }
   </script>
 
 {% endif %}
