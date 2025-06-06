@@ -441,6 +441,7 @@
     },
     "main": {
       "type": "main-blog",
+      "disabled": true,
       "settings": {
         "layout": "standard",
         "article_to_show": 7,
