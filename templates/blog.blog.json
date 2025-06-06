@@ -25,10 +25,10 @@
     "main": {
       "type": "main-blog",
       "settings": {
-        "layout": "masonry",
+        "layout": "standard",
         "article_to_show": 6,
         "show_image": true,
-        "image_ratio": "medium",
+        "image_ratio": "small",
         "image_round_corner": false,
         "show_content": true,
         "show_date": true,
