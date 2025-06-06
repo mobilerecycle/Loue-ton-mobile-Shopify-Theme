@@ -195,6 +195,50 @@
         "background": "#ffffff"
       }
     },
+    "rich_text_a6WCfx": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_MHFccA": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Greenleaze</p>",
+            "heading_size": "h1"
+          }
+        },
+        "text_njp9hm": {
+          "type": "text",
+          "settings": {
+            "text": "<p>🤔 Une question sur la location ? On vous explique tout sur notre partenaire Greenleaze et pourquoi vous êtes entre de bonnes mains.</p>",
+            "text_size": "small",
+            "text_color": "body"
+          }
+        },
+        "button_tiiatQ": {
+          "type": "button",
+          "settings": {
+            "button_label": "Cliquez-ici",
+            "button_link": "shopify://blogs/infos/greenleaze-notre-partenaire-pour-une-location-simple-fiable-et-transparente",
+            "button_style": "primary",
+            "button_size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "heading_MHFccA",
+        "text_njp9hm",
+        "button_tiiatQ"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "alignment": "center",
+        "mobile_alignment": "center",
+        "color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
     "image_with_text_PhWXFr": {
       "type": "image-with-text",
       "blocks": {
@@ -449,6 +493,7 @@
     "scrolling_text_q3BR8j",
     "618a0282-c079-42aa-a005-eb543079cfcb",
     "166444164940fb6e0d",
+    "rich_text_a6WCfx",
     "image_with_text_PhWXFr",
     "image_with_text_mWbyCt",
     "image_with_text_FagVJ7",
