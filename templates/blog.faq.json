@@ -439,6 +439,41 @@
         "mobile_padding_bottom": 0
       }
     },
+    "rich_text_fN99F4": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_ptwLRk": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>vous avez d'autres questions ? </p>",
+            "heading_size": "h1"
+          }
+        },
+        "button_wcAFrE": {
+          "type": "button",
+          "settings": {
+            "button_label": "Contactez-nous",
+            "button_link": "shopify://pages/contact",
+            "button_style": "primary",
+            "button_size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "heading_ptwLRk",
+        "button_wcAFrE"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "alignment": "center",
+        "mobile_alignment": "center",
+        "color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "mobile_padding_top": 50,
+        "mobile_padding_bottom": 50
+      }
+    },
     "main": {
       "type": "main-blog",
       "disabled": true,
@@ -472,6 +507,7 @@
     "image_with_text_gtpgVr",
     "image_with_text_8fBqE9",
     "image_with_text_DUffjj",
+    "rich_text_fN99F4",
     "main"
   ]
 }
