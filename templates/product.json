@@ -131,7 +131,7 @@
             "truncatewords_count_handle": 200,
             "text_size": "small",
             "enable_collapsible": true,
-            "disclosure_open": true,
+            "disclosure_open": false,
             "bullet_style": "default",
             "bullet_color": "#121212"
           }
