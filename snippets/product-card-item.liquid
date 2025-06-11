@@ -250,7 +250,7 @@
       <h3 class="product-grid-item__title {{ settings.product_title_size }}">
         <a href="{{ product_card_product.url | default: '#' }}">{{ product_card_product.title }}</a>
           {% render 'greenleaze-product-preview' with product_card_product as product %}
-      </h3> {% render 'ag-stars-collection-template' product:product_card_productt %}
+      </h3> {% render 'ag-stars-collection-template' product:product_card_product %}
     {%- endif -%}
 
     {%- if show_price -%}
