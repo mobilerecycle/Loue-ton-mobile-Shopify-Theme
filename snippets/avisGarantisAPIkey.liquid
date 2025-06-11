@@ -1,0 +1,18 @@
+<script src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/JsWidget.js"
+type="text/javascript"></script>
+<script>
+{% if shop.locale == "fr" and  shop.metafields.avisgarantis.agSiteIdFR %}
+var agSiteId="{{ shop.metafields.avisgarantis.agSiteIdFR }}"; 
+{% elsif  shop.locale == "en" and  shop.metafields.avisgarantis.agSiteIdGB %}
+var agSiteId="{{ shop.metafields.avisgarantis.agSiteIdGB }}"; 
+{% elsif  shop.locale == "it" and  shop.metafields.avisgarantis.agSiteIdIT %}
+var agSiteId="{{ shop.metafields.avisgarantis.agSiteIdIT }}"; 
+{% elsif  shop.locale == "de" and  shop.metafields.avisgarantis.agSiteIdDE %}
+var agSiteId="{{ shop.metafields.avisgarantis.agSiteIdDE }}"; 
+{% elsif  shop.locale == "nl" and  shop.metafields.avisgarantis.agSiteIdNL %}
+var agSiteId="{{ shop.metafields.avisgarantis.agSiteIdNL }}"; 
+{% else %}
+var agSiteId="{{ shop.metafields.avisgarantis.agSiteId }}"; 
+{% endif %}
+{{shop.locale}}
+</script> 
