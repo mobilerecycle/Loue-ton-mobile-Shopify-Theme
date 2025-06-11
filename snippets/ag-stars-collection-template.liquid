@@ -1,0 +1,120 @@
+{% assign count_review = 0  %}
+{% assign tmp_total_review = 0  %}
+{% assign average_review = 0  %}
+
+
+{% assign reviews = product.metafields.reviews  %}
+{% if shop.locale != "fr"  %}
+{% assign lang = "avisgarantis_" | append: shop.locale  %}
+{% else %}
+{% assign lang = "avisgarantis"  %}
+{% endif %}
+{% for review in reviews[lang]  %}
+	{% assign count_review = count_review | plus: 1 %}
+	{% assign tmp_total_review = tmp_total_review | plus: review.review_rating %}
+{% endfor %}
+{% assign count_review_float = count_review | times: 1.0 %}
+{% assign average_review =  tmp_total_review | divided_by: count_review_float | round: 1 %}
+{% if count_review != 0 and shop.metafields.avisgarantis.collectionTitleWidget == 'enable' %}
+<div class="categoryStarsMain">
+     <div class="star-ratings">
+          <div class="fill-ratings" style="width: {{average_review | times: 100.0 | divided_by: 5 }}%;">
+			  <div class='full-ratings'>
+				<span>★★★★★</span>
+			  </div>
+          </div>
+          <div class="empty-ratings" style="width: {{average_review | times: 100.0 | divided_by: 5 }}%;">
+            <span>★★★★★</span>
+          </div>
+     </div>
+    {% if shop.locale == "fr" %}
+                     <div class="categoryStarsStr">({{count_review}} avis)</div>
+                {% elsif  shop.locale == "en" %}
+                     <div class="categoryStarsStr">({{count_review}} reviews)</div>
+                {% elsif  shop.locale == "it" %}
+                     <div class="categoryStarsStr">({{count_review}} recensioni)</div>
+                {% elsif  shop.locale == "de" %}
+                     <div class="categoryStarsStr">({{count_review}} bewertungen)</div>
+                {% elsif  shop.locale == "nl" %}
+                    <div class="categoryStarsStr">({{count_review}} beoordelingen)</div>
+                {% else %}
+                    <div class="categoryStarsStr">({{count_review}} opiniones)</div>
+                {% endif %}
+</div>
+<style>
+    .categoryStarsMain { margin-top: -5px;margin-bottom: -3px; white-space: nowrap; }
+    .categoryStarsStr {
+    	vertical-align: top;
+		margin-top: 5px;
+		display: inline-block;
+		margin-left: 5px;
+        font-size: 14px;
+		white-space: nowrap;
+    }
+    .agWidgetStars {
+		background:none;
+		box-shadow:none;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	.agWidgetStars .inner {
+		padding:0px;
+	}
+	.agWidgetStars .ag-badge {
+		vertical-align: bottom;
+		margin-right: 0.3rem;
+	}
+	.agWidgetStars .reviewGlobal {
+		width:100%;
+	}
+  	.star-ratings {
+      unicode-bidi: bidi-override;
+      position: relative;
+      display: inline-block;
+      color: #CDCDCD;
+      font-size: 20px;
+      vertical-align: text-bottom;
+    }
+  	.categoryStarsMain .star-ratings .fill-ratings {
+      color: {{ shop.metafields.avisgarantis.starsColor }} ;
+      padding: 0;
+      position: absolute;
+      z-index: 1;
+      display: block;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+
+    .categoryStarsMain .fill-ratings {
+          width: 100%;
+          height: 30px;
+    }
+  	.categoryStarsMain .star-ratings .fill-ratings span {
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      z-index: 3;
+      
+    }
+    .categoryStarsMain .star-ratings .empty-ratings {
+      padding: 0;
+      display: block;
+      z-index: 0;
+    }
+
+    .categoryStarsMain .full-ratings {
+      width: 100%;
+      height: 30px;
+      overflow: hidden;
+      position: absolute;
+      z-index: 2;
+    }
+
+  @media (max-width: 600px) {
+    .star-ratings {
+      font-size: 17px;
+    }
+  }
+</style>
+{% endif %}

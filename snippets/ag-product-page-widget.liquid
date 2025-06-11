@@ -1,0 +1,694 @@
+{% assign count_review = 0  %}
+{% assign tmp_total_review = 0  %}
+{% assign tmp_total_review = 0  %}
+{% assign average_review = 0  %}
+{% assign best_review = 0  %}
+
+{% assign count_1 = 0  %}
+{% assign count_2 = 0  %}
+{% assign count_3 = 0  %}
+{% assign count_4 = 0  %}
+{% assign count_5 = 0  %}
+
+{% assign reviews = product.metafields.reviews  %}
+{% if shop.locale != "fr"  %}
+{% assign lang = "avisgarantis_" | append: shop.locale  %}
+{% else %}
+{% assign lang = "avisgarantis"  %}
+{% endif %}
+
+{% for review in reviews[lang]  %}
+	{% assign count_review = count_review | plus: 1 %}
+   {% if review.review_rating == '1' %}
+      {% assign count_1 = count_1 | plus: 1  %}
+   {% endif  %}
+   {% if review.review_rating == '2' %}
+      {% assign count_2 = count_2 | plus: 1  %}
+   {% endif  %}
+   {% if review.review_rating == '3' %}
+      {% assign count_3 = count_3 | plus: 1  %}
+   {% endif  %}
+   {% if review.review_rating == '4' %}
+      {% assign count_4 = count_4 | plus: 1  %}
+   {% endif  %}
+   {% if review.review_rating == '5' %}
+      {% assign count_5 = count_5 | plus: 1  %}
+   {% endif  %}
+
+	{% assign tmp_total_review = tmp_total_review | plus: review.review_rating %}
+  {% assign tmp_review = review.review_rating | plus: 0 %}
+
+   {% if tmp_review >=  best_review %}
+      {% assign best_review = tmp_review  %}
+   {% endif  %}
+{% endfor %}
+{% assign count_review_float = count_review | times: 1.0 %}
+{% assign average_review =  tmp_total_review | divided_by: count_review_float | round: 1 %}
+{% if count_review != 0 and shop.metafields.avisgarantis.productWidget == 'enable' %}
+    <div class="pTabContent">
+      <div id="ag-s">
+        <script type="application/ld+json">
+          {
+         "@context": "http://schema.org/",
+         "@type": "Product",
+         "@id": "product",
+         "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "{{average_review}}",
+            "reviewCount": "{{count_review}}",
+            "bestRating": "5"
+          }
+         }
+        </script>
+        <div {% comment %} itemscope itemtype="http://schema.org/Product" {% endcomment %}>
+          {% comment %}
+          <span style="display: none" itemprop="name">{{ product.title }}</span>
+          <img style="display: none" itemprop="image" src="{{ product.images.first | product_img_url: 'compact' }}" alt="{{ product.title }}" />
+                <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
+                  <meta itemprop="name" content="{{ product.vendor }}" />
+                  <meta itemprop="sku" content="{{ product.variants.first.sku }}" />
+                </div>
+        <div
+          itemprop="aggregateRating"
+          itemscope=""
+          itemtype="http://schema.org/AggregateRating"
+        >
+        <meta itemprop="ratingValue" content="{{average_review}}">
+        <meta itemprop="reviewCount" content="{{count_review}}">
+        <meta itemprop="bestRating" content="{{best_review}}">
+       </div>
+      {% endcomment %}
+          <div id="agWidgetMain" class="agWidget rad">
+            {% if shop.locale == "fr" %}
+              <div class="topBar">Avis à propos du produit</div>
+            {% elsif  shop.locale == "en" %}
+              <div class="topBar">REVIEWS ABOUT THIS PRODUCT</div>
+            {% elsif  shop.locale == "it" %}
+              <div class="topBar">RECENSIONI SU QUESTO PRODOTTO</div>
+            {% elsif  shop.locale == "de" %}
+              <div class="topBar">BEWERTUNGEN ZU DIESEM PRODUKT</div>
+            {% elsif  shop.locale == "nl" %}
+              <div class="topBar">BEOORDELINGEN OVER DIT PRODUCT</div>
+            {% else %}
+              <div class="topBar">OPINIONES SOBRE ESTE PRODUCTO</div>
+            {% endif %}
+            <div class="inner bgGrey1">
+              <div class="logoCont">
+                <div class="logoCont">
+                    {% if shop.locale == "fr" %}
+                        <img src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/fr/sag_logo.png" width="150" height="35" class="logoAg">
+                    {% elsif  shop.locale == "en" %}
+                        <img src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/en/sag_logo.png" width="150" height="35" class="logoAg">
+                    {% elsif  shop.locale == "it" %}
+                        <img src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/it/sag_logo.png" width="150" height="35" class="logoAg">
+                    {% elsif  shop.locale == "de" %}
+                        <img src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/de/sag_logo.png" width="150" height="35" class="logoAg">
+                    {% elsif  shop.locale == "nl" %}
+                        <img src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/nl/sag_logo.png" width="150" height="35" class="logoAg">
+                    {% else %}
+                        <img src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/es/sag_logo.png" width="150" height="35" class="logoAg">
+                    {% endif %}
+                    {% if shop.metafields.avisgarantis.certificateUrl  %}
+                        {% if shop.locale == "fr" %}
+                            <a href="{{shop.metafields.avisgarantis.certificateUrl}}" class="agBt certificateBtn" target="_blank">Voir l'attestation</a>
+                        {% elsif  shop.locale == "en" %}
+                            <a href="{{shop.metafields.avisgarantis.certificateUrlGB}}" class="agBt certificateBtn" target="_blank">Show attestation</a>
+                        {% elsif  shop.locale == "it" %}
+                            <a href="{{shop.metafields.avisgarantis.certificateUrlIT}}" class="agBt certificateBtn" target="_blank">Mostra l'attestato</a>
+                        {% elsif  shop.locale == "de" %}
+                            <a href="{{shop.metafields.avisgarantis.certificateUrlDE}}" class="agBt certificateBtn" target="_blank">Vertrauenszeugnis</a>
+                        {% elsif  shop.locale == "nl" %}
+                            <a href="{{shop.metafields.avisgarantis.certificateUrlNL}}" class="agBt certificateBtn" target="_blank">Toon attest</a>
+                        {% else %}
+                            <a href="{{shop.metafields.avisgarantis.certificateUrlES}}" class="agBt certificateBtn" target="_blank">Mostrar Certificado</a>
+                        {% endif %}
+                    {% endif  %}
+                 </div>
+              </div>
+              <div class="statCont">
+                <div class="steavisgarantisStats">
+                   <div class="item">
+                      <span class="stat">
+                         {% if count_1 > 0 %}
+                           {% assign result = count_1 | times: 1.0  %}
+                           {% assign result = result | divided_by: count_review %} 
+                           {% assign result = result | times: 100 %} 
+                         {% endif %}
+                         <div class="note bar1" style="height: {{result}}%"><span class="value">{{count_1}}</span></div>
+                          {% assign result = 0 %}
+                      </span>
+                      <span class="name">1★</span>
+                   </div>
+                   <div class="item">
+                      <span class="stat">
+                         {% if count_2 > 0 %}
+                           {% assign result = count_2 | times: 1.0  %}
+                           {% assign result = result | divided_by: count_review %} 
+                           {% assign result = result | times: 100 %} 
+                         {% endif %}
+                         <div class="note bar2" style="height: {{result}}%"><span class="value">{{count_2}}</span></div>
+                          {% assign result = 0 %}
+                      </span>
+                      <span class="name">2★</span>
+                   </div>
+                   <div class="item">
+                      <span class="stat">
+                         {% if count_3 > 0 %}
+                           {% assign result = count_3 | times: 1.0  %}
+                           {% assign result = result | divided_by: count_review %} 
+                           {% assign result = result | times: 100 %} 
+                         {% endif %}
+                         <div class="note bar3" style="height: {{result}}%"><span class="value">{{count_3}}</span></div>
+                          {% assign result = 0 %}
+                      </span>
+                      <span class="name">3★</span>
+                   </div>
+                   <div class="item">
+                      <span class="stat">
+                         {% if count_4 > 0 %}
+                           {% assign result = count_4 | times: 1.0  %}
+                           {% assign result = result | divided_by: count_review %} 
+                           {% assign result = result | times: 100 %} 
+                         {% endif %}
+                         <div class="note bar4" style="height: {{result}}%"><span class="value">{{count_4}}</span></div>
+                          {% assign result = 0 %}
+                      </span>
+                      <span class="name">4★</span>
+                   </div>
+                   <div class="item">
+                      <span class="stat">
+                         {% if count_5 > 0 %}
+                           {% assign result = count_5 | times: 1.0  %}
+                           {% assign result = result | divided_by: count_review %} 
+                           {% assign result = result | times: 100 %} 
+                         {% endif %}
+                         <div class="note bar5" style="height: {{result}}%"><span class="value">{{count_5}}</span></div>
+                          {% assign result = 0 %}
+                      </span>
+                      <span class="name">5★</span>
+                   </div>
+                </div>
+             </div>
+              <div class="reviewCont">
+                <div class="reviewGlobal">
+                  <div class="largeNote">
+                    <big>{{average_review}}</big>/5
+                    {% if shop.locale == "fr" %}
+                        <p><br>Basé sur {{count_review}} avis</p>
+                    {% elsif  shop.locale == "en" %}
+                        <p><br>Based on {{count_review}} reviews</p>
+                    {% elsif  shop.locale == "it" %}
+                        <p><br>su {{count_review}} recensioni</p>
+                    {% elsif  shop.locale == "de" %}
+                        <p><br>auf {{count_review}} Bewertungen</p>
+                    {% elsif  shop.locale == "nl" %}
+                        <p><br>Gebaseerd op {{count_review}} beoordelingen</p>
+                    {% else %}
+                        <p><br>por {{count_review}} opiniones</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul class="reviewList">
+                {% for review in reviews[lang] %}
+                {% assign evens = forloop.index | modulo: 2 %}
+                <li class="{% if evens == 0 %} bgGrey1 {% else %} bgGrey0 {% endif %}" {% comment %} itemprop="review" itemscope itemtype="https://schema.org/Review" {% endcomment %}>
+                   <div class="author" {% comment %} itemprop="author" itemscope itemtype="https://schema.org/Person" {% endcomment %}>
+                     <img width="24" height="24" src="https://cdn.shopify.com/s/files/1/0565/0042/0761/files/ico_user.png?v=1627046378" alt="{{review.reviewer_name}} {{review.lastname}}">
+                     <span {% comment %} itemprop="name" {% endcomment %}>{{review.reviewer_name}} {{review.lastname}}</span>
+                      <br><span class="time">
+                        {% if shop.locale == "fr" %}
+                            <span class="published">Publié le {{ review.date_time | date: "%d/%m/%Y à %H:%M" }}.</span>
+                        {% elsif  shop.locale == "en" %}
+                            <span class="published">Published {{ review.date_time | date: "%d/%m/%Y à %H:%M" }}.</span>
+                        {% elsif  shop.locale == "it" %}
+                            <span class="published">Pubblicato {{ review.date_time | date: "%d/%m/%Y à %H:%M" }}.</span>
+                        {% elsif  shop.locale == "de" %}
+                            <span class="published">Veröffentlicht {{ review.date_time | date: "%d/%m/%Y à %H:%M" }}.</span>
+                        {% elsif  shop.locale == "nl" %}
+                            <span class="published">Gepubliceerd {{ review.date_time | date: "%d/%m/%Y à %H:%M" }}.</span>
+                        {% else %}
+                            <span class="published">Publicado {{ review.date_time | date: "%d/%m/%Y à %H:%M" }}.</span>
+                        {% endif %}
+                      {% if review.order_date != '0000-00-00 00:00:00' %}
+                        {% if shop.locale == "fr" %}
+                            (Date de commande : {{ review.order_date | date: "%d/%m/%Y" }})
+                        {% elsif  shop.locale == "en" %}
+                            (Order date : {{ review.order_date | date: "%d/%m/%Y" }})
+                        {% elsif  shop.locale == "it" %}
+                            (Data dell'ordine : {{ review.order_date | date: "%d/%m/%Y" }})
+                        {% elsif  shop.locale == "de" %}
+                            (Datum der Bestellung : {{ review.order_date | date: "%d/%m/%Y" }})
+                        {% elsif  shop.locale == "nl" %}
+                            (Bestel datum : {{ review.order_date | date: "%d/%m/%Y" }})
+                        {% else %}
+                            (Fecha de la orden : {{ review.order_date | date: "%d/%m/%Y" }})
+                      {% endif %}
+                      {% endif %}
+                    </span>
+                   </div>
+                   <div class="reviewTxt">
+                      <div class="steavisgarantisStar">
+                         <div class="rating-box">
+                            {% for i in (1..5) %}
+                            {% assign rating = review.review_rating | plus: 0 %}
+                               {% if i <= rating %}
+                                  <span class="w-rating-star full-star"></span>
+                               {% else %}
+                                  <span class="w-rating-star empty-star"></span>
+                               {% endif %}
+                            {% endfor %}
+                         </div>
+                      </div>
+                      <p {% comment %} itemprop="reviewBody" {% endcomment %}>{{review.review_text}}</p>
+                      {% if review.answer_text and review.answer_text != '' %}
+                          <div class="reponse">
+                              <span><img src="https://cdn.shopify.com/s/files/1/0241/1897/files/ico_pen.png?v=1653031994" height="12" alt="Réponse du marchant">Réponse du marchant</span>
+                              <p>{{review.answer_text}}</p>
+                          </div>
+                      {% endif  %}
+                   </div>
+                  {% comment %}
+                   <span itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating" style="display:none">
+                     <span itemprop="ratingValue">{{review.review_rating}}</span>
+                   </span>
+                  {% endcomment %}
+                </li>
+                {% endfor %}
+             </ul>
+          </div>
+          {% if reviews.avisgarantis.size > 10  %}
+              <div class="inner2 bgGrey0"> <a class="agBt rad4 agBtBig" id="more-reviews" onclick="return showMoreReviews();" rel="2">Voir plus d'avis</a></div>
+          {% endif  %}
+        </div>
+      </div>
+      <script>
+        function showMoreReviews() {
+          document.getElementById("agWidgetMain").style.maxHeight = "100%";
+          document.getElementById("more-reviews").style.display = "none";
+        }
+      </script>
+      <style>
+        .bar1 {
+          animation-duration: 1s;
+          animation-name: newHeight1;
+          animation-iteration-count: 1;
+        }
+        @keyframes newHeight1 {
+          from {
+            height: 0%;
+          }
+          to {
+            height: 0%;
+          }
+        }
+        .bar2 {
+          animation-duration: 1s;
+          animation-name: newHeight2;
+          animation-iteration-count: 1;
+        }
+        @keyframes newHeight2 {
+          from {
+            height: 0%;
+          }
+          to {
+            height: 0%;
+          }
+        }
+        .bar3 {
+          animation-duration: 1s;
+          animation-name: newHeight3;
+          animation-iteration-count: 1;
+        }
+        @keyframes newHeight3 {
+          from {
+            height: 0%;
+          }
+          to {
+            height: 0%;
+          }
+        }
+        .bar4 {
+          animation-duration: 1s;
+          animation-name: newHeight4;
+          animation-iteration-count: 1;
+        }
+        @keyframes newHeight4 {
+          from {
+            height: 0%;
+          }
+          to {
+            height: 0%;
+          }
+        }
+
+        * {-webkit-font-smoothing: antialiased;}
+
+        #product_widget {
+            max-width: 262px;
+            border: 1px solid #b0b0b0;
+            background-color: #e5e5e5;
+            height: 60px;
+            margin-top: 25px;
+            position: relative;
+            background: #f2f2f2 none repeat scroll 0 0;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 0 2px 2px #f6f6f6;
+            color: #374853;
+            font-size: 1.1em;
+            margin-bottom: 2em;
+            padding-top: 0.5em;
+
+        }
+
+        #product_widget #stars {
+            text-align: center;
+        }
+
+        #product_widget #end {
+            background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #f4bd38 1%, #cc8f24 100%) repeat scroll 0 0;
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+            bottom: 2px;
+            height: 22px;
+            position: absolute;
+            width: 100%;
+        }
+
+        #product_widget #end a {
+            color: black;
+            display: block;
+            font-weight: bold;
+            margin-top: 3px;
+            margin-left: 33px;
+        }
+
+        #product_widget img#seal {
+            width: 96px;
+            margin-top: -8px;
+        }
+
+        #ag-s {
+            color: #6d7f8a;
+            margin: 0px auto 10px auto !important;
+            padding-top: 16px !important;
+            max-width:1100px;
+            position: relative;
+        }
+
+        #ag-s .published {
+            font-weight:600;
+        }
+
+        #ag-s #ag-header {
+            display: block;
+            padding: 5px;
+        }
+
+        #ag-s #commentaires {
+            padding: 10px;
+        }
+
+        #ag-s .avis-garantis {
+            border-top: 2px solid #ccc;
+            padding-bottom: 20px;
+        }
+
+        #ag-s .avis-garantis ul.ag-details {
+            list-style: outside none none;
+            margin: 15px 0 0;
+        }
+
+        #ag-s .avis-garantis ul.ag-details li {
+            display: inline-block;
+            height: 25px;
+            line-height: 25px;
+        }
+
+        #ag-s ul#ag-header-text {
+            display: inline-block;
+            list-style: outside none none;
+            margin: 22px;
+            vertical-align: top;
+        }
+
+        #more_info_sheets li {
+            margin-bottom: 5px;
+        }
+
+        #ag-s .avis-garantis ul.ag-details li.ag-note {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        #ag-s .ag-tr.top:before {
+            border-width: 0 14px 13px;
+            bottom: auto;
+            left: 10px;
+            top: -13px;
+        }
+        #ag-s .ag-tr:before {
+            border-color: #d5d5d5 transparent;
+            border-style: solid;
+            content: "";
+            position: absolute;
+        }
+        #ag-s .ag-tr.top:after {
+            border-width: 0 13px 13px;
+            left: 11px;
+            top: -12px;
+        }
+        #ag-s .ag-tr:after {
+            border-color: #fff transparent;
+            border-style: solid;
+            content: "";
+            position: absolute;
+            width: 0;
+        }
+        #ag-s .ag-tr {
+            border: 1px solid #d5d5d5;
+            border-radius: 7px;
+            color: black;
+            margin: 7px 0 3px;
+            padding: 12px;
+            position: relative;
+        }
+
+        #certificat {
+            display: inline-block;
+            float: right;
+            vertical-align: top;
+            font-size: 15px;
+        }
+
+        #seal_im {
+            float: left;
+            margin-left: -30px;
+            margin-top: -15px;
+        }
+
+        #stars {
+            margin-right: 18px;
+        }
+
+        .reviewer_name {
+            text-transform:capitalize;
+        }
+
+        #agWidgetH p {
+            color: #175298;
+        }
+        #ag-s .reviewTxt p {
+            color: #111111;
+        }
+
+        .rad{-moz-border-radius: 8px;-webkit-border-radius:8px; border-radius:8px;}
+        meta, .metaHide {display:none !important}
+        .agWidget { color:#111111; font-family: 'Open Sans', sans-serif; font-weight:400}
+        .inner, .inner2{padding:12px; text-align: center;}
+        .reviewGlobal { display:flex !important; vertical-align:top !important; color:#175298 !important; }
+        .reviewGlobal p {margin:0 !important; padding:0 !important; display:block !important; font-size:12px !important; line-height:12px !important; letter-spacing:0 !important; margin-bottom:10px !important;}
+        .reviewGlobal a { text-decoration: none !important; }
+        /* Etoile */
+        .steavisgarantisStar{ width:111px; max-width:111px; position:relative; margin:0 0 0 -4px; padding:0; height:30px; margin-bottom:4px}
+
+        /*NOTES*/
+        .largeNote, .largeNote p{ font-family: 'Oswald', Arial ; font-weight:700; font-size:22px; line-height:22px; letter-spacing:0; color:#175298; }
+        .largeNote big { font-size:36px; letter-spacing:-2px;}
+
+        /*list des avis*/
+        .reviewList { padding:4px 0; margin:8px auto 12px auto; line-height:16px; font-family: 'Open Sans', sans-serif; text-align:left}
+        .reviewList li{ list-style:none; border-top:1px dashed #c5cee0; padding:10px 0; position:relative}
+        .author { letter-spacing:0; font-size:15px; line-height:18px; color:#175298; font-weight:600}
+        .author img { float:left; margin:4px 8px 8px 0; width:24px;}
+        .author .time{ display:inline-block; font-size:9.5px; font-weight:400;}
+        .reviewTxt p, .reponse p {display:block; margin:4px 0 0 0; font-size:12px; line-height:14px; letter-spacing:0px}
+        .reviewTxt meta {display:none}
+        .reponse {display:block; padding:8px 12px; background:#ffffff; margin-top:10px }
+        .reponse span { font-size:11px; line-height:11px; color:#175298; letter-spacing:0}
+        .reponse span img {margin-right:6px; float:left; width:12px;}
+        .reponse p { font-style:italic; font-size:12px;}
+
+        /*steavisgarantisStats*/
+        .steavisgarantisStats { display:inline-block;}
+        .steavisgarantisStats .item { height:116px; display:inline-block; margin:0 2px}
+        .steavisgarantisStats .item .stat, .steavisgarantisStats  .item .name, .steavisgarantisStats .item .stat .note .value   {display:block; width:20px; }
+        .steavisgarantisStats .item .stat{ height:88px; background: none; position:relative;  border:0px solid #F00}
+        .steavisgarantisStats .item .stat .note { position:absolute; left:0; bottom:0; height:0; width:20px; background:#f5d700; text-align:center}
+        .steavisgarantisStats .item .stat .note .value {position:absolute; top:-8px; left:0; font-size:9px; text-align:center; color:#777777  }
+        .steavisgarantisStats .item .name { font-size:11px; text-align:center; height:20px; line-height:20px; color:#f5d700; letter-spacing:0}
+
+        /*boutons*/
+        .agBt { cursor: pointer; display: inline-block; background:#175298; border:1px solid #175298; color:#ffffff !important; font-size:11px !important; line-height:11px; letter-spacing:1px; text-transform:uppercase; text-align:center; padding:4px 10px; width:auto; text-decoration: none !important; }
+        .agBt:hover { background:none; color:#175298 !important; text-decoration:none !important;}
+        .agBtBig {font-size:11px; line-height:11px; padding:5px 14px;}
+
+        /* WIDGET HORIZONTAL*/
+        #agWidgetH{ display:block; width:100%; max-width:275px;  line-height:0; text-align:center; margin:20px 0px; white-space: nowrap;}
+
+        #agWidgetH .logoAg { max-height:77px; display:inline-block; margin-right:6%}
+        #agWidgetH .inner  {padding-bottom:12px}
+        #agWidgetH .reviewGlobal {text-align:left}
+
+        /*# WIDGET LATERAL*/
+        #agWidgetSide{ display:block; width:100%; max-width:100%;  line-height:0; text-align:center; padding-bottom:18px}
+
+        #agWidgetSide .inner  {padding:12px 12px 0 12px}
+        #agWidgetSide .logoAg {display:block; margin:8px auto 24px auto }
+        #agWidgetSide .reviewList {max-height:300px; width:100%; overflow-x: hidden;overflow-y: scroll;}
+        #agWidgetSide .reviewList::-webkit-scrollbar-track{border-radius: 2px;background-color: #175298;}
+        #agWidgetSide .reviewList::-webkit-scrollbar{width: 2px; background-color: {{ shop.metafields.avisgarantis.starsColor }};}
+        #agWidgetSide .reviewList::-webkit-scrollbar-thumb{  border-radius: 2px;    background-color: {{ shop.metafields.avisgarantis.starsColor }};}
+        #agWidgetSide .reviewList li { width:92%; margin:0 0 0 5%}
+        #agWidgetSide .author { line-height:16px;  font-size:14px; }
+
+        /*WIDGET MAIN*/
+        .topBar {background:#2c2c2c; color:#ffffff; text-align:center; font-size:13px; line-height:11px; letter-spacing:2px; padding:10px 0; text-transform:uppercase}
+        #agWidgetMain { display:block; width:100%; max-width:100%;  line-height:0; text-align:center; overflow:hidden; padding-bottom:12px; margin:0; max-height:105rem; }
+
+        #agWidgetMain .inner { text-align:left; overflow:hidden; height:106px; padding:25px 14px 20px 14px}
+        #agWidgetMain .logoCont , #agWidgetMain .statCont, #agWidgetMain .reviewCont { display:inline-block; height:100px;  vertical-align:top; }
+        #agWidgetMain .logoCont {display: inline-block; width:38%;  }
+        #agWidgetMain .statCont  { width:28%; text-align:center; min-width:140px;}
+        #agWidgetMain .reviewCont {width:27%;text-align:right; }
+        #agWidgetMain .logoCont img {max-width:151px}
+        #agWidgetMain .logoCont .agBt {margin:6px 0 0 12px}
+        #agWidgetMain .statCont  .steavisgarantisStats{}
+        #agWidgetMain .reviewCont  .reviewGlobal {text-align:center; padding-top:26px }
+        #agWidgetMain .largeNote{  font-size:24px; line-height:28px;  letter-spacing:-1px;  }
+        #agWidgetMain .largeNote big { font-size:50px; letter-spacing:-3px;}
+        #agWidgetMain .reviewList { padding:0; margin:0 auto 8px auto}
+        #agWidgetMain .reviewList li { border-top:none; padding:16px 20px; margin:0;}
+        #agWidgetMain .largeNote {width:120px; }
+        #agWidgetMain .logoAg {display:block; margin:10px}
+        #agWidgetMain .steavisgarantisStar { position:absolute; top:12px; right:16px}
+        #agWidgetMain .reviewTxt p { font-weight:400; margin:6px 0; letter-spacing:0; padding:0px}
+        #agWidgetMain .certificateBtn {padding:5px 15px;}
+        @media (max-width: 600px) {
+        #agWidgetMain .statCont {display:none !important}
+        #agWidgetMain .logoCont { width:60%}
+        #agWidgetMain .reviewCont { width:35%}
+        }
+        @media (max-width: 400px) {
+        #agWidgetMain .reviewList .steavisgarantisStar {display:block !important; position:relative; top: auto; right:auto;}
+        }
+
+        /* Footer Link */
+        #steavisgarantisFooterVerif {
+            text-align:center;
+            margin:5px auto;
+            display: table;
+        }
+        #steavisgarantisFooterVerif img{
+            margin-right: 3px;
+            width: 20px !important;
+        }
+
+        #steavisgarantisFooterText {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: left;
+            font-size: 12.5px;
+        }
+
+        #steavisgarantisFooterText a {
+            font-size: 12.5px;
+        }
+
+        /*background*/
+        .bgGrey0{ background:#f9f9f9}
+        .bgGrey1{ background:#f3f3f3}
+
+        #agWidgetH{/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f3f3f3+0,fefefe+16,fefefe+26,f3f3f3+51 */
+        background: #f3f3f3; /* Old browsers */
+        background: -moz-linear-gradient(left,  #f3f3f3 0%, #fdfdfd 16%, #fefefe 26%, #f3f3f3 51%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left,  #f3f3f3 0%,#fdfdfd 16%,#fefefe 26%,#f3f3f3 51%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right,  #f3f3f3 0%,#fdfdfd 16%,#fefefe 26%,#f3f3f3 51%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#f3f3f3',GradientType=1 ); /* IE6-9 */
+        -moz-box-shadow:inset 0px 0px 0px 1px #dfdfdf; box-shadow:inset 0px 0px 0px 1px #dfdfdf;}
+
+        #agWidgetSide , #agWidgetMain{
+      }
+
+        /*transition*/
+        .agBt { -webkit-transition: background 0.4s ease; -moz-transition: background 0.4s ease;
+        -ms-transition: background 0.4s ease;-o-transition: background 0.4s ease; transition: background 0.4s ease;}
+
+        #agWidgetMain .inner.bgGrey1{
+            box-sizing:initial !important;
+        }
+
+        /* Si mobile */
+        @media screen and (max-width: 750px) {
+            .agJsWidget {
+                display:none;
+            }
+            #steavisgarantis.agWidget.rad {
+                display:none;
+            }
+        }
+      .rating-box {
+         display: inline-block;
+         color: #CDCDCD ;
+         }
+         .w-rating-star {
+            font-size: 21px;
+            width: 21px;
+            height: 10px;
+            position: relative;
+            display: block;
+            float: left;
+         }
+         .full-star:before {
+            color: {{ shop.metafields.avisgarantis.starsColor }} ;
+            content: "\2605";
+            position: absolute;
+            left: 0;
+            overflow: hidden;
+         }
+         .empty-star:before {
+            content: "\2605";
+            position: absolute;
+            left: 0;
+            overflow: hidden;
+         }
+         .half-star:before {
+            color: #CDCDCD ;
+            content: "\2605";
+            width: 50%;
+            position: absolute;
+            left: 0;
+            overflow: hidden;
+         }
+         .half-star:after {
+            content: '\2605';
+            position: absolute;
+            left: 1.5rem;
+            width: 50%;
+            text-indent: -1.5rem;
+            overflow: hidden;
+         }
+      </style>
+    </div>
+{% endif %}

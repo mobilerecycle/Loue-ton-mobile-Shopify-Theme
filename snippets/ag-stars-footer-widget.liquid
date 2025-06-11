@@ -1,0 +1,15 @@
+{% if shop.metafields.avisgarantis.footerWidget == 'enable'  %}
+    {% if shop.locale == "fr" and  shop.metafields.avisgarantis.agSiteIdFR %}
+    <iframe width="100%" height="221" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/iframe/2/h/?id={{ shop.metafields.avisgarantis.agSiteIdFR }}"> </iframe>
+    {% elsif  shop.locale == "en" and  shop.metafields.avisgarantis.agSiteIdGB %}
+    <iframe width="100%" height="221" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/iframe/2/h/?id={{ shop.metafields.avisgarantis.agSiteIdGB }}"> </iframe>
+    {% elsif  shop.locale == "it" and  shop.metafields.avisgarantis.agSiteIdIT %}
+    <iframe width="100%" height="221" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/iframe/2/h/?id={{ shop.metafields.avisgarantis.agSiteIdIT }}"> </iframe>
+    {% elsif  shop.locale == "de" and  shop.metafields.avisgarantis.agSiteIdDE %}
+    <iframe width="100%" height="221" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/iframe/2/h/?id={{ shop.metafields.avisgarantis.agSiteIdDE }}"> </iframe>
+    {% elsif  shop.locale == "nl" and  shop.metafields.avisgarantis.agSiteIdNL %}
+    <iframe width="100%" height="221" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/iframe/2/h/?id={{ shop.metafields.avisgarantis.agSiteIdNL }}"> </iframe>
+    {% else %}
+    <iframe width="100%" height="221" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.societe-des-avis-garantis.fr/wp-content/plugins/ag-core/widgets/iframe/2/h/?id={{ shop.metafields.avisgarantis.agSiteId }}"> </iframe>
+    {% endif %}
+{% endif %} 

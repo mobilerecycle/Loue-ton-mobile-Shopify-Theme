@@ -1,0 +1,118 @@
+{% assign count_review = 0  %}
+{% assign tmp_total_review = 0  %}
+{% assign average_review = 0  %}
+
+
+{% assign reviews = product.metafields.reviews  %}
+{% if shop.locale != "fr"  %}
+{% assign lang = "avisgarantis_" | append: shop.locale  %}
+{% else %}
+{% assign lang = "avisgarantis"  %}
+{% endif %}
+
+{% for review in reviews[lang] %}
+	{% assign count_review = count_review | plus: 1 %}
+	{% assign tmp_total_review = tmp_total_review | plus: review.review_rating %}
+{% endfor %}
+
+{% assign count_review_float = count_review | times: 1.0 %}
+{% assign average_review =  tmp_total_review | divided_by: count_review_float | round: 1 %}
+{% if count_review != 0 and shop.metafields.avisgarantis.productTitleWidget == 'enable' %}
+<div id="agWidgetStars" class="agWidget rad">
+    <div class="reviewGlobal">
+		<a onclick="showReviews(); return false;" href="#ag-s">
+			{% if shop.locale == "fr" %}
+                    <img class="ag-badge" alt="badge avis garantis" src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/fr/cocarde.svg" width="20px">
+                {% elsif  shop.locale == "en" %}
+                    <img class="ag-badge" alt="badge avis garantis" src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/en/cocarde.svg" width="20px">
+                {% elsif  shop.locale == "it" %}
+                    <img class="ag-badge" alt="badge avis garantis" src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/it/cocarde.svg" width="20px">
+                {% elsif  shop.locale == "de" %}
+                    <img class="ag-badge" alt="badge avis garantis" src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/de/cocarde.svg" width="20px">
+                {% elsif  shop.locale == "nl" %}
+                    <img class="ag-badge" alt="badge avis garantis" src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/nl/cocarde.svg" width="20px">
+                {% else %}
+                    <img class="ag-badge" alt="badge avis garantis" src="https://www.guaranteed-reviews.com/wp-content/plugins/ag-core/images/widgets/es/cocarde.svg" width="20px">
+                {% endif %}
+			{% comment %} image per lang:
+			https://cdn.shopify.com/s/files/1/0241/1897/files/cocarde-es.svg?v=1640271627
+			https://cdn.shopify.com/s/files/1/0241/1897/files/cocarde-en.svg?v=1640271627
+			https://cdn.shopify.com/s/files/1/0241/1897/files/cocarde-it.svg?v=1640271627
+			https://cdn.shopify.com/s/files/1/0241/1897/files/cocarde-de.svg?v=1640271627
+			https://cdn.shopify.com/s/files/1/0241/1897/files/cocarde-nl.svg?v=1640271627
+			{% endcomment %}
+		</a>		
+	
+        <div class="star-ratings"  onclick="showReviews(); return false;">
+          <div class="fill-ratings" style="width: {{average_review | times: 100.0 | divided_by: 5 }}%;">
+            <span>★★★★★</span>
+          </div>
+          <div class="empty-ratings" style="width: 100%;">
+            <span>★★★★★</span>
+          </div>
+        </div>
+		<a class="agpbt" onclick="showReviews(); return false;" href="#ag-s">
+			{% if shop.locale == "fr" %}
+                    ({{count_review}} avis)
+                {% elsif  shop.locale == "en" %}
+                    ({{count_review}} reviews)
+                {% elsif  shop.locale == "it" %}
+                    ({{count_review}} recensioni)
+                {% elsif  shop.locale == "de" %}
+                    ({{count_review}} bewertungen)
+                {% elsif  shop.locale == "nl" %}
+                    ({{count_review}} beoordelingen)
+                {% else %}
+                    ({{count_review}} opiniones)
+                {% endif %}
+		</a>
+    </div>
+</div>
+
+<style>
+	.agpbt {
+    	vertical-align: top;
+		margin-top: 7px;
+		display: inline-block;
+		margin-left: 5px;
+	}
+	a.agpbt {
+    	text-decoration: none;
+		color: #175298;
+        font-size:14px;
+	}
+	.rating-box {
+		display: inline-block;
+		color: #CDCDCD ;
+	}
+    .star-ratings {
+      unicode-bidi: bidi-override;
+      position: relative;
+      display: inline-block;
+      color: #CDCDCD;
+      font-size: 22px;
+      vertical-align: text-bottom;
+    }
+  	.star-ratings .fill-ratings {
+      color: {{ shop.metafields.avisgarantis.starsColor }} ;
+      padding: 0;
+      position: absolute;
+      z-index: 1;
+      display: block;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+
+    }
+  	.star-ratings .fill-ratings span {
+      display: inline-block;
+      
+    }
+    .star-ratings .empty-ratings {
+      padding: 0;
+      display: block;
+      z-index: 0;
+  
+    }
+</style>
+{% endif %}
