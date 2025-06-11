@@ -75,6 +75,12 @@
           "type": "title",
           "settings": {}
         },
+        "custom_liquid_xj4gKT": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'ag-stars-product-template' %}"
+          }
+        },
         "cd140005-5187-4edb-a871-d38e77099a6d": {
           "type": "inventory",
           "settings": {
@@ -172,6 +178,7 @@
       "block_order": [
         "6ca09fda-dfaa-4cce-bc9a-de4c2a935a71",
         "title",
+        "custom_liquid_xj4gKT",
         "cd140005-5187-4edb-a871-d38e77099a6d",
         "f900597c-23f9-44fa-ac9b-986174a86857",
         "variant_picker",
