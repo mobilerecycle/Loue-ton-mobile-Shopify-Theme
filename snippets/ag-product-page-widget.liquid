@@ -47,11 +47,12 @@
 {% if count_review != 0 and shop.metafields.avisgarantis.productWidget == 'enable' %}
     <div class="pTabContent">
       <div id="ag-s">
+        {% assign jsonproductsag = "#product" %}
         <script type="application/ld+json">
           {
          "@context": "http://schema.org/",
          "@type": "Product",
-         "@id": "product",
+         "@id": {{ product.url | append: jsonproductsag | json }},
          "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "{{average_review}}",
